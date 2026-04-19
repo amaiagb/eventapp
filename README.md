@@ -1,66 +1,152 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# EventApp - Plataforma de Gestión de Eventos Locales
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.icons8.com/color/96/000000/calendar--v1.png" alt="EventApp Logo" width="80">
 </p>
 
-## About Laravel
+<p align="center">
+  <strong>Plataforma para la creación y gestión de eventos y comunidades locales</strong>
+</p>
+<p align="center">
+<img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="">
+<img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white" alt="">
+<img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" alt="">
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Índice
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [Instalación](#instalación)
+- [Sobre el Proyecto](#sobre-el-proyecto)
+- [Tecnologías Utilizadas](#tecnologías-utilizadas)
+- [Arquitectura](#arquitectura)
+- [Roles de Usuario](#roles-de-usuario)
+- [Módulos del Sistema](#módulos-del-sistema)
+- [Seguridad](#seguridad)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+## Instalación
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. **Clonar el repositorio**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+    ```bash
+    git clone https://github.com/amaiagb/eventapp.git
+    ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. **Instalar dependencias**
 
-## Laravel Sponsors
+    ```bash
+    cd eventapp
+    composer install
+    npm install
+    ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. **Configurar el archivo `.env`**
 
-### Premium Partners
+    Duplica el archivo `.env.example` y renómbralo a `.env`. Luego, ajusta los siguientes parámetros:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+    ```env
+    DB_CONNECTION=mysql           # Tipo de conexión
+    DB_HOST=127.0.0.1             # Dirección del host
+    DB_PORT=3306                  # Puerto para la conexión MySQL
+    DB_DATABASE=eventapp          # Nombre de la base de datos
+    DB_USERNAME=eventapp_admin    # Usuario de la base de datos
+    DB_PASSWORD=***               # Contraseña del usuario
+    SESSION_DRIVER=cookie         # Método de manejo de sesiones
+    CACHE_PREFIX=sync             # Prefijo para el cache
+    ```
 
-## Contributing
+4. **Crear la base de datos y el usuario**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    Usando HeidiSQL, phpMyAdmin o una herramienta similar, crea una base de datos y usuario con los valores correspondientes al archivo `.env`.
 
-## Code of Conduct
+5. **Generar la clave de la aplicación**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    ```bash
+    php artisan key:generate
+    ```
 
-## Security Vulnerabilities
+6. **Ejecutar las migraciones y seeders**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    ```bash
+    php artisan migrate
+    php artisan db:seed
+    ```
 
-## License
+7. **Compilar assets de frontend**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    ```bash
+    npm run build
+    ```
+
+## Sobre el Proyecto
+
+**EventApp** es una plataforma de gestión de eventos locales diseñada para facilitar la creación, descubrimiento y participación en actividades comunitarias. El sistema permite a los usuarios crear eventos, buscar actividades de su interés, inscribirse y recibir recordatorios, con un enfoque inclusivo para pequeñas comunidades y grupos diversos.
+
+### Objetivos Principales
+
+- **Facilitar la creación de eventos**: Permitir a los usuarios crear eventos con facilidad, incluyendo categorías, descripciones, imágenes y ubicación
+- **Promover la visibilidad de eventos pequeños**: Ofrecer una plataforma donde eventos locales tengan mayor visibilidad
+- **Gestión de inscripciones y aforo**: Sistema de inscripción con control de aforo para evitar sobreventa
+- **Interacción entre usuarios**: Chat por evento, sistema de seguimiento y notificaciones
+- **Moderación de contenidos**: Sistema de validación y aprobación de eventos por administradores
+
+## Tecnologías Utilizadas
+
+### Backend
+- **Laravel 11**: Framework PHP principal
+- **MySQL**: Sistema de gestión de base de datos
+- **Eloquent ORM**: Mapeo objeto-relacional
+- **Blade**: Motor de plantillas
+
+### Frontend
+- **Bootstrap**: Framework CSS utility-first
+- **JavaScript ES6+**: Lógica del cliente
+- **Vite**: Build tool para assets
+
+### Desarrollo
+- **Composer**: Gestión de dependencias PHP
+- **Git**: Control de versiones
+
+## Arquitectura
+
+### Estructura del Proyecto
+```
+eventapp/
+├── app/
+│   ├── Http/Controllers/     # Controladores MVC
+│   ├── Models/              # Modelos Eloquent
+│   └── Providers/           # Service Providers
+├── database/
+│   ├── migrations/          # Migraciones de base de datos
+│   └── seeders/            # Datos iniciales
+├── resources/
+│   ├── views/              # Plantillas Blade
+│   ├── css/                # Estilos CSS
+│   └── js/                 # Archivos JavaScript
+├── public/                 # Archivos públicos
+└── routes/                 # Definición de rutas
+```
+
+### Patrones de Diseño
+- **MVC**: Model-View-Controller
+- **Repository Pattern**: Para acceso a datos
+- **Service Layer**: Lógica de negocio
+- **Middleware**: Autenticación y autorización
+
+## Roles de Usuario
+
+### Administrador
+- Validación y aprobación de eventos
+- Gestión de usuarios y moderación de contenidos
+- Gestión de reportes y bloqueos
+
+### Usuario Estándar
+- Creación y edición de eventos propios
+- Inscripción a eventos y control de aforo
+- Participación en chats por evento
+- Sistema de valoraciones y reseñas
+
+
+---
+
+**EventApp** - 2026  
