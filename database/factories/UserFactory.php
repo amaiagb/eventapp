@@ -24,11 +24,18 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'username' => fake()->unique()->userName(),
+            'name' => fake()->firstName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => static::$password ??= Hash::make('123'),
             'remember_token' => Str::random(10),
+            'surname' => fake()->lastName(),
+            'bio' => fake()->paragraph(),
+            'profile_image' => null,
+            'city_id' => null, // Se asignará después de instalar nnjeim/world
+            'role_id' => \App\Models\Role::where('name', 'user')->first()?->id,
+            'is_active' => true,
         ];
     }
 

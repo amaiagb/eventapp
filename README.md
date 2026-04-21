@@ -65,18 +65,32 @@
     php artisan key:generate
     ```
 
-6. **Ejecutar las migraciones y seeders**
+6. **Configurar límite de memoria de PHP**
+
+    El proyecto utiliza el paquete `nnjeim/world` para datos geográficos, el cual requiere más memoria que el límite por defecto de PHP. Debes configurar el límite de memoria a 512M:
+
+    - **Si usas Uniform Server**: Edita el archivo `core/php83/php-cli.ini` (o `core/php82/php-cli.ini` según tu versión) y añade:
+      ```ini
+      memory_limit = 512M
+      ```
+
+    - **Si usas XAMPP/WAMP**: Edita el archivo `php.ini` y busca/modifica:
+      ```ini
+      memory_limit = 512M
+      ```
+
+    - **Alternativa temporal**: Si no quieres modificar la configuración, ejecuta los seeders con:
+      ```bash
+      php -d memory_limit=512M artisan db:seed
+      ```
+
+7. **Ejecutar las migraciones y seeders**
 
     ```bash
     php artisan migrate
     php artisan db:seed
     ```
 
-7. **Compilar assets de frontend**
-
-    ```bash
-    npm run build
-    ```
 
 ## Sobre el Proyecto
 
