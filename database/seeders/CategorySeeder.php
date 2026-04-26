@@ -21,6 +21,8 @@ class CategorySeeder extends Seeder
             ['name' => 'Arte', 'description' => 'Exposiciones de arte, talleres creativos', 'icon' => 'image'],
             ['name' => 'Educación', 'description' => 'Cursos, talleres y conferencias educativas', 'icon' => 'book'],
             ['name' => 'Ocio', 'description' => 'Eventos de entretenimiento y diversión', 'icon' => 'smile'],
+            ['name' => 'Medioambiente', 'description' => 'Eventos de conservación, sostenibilidad y acción climática', 'icon' => 'leaf'],
+            ['name' => 'Activismo', 'description' => 'Manifestaciones, protestas y eventos de acción social', 'icon' => 'megaphone'],
         ];
 
         foreach ($categories as $category) {

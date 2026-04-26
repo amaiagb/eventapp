@@ -31,6 +31,22 @@ class Event extends Model
     ];
 
     /**
+     * Obtiene la imagen de portada, retorna default.png si es null
+     */
+    public function getCoverImageAttribute($value)
+    {
+        return $value ?? 'default.png';
+    }
+
+    /**
+     * Obtiene la URL completa de la imagen de portada
+     */
+    public function getCoverImageUrlAttribute()
+    {
+        return asset('storage/img/events/' . $this->cover_image);
+    }
+
+    /**
      * Obtiene el usuario creador del evento
      */
     public function user()

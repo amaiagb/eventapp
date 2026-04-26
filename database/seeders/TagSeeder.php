@@ -23,6 +23,21 @@ class TagSeeder extends Seeder
             'Networking',
             'Workshop',
             'Exposición',
+            'LGTBIQ+',
+            'Feminista',
+            'Salud Mental',
+            'Inclusivo',
+            'Discapacidad',
+            'Inmigrantes',
+            'Activismo',
+            'Medioambiente',
+            'Voluntariado',
+            'Apoyo Mutuo',
+            'Diversidad',
+            'Igualdad',
+            'Sostenibilidad',
+            'Comunidad',
+            'Jóvenes',
         ];
 
         foreach ($tags as $tag) {

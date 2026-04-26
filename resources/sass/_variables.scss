@@ -1,7 +1,61 @@
 // Body
-$body-bg: #f8fafc;
+$body-bg: #ffffff;
 
 // Typography
-$font-family-sans-serif: 'Nunito', sans-serif;
+$font-family-sans-serif: 'Poppins', sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
+
+// ============================================
+// PALETA DE COLORES PRINCIPAL
+// ============================================
+
+// Primary Color (Azul)
+$primary: #0d6efd;
+$primary-hover: #0b5ed7;
+$primary-active: #0a58ca;
+$primary-light: #e7f1ff;
+$primary-dark: #0a58ca;
+
+// Secondary Color (Verde)
+$secondary: #198754;
+$secondary-hover: #157347;
+$secondary-active: #146c43;
+$secondary-light: #d1e7dd;
+$secondary-dark: #146c43;
+
+// Accent Color (Naranja)
+$accent: #fd7e14;
+$accent-hover: #fd9c4a;
+$accent-active: #fd9c4a;
+$accent-light: #ffecb5;
+$accent-dark: #e66e0c;
+
+// Background Colors
+$bg-light: #f8f9fa;
+$bg-dark: #212529;
+
+// Text Colors
+$text-primary: #333333;
+$text-secondary: #6c757d;
+$text-muted: #6c757d;
+
+// Border Colors
+$border-color: #dee2e6;
+$border-light: #e9ecef;
+
+// ============================================
+// CSS CUSTOM PROPERTIES (para uso en JavaScript)
+// ============================================
+:root {
+    --primary-color: #{$primary};
+    --primary-hover: #{$primary-hover};
+    --primary-active: #{$primary-active};
+    --secondary-color: #{$secondary};
+    --secondary-hover: #{$secondary-hover};
+    --secondary-active: #{$secondary-active};
+    --accent-color: #{$accent};
+    --accent-hover: #{$accent-hover};
+    --accent-active: #{$accent-active};
+    --bg-light: #{$bg-light};
+}

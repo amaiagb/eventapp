@@ -1,0 +1,315 @@
+// Componentes personalizados
+// Botones, cards, modales, etc. que extienden Bootstrap
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: $body-bg;
+    padding-top: 70px;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: $primary !important;
+}
+
+// Events - Horizontal layout (for search page)
+.event-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+
+    .row {
+        align-items: stretch;
+    }
+
+    img {
+        height: 100%;
+        min-height: 200px;
+        object-fit: cover;
+    }
+
+    .card-img-top {
+        border-radius: 12px 0 0 12px;
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+}
+
+// Events - Vertical layout (for home page)
+.event-card-home {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    height: 440px;
+
+    .card-img-top {
+        height: 180px;
+        object-fit: cover;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 1rem;
+        height: calc(100% - 180px);
+    }
+
+    .card-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.4;
+        max-height: 2.8em;
+        margin-bottom: 0.5rem;
+    }
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+}
+
+.event-card-inline {
+    display: inline-block;
+    width: 280px;
+    margin-right: 1rem;
+    vertical-align: top;
+    white-space: normal;
+}
+
+// Carousel
+.carousel-container {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 1rem 0;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $primary;
+        border-radius: 10px;
+    }
+}
+
+// Buttons - Custom overrides with hover/active states
+.btn-primary {
+    background-color: $primary;
+    border-color: $primary;
+
+    &:hover {
+        background-color: $primary-hover;
+        border-color: $primary-hover;
+    }
+
+    &:active {
+        background-color: $primary-active;
+        border-color: $primary-active;
+    }
+}
+
+.btn-success {
+    background-color: $secondary;
+    border-color: $secondary;
+
+    &:hover {
+        background-color: $secondary-hover;
+        border-color: $secondary-hover;
+    }
+
+    &:active {
+        background-color: $secondary-active;
+        border-color: $secondary-active;
+    }
+}
+
+.btn-warning {
+    background-color: $accent;
+    border-color: $accent;
+
+    &:hover {
+        background-color: $accent-hover;
+        border-color: $accent-hover;
+    }
+
+    &:active {
+        background-color: $accent-active;
+        border-color: $accent-active;
+    }
+}
+
+// FAB button
+.fab-create-event {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $primary, $accent);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 1000;
+
+    &:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+}
+
+// Search and filters
+.search-filters {
+    background-color: $bg-light;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.filter-sidebar {
+    background-color: $bg-light;
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.events-list {
+    padding-right: 0.5rem;
+}
+
+.map-container {
+    background-color: $bg-light;
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+// Typography
+.section-title {
+    font-weight: 600;
+    color: $text-primary;
+    margin-bottom: 1.5rem;
+}
+
+// Badges
+.category-badge {
+    background-color: $primary;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.category-badge-outline {
+    background-color: transparent;
+    color: $primary;
+    border: 1px solid $primary;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: inline-block;
+    flex: 0 0 auto;
+    width: fit-content;
+}
+
+.organizer-icon {
+    color: $accent;
+}
+
+// Multiselect
+.multiselect-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: white;
+    border: 1px solid $border-color;
+    border-radius: 0.375rem;
+}
+
+.multiselect-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    background: $bg-light;
+    border: 1px solid $border-color;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+
+    &:hover {
+        background: $border-light;
+        border-color: #adb5bd;
+    }
+
+    input[type="checkbox"] {
+        display: none;
+    }
+
+    &:has(input[type="checkbox"]:checked) {
+        background: $primary;
+        border-color: $primary;
+
+        .multiselect-text {
+            color: white;
+
+            &::before {
+                color: white;
+            }
+        }
+    }
+}
+
+.multiselect-text {
+    &::before {
+        content: '○';
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-right: 0.25rem;
+        font-size: 14px;
+        color: $text-secondary;
+    }
+}
+
+.multiselect-item input[type="checkbox"]:checked + .multiselect-text {
+    color: $primary;
+    font-weight: 500;
+
+    &::before {
+        content: '●';
+        color: $primary;
+    }
+}
