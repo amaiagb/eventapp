@@ -8,6 +8,12 @@
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
@@ -60,6 +66,12 @@
                                 @if (Route::has('password.request'))
                                     <a class="btn btn-link" href="{{ route('password.request') }}">
                                         {{ __('Forgot Your Password?') }}
+                                    </a>
+                                @endif
+
+                                @if (Route::has('register'))
+                                    <a class="btn btn-link" href="{{ route('register') }}">
+                                        {{ __('Register') }}
                                     </a>
                                 @endif
                             </div>
