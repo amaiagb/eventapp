@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -12,7 +13,14 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
+        // Obtener todos los eventos con sus relaciones básicas
+        $events = Event::with(['category', 'user', 'city'])
+            ->where('status', 'approved')
+            ->where('event_date', '>=', now())
+            ->orderBy('event_date', 'asc')
+            ->paginate(12);
+
+        return view('events.index', compact('events'));
     }
 
     /**
@@ -20,7 +28,8 @@ class EventController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::orderBy('name')->get();
+        return view('events.create', compact('categories'));
     }
 
     /**
@@ -36,7 +45,18 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        //
+        // Cargar eventos con sus relaciones
+        $event->load(['category', 'user', 'city', 'attendees']);
+        
+        // Obtener eventos en la misma ciudad (excluyendo el actual)
+        $otherEventsInCity = Event::where('city_id', $event->city_id)
+            ->where('id', '!=', $event->id)
+            ->where('event_date', '>=', now())
+            ->with(['category', 'city'])
+            ->limit(10)
+            ->get();
+        
+        return view('events.show', compact('event', 'otherEventsInCity'));
     }
 
     /**
