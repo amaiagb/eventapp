@@ -29,6 +29,39 @@
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Custom Dropdown Function -->
+    <script>
+        function toggleDropdown(event) {
+            event.preventDefault();
+            var dropdown = document.getElementById('userDropdownMenu');
+            
+            // Close all other dropdowns
+            var allDropdowns = document.querySelectorAll('.dropdown-menu');
+            allDropdowns.forEach(function(d) {
+                if (d !== dropdown) {
+                    d.style.display = 'none';
+                }
+            });
+            
+            // Toggle current dropdown
+            if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+                dropdown.style.display = 'block';
+            } else {
+                dropdown.style.display = 'none';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            var dropdown = document.getElementById('userDropdownMenu');
+            var dropdownToggle = event.target.closest('a[onclick="toggleDropdown(event)"]');
+            
+            if (!dropdownToggle && !dropdown.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+    </script>
+
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 

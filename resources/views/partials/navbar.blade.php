@@ -60,31 +60,29 @@
 
                     <!-- User Profile Dropdown -->
                     <li class="nav-item dropdown ms-2">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link d-flex align-items-center" href="#" onclick="toggleDropdown(event)" style="cursor: pointer;">
                             <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 35px; height: 35px;">
-                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
                             </div>
-                            <span class="d-none d-lg-inline">{{ Auth::user()->name }}</span>
+                            <span class="d-none d-lg-inline">{{ Auth::user()->username }}</span>
+                            <i class="fas fa-chevron-down ms-1"></i>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <ul id="userDropdownMenu" class="dropdown-menu dropdown-menu-end" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #dee2e6; border-radius: 0.375rem; box-shadow: 0 0.5rem 1rem rgba(0,0,0,.175); min-width: 200px; z-index: 1000;">
                             <li>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item d-block px-4 py-2 text-decoration-none text-dark" href="{{ route('profile.details') }}" style="color: #212529 !important;">
                                     <i class="fas fa-user me-2"></i> Mi Perfil
                                 </a>
                             </li>
+                            @if(Auth::user()->role && Auth::user()->role->name === 'admin')
+                                <li>
+                                    <a class="dropdown-item d-block px-4 py-2 text-decoration-none text-warning" href="{{ route('admin.dashboard') }}" style="color: #f6c23e !important;">
+                                        <i class="fas fa-tachometer-alt me-2"></i> Panel de Administración
+                                    </a>
+                                </li>
+                            @endif
+                            <li><hr class="dropdown-divider my-2"></li>
                             <li>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-calendar-alt me-2"></i> Mis Eventos
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cog me-2"></i> Configuración
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <a class="dropdown-item d-block px-4 py-2 text-decoration-none text-danger" href="{{ route('logout.direct') }}" style="color: #dc3545 !important;">
                                     <i class="fas fa-sign-out-alt me-2"></i> Cerrar Sesión
                                 </a>
                             </li>
