@@ -73,7 +73,7 @@
             @if($events->count() > 0)
             <div class="events-list">
                 @foreach($events as $event)
-                <div class="card event-card mb-3">
+                <div class="card card-horizontal mb-3">
                     <div class="row g-0">
                         <div class="col-md-5">
                             @if($event->cover_image)
@@ -97,7 +97,7 @@
                                     <i class="fas fa-user organizer-icon me-1"></i>{{ $event->user->name }}
                                     @endif
                                 </p>
-                                <a href="#" class="btn btn-primary btn-sm w-100">Ver detalles</a>
+                                <a href="{{ route('events.show', $event->id) }}" class="btn btn-primary btn-sm w-100">Ver detalles</a>
                             </div>
                         </div>
                     </div>

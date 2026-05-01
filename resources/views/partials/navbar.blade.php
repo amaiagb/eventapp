@@ -38,23 +38,13 @@
                 @else
                     <!-- Quick Access Links -->
                     <li class="nav-item">
-                        <a class="nav-link" href="#" title="Crear evento">
-                            <i class="fas fa-plus-circle fa-lg"></i>
+                        <a class="nav-link" href="{{ route('events.create') }}" title="Crear evento">
+                            <span class="d-none d-lg-inline ms-1">Crear Evento</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" title="Mis eventos">
-                            <i class="fas fa-calendar-check fa-lg"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" title="Notificaciones">
-                            <i class="fas fa-bell fa-lg"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" title="Configuración">
-                            <i class="fas fa-cog fa-lg"></i>
+                            <span class="d-none d-lg-inline ms-1">Mis Eventos</span>
                         </a>
                     </li>
 
