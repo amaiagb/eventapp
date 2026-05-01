@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Report;
@@ -158,5 +159,27 @@ class AdminController extends Controller
 
         $status = $user->is_active ? 'activado' : 'desactivado';
         return back()->with('success', "Usuario {$status} correctamente.");
+    }
+
+    /**
+     * Marcar un reporte como resuelto
+     */
+    public function resolveReport(Report $report)
+    {
+        $report->status = 'resolved';
+        $report->save();
+
+        return back()->with('success', 'Reporte marcado como resuelto.');
+    }
+
+    /**
+     * Rechazar un reporte
+     */
+    public function rejectReport(Report $report)
+    {
+        $report->status = 'reviewed';
+        $report->save();
+
+        return back()->with('success', 'Reporte rechazado.');
     }
 }

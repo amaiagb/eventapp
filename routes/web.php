@@ -49,6 +49,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Toggle routes
     Route::patch('/events/{event}/toggle', [AdminController::class, 'toggleEvent'])->name('events.toggle');
     Route::patch('/users/{user}/toggle', [AdminController::class, 'toggleUser'])->name('users.toggle');
+    
+    // Report management routes
+    Route::patch('/reports/{report}/resolve', [AdminController::class, 'resolveReport'])->name('reports.resolve');
+    Route::patch('/reports/{report}/reject', [AdminController::class, 'rejectReport'])->name('reports.reject');
 });
 
 // Event routes

@@ -205,11 +205,61 @@
 
             <!-- Report Event -->
             <div class="report-event mb-5">
-                <div class="text-center">
-                    <button class="btn btn-outline-danger btn-sm">
-                        <i class="fas fa-flag me-2"></i>Reportar evento
-                    </button>
-                </div>
+                @if(auth()->check() && $event->user_id !== auth()->id())
+                    <div class="text-center">
+                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#reportModal">
+                            <i class="fas fa-flag me-2"></i>Reportar evento
+                        </button>
+                    </div>
+
+                    <!-- Report Modal -->
+                    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="reportModalLabel">
+                                        <i class="fas fa-flag me-2"></i>Reportar evento
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="{{ route('report.store') }}" method="POST">
+                                    @csrf
+                                    <div class="modal-body">
+                                        <input type="hidden" name="reportable_type" value="App\Models\Event">
+                                        <input type="hidden" name="reportable_id" value="{{ $event->id }}">
+                                        
+                                        <div class="mb-3">
+                                            <label for="reason" class="form-label">Motivo del reporte</label>
+                                            <textarea class="form-control" id="reason" name="reason" rows="4" 
+                                                      placeholder="Describe el motivo por el cual reportas este evento..." required minlength="10" maxlength="500"></textarea>
+                                            <div class="form-text">Mínimo 10 caracteres, máximo 500 caracteres</div>
+                                        </div>
+
+                                        @error('reason')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+
+                                        @error('reportable_id')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fas fa-paper-plane me-2"></i>Enviar reporte
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @elseif(!auth()->check())
+                    <div class="text-center">
+                        <a href="{{ route('login') }}" class="btn btn-outline-danger btn-sm">
+                            <i class="fas fa-flag me-2"></i>Inicia sesión para reportar
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
 

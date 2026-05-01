@@ -89,55 +89,13 @@
                     <div class="card bg-danger text-white">
                         <div class="card-body">
                             <h5 class="card-title">Rechazados</h5>
-                            <h3>{{ \App\Models\Report::where('status', 'rejected')->count() }}</h3>
+                            <h3>{{ \App\Models\Report::where('status', 'reviewed')->count() }}</h3>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Filtros -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <form action="{{ route('admin.reports') }}" method="GET" class="row g-3">
-                        <div class="col-md-3">
-                            <label for="status" class="form-label">Estado</label>
-                            <select class="form-select" id="status" name="status">
-                                <option value="">Todos</option>
-                                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pendientes</option>
-                                <option value="resolved" {{ request('status') == 'resolved' ? 'selected' : '' }}>Resueltos</option>
-                                <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rechazados</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="type" class="form-label">Tipo</label>
-                            <select class="form-select" id="type" name="type">
-                                <option value="">Todos</option>
-                                <option value="App\Models\Event" {{ request('type') == 'App\Models\Event' ? 'selected' : '' }}>Eventos</option>
-                                <option value="App\Models\User" {{ request('type') == 'App\Models\User' ? 'selected' : '' }}>Usuarios</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="search" class="form-label">Buscar</label>
-                            <input type="text" class="form-control" id="search" name="search" 
-                                   value="{{ request('search') }}" placeholder="Buscar reportes...">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">&nbsp;</label>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-search me-2"></i> Filtrar
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <a href="{{ route('admin.reports') }}" class="btn btn-secondary">
-                                <i class="fas fa-times me-2"></i> Limpiar filtros
-                            </a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
+            
             <!-- Lista de Reportes -->
             <div class="card shadow">
                 <div class="card-header py-3">
@@ -176,17 +134,11 @@
                                             </td>
                                             <td>
                                                 <span class="badge bg-secondary">
-                                                    {{ class_basename($report->reportable_type) }}
+                                                    {{ $report->reportable_type_name }}
                                                 </span>
                                             </td>
                                             <td>
-                                                @if($report->reportable_type === 'App\Models\Event')
-                                                    <strong>Evento:</strong> {{ Str::limit($report->reportable->title ?? 'N/A', 30) }}
-                                                @elseif($report->reportable_type === 'App\Models\User')
-                                                    <strong>Usuario:</strong> {{ $report->reportable->username ?? 'N/A' }}
-                                                @else
-                                                    N/A
-                                                @endif
+                                                {{ $report->reportable_display_info }}
                                             </td>
                                             <td>
                                                 <span class="text-muted" title="{{ $report->reason }}">
@@ -194,11 +146,8 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <span class="badge 
-                                                    {{ $report->status === 'pending' ? 'bg-warning' : '' }}
-                                                    {{ $report->status === 'resolved' ? 'bg-success' : '' }}
-                                                    {{ $report->status === 'rejected' ? 'bg-danger' : '' }}">
-                                                    {{ ucfirst($report->status) }}
+                                                <span class="badge {{ $report->status_badge_class }}">
+                                                    {{ $report->status_label }}
                                                 </span>
                                             </td>
                                             <td>{{ $report->created_at->format('d/m/Y H:i') }}</td>
@@ -209,12 +158,20 @@
                                                         <i class="fas fa-eye"></i>
                                                     </button>
                                                     @if($report->status === 'pending')
-                                                        <button class="btn btn-sm btn-success" title="Marcar como resuelto">
-                                                            <i class="fas fa-check"></i>
-                                                        </button>
-                                                        <button class="btn btn-sm btn-danger" title="Rechazar reporte">
-                                                            <i class="fas fa-times"></i>
-                                                        </button>
+                                                        <form action="{{ route('admin.reports.resolve', $report) }}" method="POST" style="display: inline;">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit" class="btn btn-sm btn-success" title="Marcar como resuelto">
+                                                                <i class="fas fa-check"></i>
+                                                            </button>
+                                                        </form>
+                                                        <form action="{{ route('admin.reports.reject', $report) }}" method="POST" style="display: inline;">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit" class="btn btn-sm btn-danger" title="Rechazar reporte">
+                                                                <i class="fas fa-times"></i>
+                                                            </button>
+                                                        </form>
                                                     @endif
                                                 </div>
                                             </td>
