@@ -165,9 +165,11 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title mb-3">Escribe un mensaje</h5>
-                                <form>
+                                <form action="{{ route('messages.store') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="event_id" value="{{ $event->id }}">
                                     <div class="mb-3">
-                                        <textarea class="form-control" rows="3" placeholder="Comparte algo sobre este evento..."></textarea>
+                                        <textarea class="form-control" name="content" rows="3" placeholder="Comparte algo sobre este evento..." required></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fas fa-paper-plane me-2"></i>Enviar mensaje
@@ -186,42 +188,37 @@
                     <!-- Messages List -->
                     <div class="messages-list">
                         @if(auth()->check())
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <div class="d-flex align-items-start">
-                                    <div class="message-avatar me-3">
-                                        <div class="avatar-placeholder rounded-circle">
-                                            <i class="fas fa-user"></i>
+                            @if($messages->count() > 0)
+                                @foreach($messages as $message)
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start">
+                                            <div class="message-avatar me-3">
+                                                @if($message->user && $message->user->profile_image)
+                                                <img src="{{ asset('storage/' . $message->user->profile_image) }}" alt="{{ $message->user->name }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                                @else
+                                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                    {{ $message->user ? strtoupper(substr($message->user->username ?? $message->user->name, 0, 1)) : '?' }}
+                                                </div>
+                                                @endif
+                                            </div>
+                                            <div class="message-content flex-grow-1">
+                                                <div class="message-header mb-2">
+                                                    <strong>{{ $message->user->name ?? 'Anónimo' }}</strong>
+                                                    <span class="text-muted small ms-2">{{ $message->created_at->diffForHumans() }}</span>
+                                                </div>
+                                                <p class="mb-0">{{ $message->content }}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="message-content flex-grow-1">
-                                        <div class="message-header mb-2">
-                                            <strong>Usuario Ejemplo</strong>
-                                            <span class="text-muted small ms-2">Hace 2 horas</span>
-                                        </div>
-                                        <p class="mb-0">¡Qué interesante este evento! ¿Alguien más va a asistir?</p>
                                     </div>
                                 </div>
+                                @endforeach
+                            @else
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                No hay mensajes en el foro todavía. ¡Sé el primero en escribir!
                             </div>
-                        </div>
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <div class="d-flex align-items-start">
-                                    <div class="message-avatar me-3">
-                                        <div class="avatar-placeholder rounded-circle">
-                                            <i class="fas fa-user"></i>
-                                        </div>
-                                    </div>
-                                    <div class="message-content flex-grow-1">
-                                        <div class="message-header mb-2">
-                                            <strong>Otro Usuario</strong>
-                                            <span class="text-muted small ms-2">Hace 1 hora</span>
-                                        </div>
-                                        <p class="mb-0">Sí, yo voy a estar ahí. Nos vemos allí!</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            @endif
                         @else
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle me-2"></i>

@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\City;
 use App\Models\Tag;
 use App\Models\EventAttendee;
+use App\Models\Message;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -108,6 +109,12 @@ class EventController extends Controller
                 ->exists();
         }
 
+        // Obtener mensajes del foro del evento ordenados por fecha
+        $messages = Message::where('event_id', $event->id)
+            ->with('user')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
         // Obtener eventos en la misma ciudad (excluyendo el actual)
         $otherEventsInCity = Event::where('city_id', $event->city_id)
             ->where('id', '!=', $event->id)
@@ -117,7 +124,7 @@ class EventController extends Controller
             ->limit(10)
             ->get();
 
-        return view('events.show', compact('event', 'otherEventsInCity', 'isRegistered'));
+        return view('events.show', compact('event', 'otherEventsInCity', 'isRegistered', 'messages'));
     }
 
     /**

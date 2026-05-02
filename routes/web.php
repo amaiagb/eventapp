@@ -8,6 +8,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\MessageController;
 
 // Ruta principal - usando HomeController para seguir MVC
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -60,3 +61,6 @@ Route::resource('events', EventController::class);
 Route::post('/events/{event}/register', [EventController::class, 'register'])->name('events.register')->middleware('auth');
 Route::post('/events/{event}/cancel', [EventController::class, 'cancel'])->name('events.cancel')->middleware('auth');
 Route::get('/my-events', [EventController::class, 'myEvents'])->name('events.my-events')->middleware('auth');
+
+// Message routes
+Route::post('/messages', [MessageController::class, 'store'])->name('messages.store')->middleware('auth');
