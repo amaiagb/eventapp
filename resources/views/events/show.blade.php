@@ -112,7 +112,7 @@
             </div>
 
             <!-- FAQs Section -->
-            <div class="faqs-section mb-5">
+            <!-- <div class="faqs-section mb-5">
                 <h3 class="section-title mb-3">Preguntas Frecuentes</h3>
                 <div class="accordion" id="faqsAccordion">
                     <div class="accordion-item">
@@ -152,7 +152,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Forum Section -->
             <div class="forum-section mb-5">
@@ -331,9 +331,6 @@
                         <button class="btn btn-primary w-100 mb-3">
                             <i class="fas fa-user-plus me-2"></i>Apuntarse al evento
                         </button>
-                        <button class="btn btn-outline-secondary w-100">
-                            <i class="fas fa-heart me-2"></i>Me interesa
-                        </button>
                         @elseif(auth()->check() && $event->status === 'pending' && auth()->id() === $event->user_id)
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle me-2"></i>
@@ -349,7 +346,7 @@
                 </div>
 
                 <!-- Share Event -->
-                <div class="card share-card mt-4">
+                <!-- <div class="card share-card mt-4">
                     <div class="card-body">
                         <h5 class="card-title mb-3">Compartir evento</h5>
                         <div class="d-flex gap-2">
@@ -367,7 +364,7 @@
                             </button>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -411,123 +408,4 @@
 </div>
 @endif
 
-@push('scripts')
-<style>
-    .event-cover-image {
-        position: relative;
-        height: 400px;
-        overflow: hidden;
-    }
-
-    .event-cover-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .cover-overlay {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-        padding: 2rem 0;
-    }
-
-    .event-title {
-        color: white;
-        font-size: 2.5rem;
-        font-weight: 600;
-        margin: 0;
-    }
-
-    .default-cover {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        height: 400px;
-        display: flex;
-        align-items: center;
-    }
-
-    .default-cover-content {
-        width: 100%;
-    }
-
-    .event-basic-info .event-meta {
-        font-size: 0.9rem;
-    }
-
-    .sticky-sidebar {
-        position: sticky;
-        top: 20px;
-    }
-
-    .organizer-card .organizer-avatar img,
-    .organizer-card .avatar-placeholder {
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-    }
-
-    .avatar-placeholder {
-        background: #e9ecef;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #6c757d;
-    }
-
-    .message-avatar img,
-    .message-avatar .avatar-placeholder {
-        width: 40px;
-        height: 40px;
-        object-fit: cover;
-    }
-
-    .carousel-container {
-        display: flex;
-        gap: 1rem;
-        overflow-x: auto;
-        padding-bottom: 1rem;
-        scrollbar-width: thin;
-    }
-
-    .carousel-container::-webkit-scrollbar {
-        height: 8px;
-    }
-
-    .carousel-container::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 4px;
-    }
-
-    .carousel-container::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 4px;
-    }
-
-    .carousel-container::-webkit-scrollbar-thumb:hover {
-        background: #555;
-    }
-
-    .event-card-inline {
-        flex: 0 0 280px;
-    }
-
-    @media (max-width: 768px) {
-        .event-title {
-            font-size: 1.8rem;
-        }
-
-        .sticky-sidebar {
-            position: relative;
-            top: 0;
-        }
-
-        .carousel-container {
-            flex-wrap: nowrap;
-            overflow-x: auto;
-        }
-    }
-</style>
-@endpush
 @endsection
