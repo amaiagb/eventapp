@@ -323,14 +323,36 @@
                             </div>
                             <div class="summary-item">
                                 <i class="fas fa-users text-primary me-2"></i>
-                                <span>{{ $event->attendees_count ?? 0 }} asistentes</span>
+                                <span>{{ $event->attendees()->count() }} asistentes</span>
                             </div>
                         </div>
 
                         @if(auth()->check() && $event->status === 'approved')
-                        <button class="btn btn-primary w-100 mb-3">
-                            <i class="fas fa-user-plus me-2"></i>Apuntarse al evento
+                        @if(auth()->id() !== $event->user_id)
+                        @if($isRegistered)
+                        <button type="button" class="btn btn-success w-100 mb-3" style="pointer-events: none; cursor: default;">
+                            <i class="fas fa-check me-2"></i>Ya te has unido
                         </button>
+                        <form action="{{ route('events.cancel', $event->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-link w-100 text-decoration-none text-muted">
+                                Cancelar asistencia
+                            </button>
+                        </form>
+                        @else
+                        <form action="{{ route('events.register', $event->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-primary w-100 mb-3">
+                                <i class="fas fa-user-plus me-2"></i>Apuntarse al evento
+                            </button>
+                        </form>
+                        @endif
+                        @else
+                        <div class="alert alert-info mb-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Eres el creador de este evento.
+                        </div>
+                        @endif
                         @elseif(auth()->check() && $event->status === 'pending' && auth()->id() === $event->user_id)
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle me-2"></i>

@@ -43,7 +43,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" title="Mis eventos">
+                        <a class="nav-link" href="{{ route('events.my-events') }}" title="Mis eventos">
                             <span class="d-none d-lg-inline ms-1">Mis Eventos</span>
                         </a>
                     </li>

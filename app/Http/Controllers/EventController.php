@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Tag;
+use App\Models\EventAttendee;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -98,7 +99,15 @@ class EventController extends Controller
 
         // Cargar eventos con sus relaciones
         $event->load(['category', 'user', 'city', 'attendees']);
-        
+
+        // Check if current user is registered
+        $isRegistered = false;
+        if (auth()->check()) {
+            $isRegistered = EventAttendee::where('event_id', $event->id)
+                ->where('user_id', auth()->id())
+                ->exists();
+        }
+
         // Obtener eventos en la misma ciudad (excluyendo el actual)
         $otherEventsInCity = Event::where('city_id', $event->city_id)
             ->where('id', '!=', $event->id)
@@ -107,8 +116,8 @@ class EventController extends Controller
             ->with(['category', 'city'])
             ->limit(10)
             ->get();
-        
-        return view('events.show', compact('event', 'otherEventsInCity'));
+
+        return view('events.show', compact('event', 'otherEventsInCity', 'isRegistered'));
     }
 
     /**
@@ -196,5 +205,105 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         //
+    }
+
+    /**
+     * Registrar asistencia de usuario a evento
+     */
+    public function register(Event $event)
+    {
+        // Comprobar si el usuario es el creador del evento
+        if (auth()->id() === $event->user_id) {
+            return redirect()->back()->with('error', 'No puedes apuntarte a tu propio evento.');
+        }
+
+        $existingAttendee = EventAttendee::where('event_id', $event->id)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if ($existingAttendee) {
+            return redirect()->back()->with('error', 'Ya estás apuntado a este evento.');
+        }
+
+        // Comprobar si el evento tiene máximo de asistentes
+        if ($event->max_attendees !== null) {
+            $currentAttendees = EventAttendee::where('event_id', $event->id)
+                ->count();
+
+            if ($currentAttendees >= $event->max_attendees) {
+                return redirect()->back()->with('error', 'El evento ha alcanzado el máximo de asistentes.');
+            }
+        }
+
+        // Crear el registro de asistente al evento
+        EventAttendee::create([
+            'event_id' => $event->id,
+            'user_id' => auth()->id(),
+            'status' => 'confirmed',
+        ]);
+
+        return redirect()->back()->with('success', 'Te has apuntado al evento correctamente.');
+    }
+
+    /**
+     * Cancelar asistencia a un evento
+     */
+    public function cancel(Event $event)
+    {
+        $attendee = EventAttendee::where('event_id', $event->id)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if (!$attendee) {
+            return redirect()->back()->with('error', 'No estás apuntado a este evento.');
+        }
+
+        $attendee->delete();
+
+        return redirect()->back()->with('success', 'Has cancelado tu asistencia al evento.');
+    }
+
+    /**
+     * Mostrar los eventos del usuario (creados y asistidos)
+     */
+    public function myEvents()
+    {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        $userId = auth()->id();
+
+        // Obtener eventos creados por el usuario
+        $createdEvents = Event::where('user_id', $userId)
+            ->with(['category', 'city'])
+            ->orderBy('event_date', 'desc')
+            ->get();
+
+        // Obtener eventos asistidos por el usuario
+        $attendedEventIds = EventAttendee::where('user_id', $userId)
+            ->where('status', 'confirmed')
+            ->pluck('event_id');
+
+        $attendedEvents = Event::whereIn('id', $attendedEventIds)
+            ->with(['category', 'city'])
+            ->orderBy('event_date', 'desc')
+            ->get();
+
+        // Separar por pasados y próximos
+        $now = now()->startOfDay();
+
+        $createdUpcoming = $createdEvents->where('event_date', '>=', $now);
+        $createdPast = $createdEvents->where('event_date', '<', $now);
+
+        $attendedUpcoming = $attendedEvents->where('event_date', '>=', $now);
+        $attendedPast = $attendedEvents->where('event_date', '<', $now);
+
+        return view('events.my-events', compact(
+            'createdUpcoming',
+            'createdPast',
+            'attendedUpcoming',
+            'attendedPast'
+        ));
     }
 }

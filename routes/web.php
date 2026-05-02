@@ -57,3 +57,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
 // Event routes
 Route::resource('events', EventController::class);
+Route::post('/events/{event}/register', [EventController::class, 'register'])->name('events.register')->middleware('auth');
+Route::post('/events/{event}/cancel', [EventController::class, 'cancel'])->name('events.cancel')->middleware('auth');
+Route::get('/my-events', [EventController::class, 'myEvents'])->name('events.my-events')->middleware('auth');
