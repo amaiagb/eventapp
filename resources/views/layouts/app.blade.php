@@ -55,7 +55,8 @@
             var dropdown = document.getElementById('userDropdownMenu');
             var dropdownToggle = event.target.closest('a[onclick="toggleDropdown(event)"]');
             
-            if (!dropdownToggle && !dropdown.contains(event.target)) {
+            // Only proceed if dropdown exists
+            if (dropdown && !dropdownToggle && !dropdown.contains(event.target)) {
                 dropdown.style.display = 'none';
             }
         });

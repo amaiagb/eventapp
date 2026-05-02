@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('navbar')
-    @include('partials.navbar')
+@include('partials.navbar')
 @endsection
 
 @section('content')
@@ -25,6 +25,21 @@
 </div>
 @endif
 
+@if($event->status === 'pending')
+<!-- Pending Event Warning Banner -->
+<div class="alert alert-warning mb-4">
+    <div class="container">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-exclamation-triangle me-3 fs-4"></i>
+            <div>
+                <h5 class="alert-heading mb-1">Evento Pendiente de Aprobación</h5>
+                <p class="mb-0">Este evento está pendiente de aprobación por un administrador. Mientras sea aprobado, solo tú como creador puedes ver esta página.</p>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 <!-- Main Content -->
 <div class="container py-4">
     <div class="row">
@@ -43,7 +58,7 @@
                             <i class="far fa-calendar text-primary"></i>
                             {{ $event->event_date->format('d M Y') }}
                             @if($event->event_time)
-                                {{ $event->event_time->format('H:i') }}
+                            {{ $event->event_time->format('H:i') }}
                             @endif
                         </span>
                     </div>
@@ -66,11 +81,11 @@
                         <div class="d-flex align-items-center">
                             <div class="organizer-avatar me-3">
                                 @if($event->user && $event->user->profile_image)
-                                    <img src="{{ asset('storage/img/users/' . $event->user->profile_image) }}" alt="{{ $event->user->name }}" class="rounded-circle">
+                                <img src="{{ asset('storage/' . $event->user->profile_image) }}" alt="{{ $event->user->name }}" class="rounded-circle">
                                 @else
-                                    <div class="avatar-placeholder rounded-circle">
-                                        <i class="fas fa-user"></i>
-                                    </div>
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    {{ $event->user ? strtoupper(substr($event->user->username ?? $event->user->name, 0, 1)) : '?' }}
+                                </div>
                                 @endif
                             </div>
                             <div class="organizer-details flex-grow-1">
@@ -78,12 +93,18 @@
                                 <p class="text-muted small mb-0">Organizador del evento</p>
                             </div>
                             <div class="organizer-actions">
-                                <button class="btn btn-outline-primary btn-sm me-2">
+                                @if(auth()->check() && $event->status === 'approved')
+                                <a href="" class="btn btn-outline-primary btn-sm me-2">
                                     <i class="fas fa-eye me-1"></i>Ver perfil
-                                </button>
+                                </a>
                                 <button class="btn btn-outline-secondary btn-sm">
                                     <i class="fas fa-user-plus me-1"></i>Seguir
                                 </button>
+                                @elseif(auth()->check() && $event->status === 'pending' && auth()->id() === $event->user_id)
+                                <a href="{{ route('events.edit', $event->id) }}" class="btn btn-outline-primary btn-sm me-2">
+                                    <i class="fas fa-edit me-1"></i>Editar evento
+                                </a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -137,6 +158,7 @@
             <div class="forum-section mb-5">
                 <h3 class="section-title mb-3">Foro del evento</h3>
                 <div class="forum-container">
+                    @if($event->status === 'approved')
                     <!-- New Message Form -->
                     @if(auth()->check())
                     <div class="new-message-form mb-4">
@@ -163,6 +185,7 @@
 
                     <!-- Messages List -->
                     <div class="messages-list">
+                        @if(auth()->check())
                         <div class="card mb-3">
                             <div class="card-body">
                                 <div class="d-flex align-items-start">
@@ -199,68 +222,82 @@
                                 </div>
                             </div>
                         </div>
+                        @else
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Debes estar <a href="{{ route('login') }}">iniciado sesión</a> para ver los mensajes del foro.
+                        </div>
+                        @endif
                     </div>
+                    @else
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        El foro del evento estará disponible cuando el evento sea aprobado.
+                    </div>
+                    @endif
                 </div>
             </div>
 
             <!-- Report Event -->
+            @if($event->status === 'approved')
             <div class="report-event mb-5">
                 @if(auth()->check() && $event->user_id !== auth()->id())
-                    <div class="text-center">
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#reportModal">
-                            <i class="fas fa-flag me-2"></i>Reportar evento
-                        </button>
-                    </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#reportModal">
+                        <i class="fas fa-flag me-2"></i>Reportar evento
+                    </button>
+                </div>
 
-                    <!-- Report Modal -->
-                    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="reportModalLabel">
-                                        <i class="fas fa-flag me-2"></i>Reportar evento
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form action="{{ route('report.store') }}" method="POST">
-                                    @csrf
-                                    <div class="modal-body">
-                                        <input type="hidden" name="reportable_type" value="App\Models\Event">
-                                        <input type="hidden" name="reportable_id" value="{{ $event->id }}">
-                                        
-                                        <div class="mb-3">
-                                            <label for="reason" class="form-label">Motivo del reporte</label>
-                                            <textarea class="form-control" id="reason" name="reason" rows="4" 
-                                                      placeholder="Describe el motivo por el cual reportas este evento..." required minlength="10" maxlength="500"></textarea>
-                                            <div class="form-text">Mínimo 10 caracteres, máximo 500 caracteres</div>
-                                        </div>
-
-                                        @error('reason')
-                                            <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
-
-                                        @error('reportable_id')
-                                            <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="submit" class="btn btn-danger">
-                                            <i class="fas fa-paper-plane me-2"></i>Enviar reporte
-                                        </button>
-                                    </div>
-                                </form>
+                <!-- Report Modal -->
+                <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="reportModalLabel">
+                                    <i class="fas fa-flag me-2"></i>Reportar evento
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
+                            <form action="{{ route('report.store') }}" method="POST">
+                                @csrf
+                                <div class="modal-body">
+                                    <input type="hidden" name="reportable_type" value="App\Models\Event">
+                                    <input type="hidden" name="reportable_id" value="{{ $event->id }}">
+
+                                    <div class="mb-3">
+                                        <label for="reason" class="form-label">Motivo del reporte</label>
+                                        <textarea class="form-control" id="reason" name="reason" rows="4"
+                                            placeholder="Describe el motivo por el cual reportas este evento..." required minlength="10" maxlength="500"></textarea>
+                                        <div class="form-text">Mínimo 10 caracteres, máximo 500 caracteres</div>
+                                    </div>
+
+                                    @error('reason')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+
+                                    @error('reportable_id')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-paper-plane me-2"></i>Enviar reporte
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
+                </div>
                 @elseif(!auth()->check())
-                    <div class="text-center">
-                        <a href="{{ route('login') }}" class="btn btn-outline-danger btn-sm">
-                            <i class="fas fa-flag me-2"></i>Inicia sesión para reportar
-                        </a>
-                    </div>
+                <div class="text-center">
+                    <a href="{{ route('login') }}" class="btn btn-outline-danger btn-sm">
+                        <i class="fas fa-flag me-2"></i>Inicia sesión para reportar
+                    </a>
+                </div>
                 @endif
             </div>
+            @endif
         </div>
 
         <!-- Right Column - Sticky Registration Card -->
@@ -270,7 +307,7 @@
                 <div class="card registration-card">
                     <div class="card-body">
                         <h4 class="card-title mb-4">Apuntarse al evento</h4>
-                        
+
                         <div class="event-summary mb-4">
                             <div class="summary-item mb-2">
                                 <i class="fas fa-calendar text-primary me-2"></i>
@@ -290,18 +327,23 @@
                             </div>
                         </div>
 
-                        @if(auth()->check())
-                            <button class="btn btn-primary w-100 mb-3">
-                                <i class="fas fa-user-plus me-2"></i>Apuntarse al evento
-                            </button>
-                            <button class="btn btn-outline-secondary w-100">
-                                <i class="fas fa-heart me-2"></i>Me interesa
-                            </button>
+                        @if(auth()->check() && $event->status === 'approved')
+                        <button class="btn btn-primary w-100 mb-3">
+                            <i class="fas fa-user-plus me-2"></i>Apuntarse al evento
+                        </button>
+                        <button class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-heart me-2"></i>Me interesa
+                        </button>
+                        @elseif(auth()->check() && $event->status === 'pending' && auth()->id() === $event->user_id)
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Tu evento está pendiente de aprobación. Las acciones estarán disponibles cuando sea aprobado.
+                        </div>
                         @else
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle me-2"></i>
-                                Debes <a href="{{ route('login') }}">iniciar sesión</a> para apuntarte a este evento.
-                            </div>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Debes <a href="{{ route('login') }}">iniciar sesión</a> para apuntarte a este evento.
+                        </div>
                         @endif
                     </div>
                 </div>
@@ -344,9 +386,9 @@
             <div class="event-card-inline">
                 <div class="card card-vertical">
                     @if($otherEvent->cover_image)
-                        <img src="{{ asset('storage/img/events/' . $otherEvent->cover_image) }}" class="card-img-top" alt="{{ $otherEvent->title }}">
+                    <img src="{{ asset('storage/img/events/' . $otherEvent->cover_image) }}" class="card-img-top" alt="{{ $otherEvent->title }}">
                     @else
-                        <img src="https://via.placeholder.com/280x180?text=Evento" class="card-img-top" alt="{{ $otherEvent->title }}">
+                    <img src="https://via.placeholder.com/280x180?text=Evento" class="card-img-top" alt="{{ $otherEvent->title }}">
                     @endif
                     <div class="card-body">
                         <div class="card-content">
@@ -371,121 +413,121 @@
 
 @push('scripts')
 <style>
-.event-cover-image {
-    position: relative;
-    height: 400px;
-    overflow: hidden;
-}
-
-.event-cover-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.cover-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-    padding: 2rem 0;
-}
-
-.event-title {
-    color: white;
-    font-size: 2.5rem;
-    font-weight: 600;
-    margin: 0;
-}
-
-.default-cover {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    height: 400px;
-    display: flex;
-    align-items: center;
-}
-
-.default-cover-content {
-    width: 100%;
-}
-
-.event-basic-info .event-meta {
-    font-size: 0.9rem;
-}
-
-.sticky-sidebar {
-    position: sticky;
-    top: 20px;
-}
-
-.organizer-card .organizer-avatar img,
-.organizer-card .avatar-placeholder {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-}
-
-.avatar-placeholder {
-    background: #e9ecef;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #6c757d;
-}
-
-.message-avatar img,
-.message-avatar .avatar-placeholder {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-}
-
-.carousel-container {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    padding-bottom: 1rem;
-    scrollbar-width: thin;
-}
-
-.carousel-container::-webkit-scrollbar {
-    height: 8px;
-}
-
-.carousel-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-}
-
-.carousel-container::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-}
-
-.carousel-container::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
-.event-card-inline {
-    flex: 0 0 280px;
-}
-
-@media (max-width: 768px) {
-    .event-title {
-        font-size: 1.8rem;
-    }
-    
-    .sticky-sidebar {
+    .event-cover-image {
         position: relative;
-        top: 0;
+        height: 400px;
+        overflow: hidden;
     }
-    
+
+    .event-cover-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .cover-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        padding: 2rem 0;
+    }
+
+    .event-title {
+        color: white;
+        font-size: 2.5rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .default-cover {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        height: 400px;
+        display: flex;
+        align-items: center;
+    }
+
+    .default-cover-content {
+        width: 100%;
+    }
+
+    .event-basic-info .event-meta {
+        font-size: 0.9rem;
+    }
+
+    .sticky-sidebar {
+        position: sticky;
+        top: 20px;
+    }
+
+    .organizer-card .organizer-avatar img,
+    .organizer-card .avatar-placeholder {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+    }
+
+    .avatar-placeholder {
+        background: #e9ecef;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6c757d;
+    }
+
+    .message-avatar img,
+    .message-avatar .avatar-placeholder {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+    }
+
     .carousel-container {
-        flex-wrap: nowrap;
+        display: flex;
+        gap: 1rem;
         overflow-x: auto;
+        padding-bottom: 1rem;
+        scrollbar-width: thin;
     }
-}
+
+    .carousel-container::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .carousel-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .carousel-container::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+
+    .carousel-container::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    .event-card-inline {
+        flex: 0 0 280px;
+    }
+
+    @media (max-width: 768px) {
+        .event-title {
+            font-size: 1.8rem;
+        }
+
+        .sticky-sidebar {
+            position: relative;
+            top: 0;
+        }
+
+        .carousel-container {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+    }
 </style>
 @endpush
 @endsection

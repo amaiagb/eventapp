@@ -51,9 +51,16 @@
                     <!-- User Profile Dropdown -->
                     <li class="nav-item dropdown ms-2">
                         <a class="nav-link d-flex align-items-center" href="#" onclick="toggleDropdown(event)" style="cursor: pointer;">
-                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 35px; height: 35px;">
-                                {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
-                            </div>
+                            @if(Auth::user()->profile_image)
+                                <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" 
+                                     alt="Profile Image" 
+                                     class="rounded-circle me-2" 
+                                     style="width: 35px; height: 35px; object-fit: cover;">
+                            @else
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 35px; height: 35px;">
+                                    {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                                </div>
+                            @endif
                             <span class="d-none d-lg-inline">{{ Auth::user()->username }}</span>
                             <i class="fas fa-chevron-down ms-1"></i>
                         </a>
