@@ -84,6 +84,48 @@ class AdminController extends Controller
     }
 
     /**
+     * Mostrar detalles de un evento para aprobación
+     */
+    public function showEvent(Event $event)
+    {
+        // Cargar todas las relaciones del evento
+        $event->load(['category', 'city', 'user', 'attendees']);
+        
+        return view('admin.events.show', compact('event'));
+    }
+
+    /**
+     * Aprobar un evento
+     */
+    public function approveEvent(Event $event)
+    {
+        $event->status = 'approved';
+        $event->is_active = true;
+        $event->save();
+
+        return redirect()->route('admin.events')
+            ->with('success', 'Evento "' . $event->title . '" ha sido aprobado exitosamente.');
+    }
+
+    /**
+     * Rechazar un evento
+     */
+    public function rejectEvent(Request $request, Event $event)
+    {
+        $validated = $request->validate([
+            'rejection_reason' => 'required|string|min:10|max:500'
+        ]);
+
+        $event->status = 'rejected';
+        $event->is_active = false;
+        $event->rejection_reason = $validated['rejection_reason'];
+        $event->save();
+
+        return redirect()->route('admin.events')
+            ->with('success', 'Evento "' . $event->title . '" ha sido rechazado.');
+    }
+
+    /**
      * Mostrar todos los usuarios
      */
     public function users(Request $request)

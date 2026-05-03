@@ -22,6 +22,16 @@
                 </div>
             </form>
 
+            <!-- Dark Mode Toggle -->
+            <div class="ms-3 d-flex align-items-center">
+                <button class="dark-mode-toggle btn btn-outline-secondary btn-sm theme-toggle" 
+                        type="button" 
+                        title="Cambiar modo oscuro/claro"
+                        onclick="toggleDarkMode()">
+                    <i class="fas fa-moon" id="theme-icon"></i>
+                </button>
+            </div>
+
             <!-- User Menu -->
             <ul class="navbar-nav ms-auto align-items-center">
                 @guest
@@ -43,7 +53,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" title="Mis eventos">
+                        <a class="nav-link" href="{{ route('my.events') }}" title="Mis eventos">
                             <span class="d-none d-lg-inline ms-1">Mis Eventos</span>
                         </a>
                     </li>

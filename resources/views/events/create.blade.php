@@ -63,11 +63,18 @@
                                 </div>
                                 
                                 <div class="col-md-6">
-                                    <label class="form-label">Ubicación <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('location') is-invalid @enderror" 
-                                           name="location" placeholder="Ej: Plaza Mayor, Madrid" 
-                                           value="{{ old('location') }}" required>
-                                    @error('location')
+                                    <label class="form-label">Ciudad <span class="text-danger">*</span></label>
+                                    <select class="form-select @error('city_id') is-invalid @enderror" 
+                                            name="city_id" required>
+                                        <option value="">Seleccionar ciudad</option>
+                                        @foreach($cities as $city)
+                                            <option value="{{ $city->id }}" 
+                                                    {{ old('city_id') == $city->id ? 'selected' : '' }}>
+                                                {{ $city->name }}, {{ $city->country->name ?? '' }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('city_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -94,6 +101,27 @@
                                     <input type="time" class="form-control @error('event_time') is-invalid @enderror" 
                                            name="event_time" value="{{ old('event_time') }}" required>
                                     @error('event_time')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ubicación Específica -->
+                        <div class="mb-4">
+                            <h5 class="text-muted mb-3">
+                                <i class="fas fa-map-marker-alt me-2"></i>Ubicación Específica
+                            </h5>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label">Dirección o lugar específico <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('location') is-invalid @enderror" 
+                                           name="location" placeholder="Ej: Plaza Mayor, Centro de Convenciones, Parque Central" 
+                                           value="{{ old('location') }}" required>
+                                    <div class="form-text">
+                                        Indica el lugar exacto donde se realizará el evento (dirección, nombre del lugar, etc.)
+                                    </div>
+                                    @error('location')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
