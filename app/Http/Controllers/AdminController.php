@@ -169,7 +169,17 @@ class AdminController extends Controller
         $report->status = 'resolved';
         $report->save();
 
-        return back()->with('success', 'Reporte marcado como resuelto.');
+        // Si el reporte es sobre un evento y el evento está aprobado, cambiarlo a rechazado
+        if ($report->reportable_type === 'App\Models\Event' && $report->reportable) {
+            $event = $report->reportable;
+            if ($event->status === 'approved') {
+                $event->status = 'rejected';
+                $event->rejection_reason = 'Evento rechazado debido a un reporte aceptado: ' . $report->reason;
+                $event->save();
+            }
+        }
+
+        return back()->with('success', 'Reporte marcado como resuelto y evento rechazado si era aplicable.');
     }
 
     /**

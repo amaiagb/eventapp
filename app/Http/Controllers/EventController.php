@@ -293,6 +293,7 @@ class EventController extends Controller
             ->pluck('event_id');
 
         $attendedEvents = Event::whereIn('id', $attendedEventIds)
+            ->where('status', '!=', 'rejected')
             ->with(['category', 'city'])
             ->orderBy('event_date', 'desc')
             ->get();
