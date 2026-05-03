@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('navbar')
+    @include('partials.navbar')
+@endsection
+
 @section('content')
 <div class="container py-4">
     <div class="row justify-content-center">
@@ -131,6 +135,25 @@
                                             </span>
                                         @enderror
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Interests Section -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-heart me-2"></i>Mis Intereses
+                                </label>
+                                <div class="multiselect-container">
+                                    @if(isset($tags))
+                                        @foreach($tags as $tag)
+                                        <label class="multiselect-item">
+                                            <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="multiselect-checkbox" @if(in_array($tag->id, $userTags)) checked @endif>
+                                            <span class="multiselect-text">{{ $tag->name }}</span>
+                                        </label>
+                                        @endforeach
+                                    @endif
                                 </div>
                             </div>
                         </div>

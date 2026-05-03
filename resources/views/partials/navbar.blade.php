@@ -22,6 +22,16 @@
                 </div>
             </form>
 
+            <!-- Dark Mode Toggle -->
+            <div class="ms-3 d-flex align-items-center">
+                <button class="dark-mode-toggle btn btn-outline-secondary btn-sm theme-toggle" 
+                        type="button" 
+                        title="Cambiar modo oscuro/claro"
+                        onclick="toggleDarkMode()">
+                    <i class="fas fa-moon" id="theme-icon"></i>
+                </button>
+            </div>
+
             <!-- User Menu -->
             <ul class="navbar-nav ms-auto align-items-center">
                 @guest
@@ -43,7 +53,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" title="Mis eventos">
+                        <a class="nav-link" href="{{ route('events.my-events') }}" title="Mis eventos">
                             <span class="d-none d-lg-inline ms-1">Mis Eventos</span>
                         </a>
                     </li>
@@ -51,9 +61,16 @@
                     <!-- User Profile Dropdown -->
                     <li class="nav-item dropdown ms-2">
                         <a class="nav-link d-flex align-items-center" href="#" onclick="toggleDropdown(event)" style="cursor: pointer;">
-                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 35px; height: 35px;">
-                                {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
-                            </div>
+                            @if(Auth::user()->profile_image)
+                                <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" 
+                                     alt="Profile Image" 
+                                     class="rounded-circle me-2" 
+                                     style="width: 35px; height: 35px; object-fit: cover;">
+                            @else
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 35px; height: 35px;">
+                                    {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                                </div>
+                            @endif
                             <span class="d-none d-lg-inline">{{ Auth::user()->username }}</span>
                             <i class="fas fa-chevron-down ms-1"></i>
                         </a>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('navbar')
-    @include('partials.navbar')
+@include('partials.navbar')
 @endsection
 
 @section('content')
@@ -25,6 +25,21 @@
 </div>
 @endif
 
+@if($event->status === 'pending')
+<!-- Pending Event Warning Banner -->
+<div class="alert alert-warning mb-4">
+    <div class="container">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-exclamation-triangle me-3 fs-4"></i>
+            <div>
+                <h5 class="alert-heading mb-1">Evento Pendiente de Aprobación</h5>
+                <p class="mb-0">Este evento está pendiente de aprobación por un administrador. Mientras sea aprobado, solo tú como creador puedes ver esta página.</p>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 <!-- Main Content -->
 <div class="container py-4">
     <div class="row">
@@ -43,7 +58,7 @@
                             <i class="far fa-calendar text-primary"></i>
                             {{ $event->event_date->format('d M Y') }}
                             @if($event->event_time)
-                                {{ $event->event_time->format('H:i') }}
+                            {{ $event->event_time->format('H:i') }}
                             @endif
                         </span>
                     </div>
@@ -66,11 +81,11 @@
                         <div class="d-flex align-items-center">
                             <div class="organizer-avatar me-3">
                                 @if($event->user && $event->user->profile_image)
-                                    <img src="{{ asset('storage/img/users/' . $event->user->profile_image) }}" alt="{{ $event->user->name }}" class="rounded-circle">
+                                <img src="{{ asset('storage/' . $event->user->profile_image) }}" alt="{{ $event->user->name }}" class="rounded-circle">
                                 @else
-                                    <div class="avatar-placeholder rounded-circle">
-                                        <i class="fas fa-user"></i>
-                                    </div>
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    {{ $event->user ? strtoupper(substr($event->user->username ?? $event->user->name, 0, 1)) : '?' }}
+                                </div>
                                 @endif
                             </div>
                             <div class="organizer-details flex-grow-1">
@@ -78,55 +93,26 @@
                                 <p class="text-muted small mb-0">Organizador del evento</p>
                             </div>
                             <div class="organizer-actions">
-                                <button class="btn btn-outline-primary btn-sm me-2">
+                                @if(auth()->check() && $event->status === 'approved')
+                                <a href="{{ route('users.show', $event->user->id) }}" class="btn btn-outline-primary btn-sm me-2">
                                     <i class="fas fa-eye me-1"></i>Ver perfil
-                                </button>
-                                <button class="btn btn-outline-secondary btn-sm">
-                                    <i class="fas fa-user-plus me-1"></i>Seguir
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- FAQs Section -->
-            <div class="faqs-section mb-5">
-                <h3 class="section-title mb-3">Preguntas Frecuentes</h3>
-                <div class="accordion" id="faqsAccordion">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                                ¿Cómo puedo apuntarme al evento?
-                            </button>
-                        </h2>
-                        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqsAccordion">
-                            <div class="accordion-body">
-                                Puedes apuntarte al evento haciendo clic en el botón "Apuntarse" que encontrarás en la columna derecha. Solo necesitas estar registrado en la plataforma.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                                ¿Es necesario pagar para participar?
-                            </button>
-                        </h2>
-                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqsAccordion">
-                            <div class="accordion-body">
-                                La mayoría de nuestros eventos son gratuitos. Si este evento tiene algún coste, se indicará específicamente en la descripción del evento.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                                ¿Puedo cancelar mi asistencia?
-                            </button>
-                        </h2>
-                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqsAccordion">
-                            <div class="accordion-body">
-                                Sí, puedes cancelar tu asistencia en cualquier momento desde tu panel de eventos. Te recomendamos hacerlo con al menos 24 horas de antelación.
+                                </a>
+                                @if(auth()->id() !== $event->user->id)
+                                <form id="followForm" action="{{ route('users.follow', $event->user->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" id="followBtn" class="btn @if($isFollowing) btn-outline-secondary @else btn-primary @endif btn-sm">
+                                        <i class="fas @if($isFollowing) fa-user-minus @else fa-user-plus @endif me-1"></i>
+                                        <span id="followText">@if($isFollowing) Dejar de seguir @else Seguir @endif</span>
+                                    </button>
+                                </form>
+                                @endif
+                                @endif
+                                
+                                @if(auth()->check() && auth()->id() === $event->user_id)
+                                <a href="{{ route('events.edit', $event->id) }}" class="btn btn-outline-primary btn-sm me-2">
+                                    <i class="fas fa-edit me-1"></i>Editar evento
+                                </a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -137,15 +123,18 @@
             <div class="forum-section mb-5">
                 <h3 class="section-title mb-3">Foro del evento</h3>
                 <div class="forum-container">
+                    @if($event->status === 'approved')
                     <!-- New Message Form -->
                     @if(auth()->check())
                     <div class="new-message-form mb-4">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title mb-3">Escribe un mensaje</h5>
-                                <form>
+                                <form action="{{ route('messages.store') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="event_id" value="{{ $event->id }}">
                                     <div class="mb-3">
-                                        <textarea class="form-control" rows="3" placeholder="Comparte algo sobre este evento..."></textarea>
+                                        <textarea class="form-control" name="content" rows="3" placeholder="Comparte algo sobre este evento..." required></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fas fa-paper-plane me-2"></i>Enviar mensaje
@@ -163,104 +152,114 @@
 
                     <!-- Messages List -->
                     <div class="messages-list">
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <div class="d-flex align-items-start">
-                                    <div class="message-avatar me-3">
-                                        <div class="avatar-placeholder rounded-circle">
-                                            <i class="fas fa-user"></i>
+                        @if(auth()->check())
+                            @if($messages->count() > 0)
+                                @foreach($messages as $message)
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start">
+                                            <div class="message-avatar me-3">
+                                                @if($message->user && $message->user->profile_image)
+                                                <img src="{{ asset('storage/' . $message->user->profile_image) }}" alt="{{ $message->user->name }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                                @else
+                                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                    {{ $message->user ? strtoupper(substr($message->user->username ?? $message->user->name, 0, 1)) : '?' }}
+                                                </div>
+                                                @endif
+                                            </div>
+                                            <div class="message-content flex-grow-1">
+                                                <div class="message-header mb-2">
+                                                    <strong>{{ $message->user->name ?? 'Anónimo' }}</strong>
+                                                    <span class="text-muted small ms-2">{{ $message->created_at->diffForHumans() }}</span>
+                                                </div>
+                                                <p class="mb-0">{{ $message->content }}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="message-content flex-grow-1">
-                                        <div class="message-header mb-2">
-                                            <strong>Usuario Ejemplo</strong>
-                                            <span class="text-muted small ms-2">Hace 2 horas</span>
-                                        </div>
-                                        <p class="mb-0">¡Qué interesante este evento! ¿Alguien más va a asistir?</p>
                                     </div>
                                 </div>
+                                @endforeach
+                            @else
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                No hay mensajes en el foro todavía. ¡Sé el primero en escribir!
                             </div>
+                            @endif
+                        @else
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Debes estar <a href="{{ route('login') }}">iniciado sesión</a> para ver los mensajes del foro.
                         </div>
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <div class="d-flex align-items-start">
-                                    <div class="message-avatar me-3">
-                                        <div class="avatar-placeholder rounded-circle">
-                                            <i class="fas fa-user"></i>
-                                        </div>
-                                    </div>
-                                    <div class="message-content flex-grow-1">
-                                        <div class="message-header mb-2">
-                                            <strong>Otro Usuario</strong>
-                                            <span class="text-muted small ms-2">Hace 1 hora</span>
-                                        </div>
-                                        <p class="mb-0">Sí, yo voy a estar ahí. Nos vemos allí!</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @endif
                     </div>
+                    @else
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        El foro del evento estará disponible cuando el evento sea aprobado.
+                    </div>
+                    @endif
                 </div>
             </div>
 
             <!-- Report Event -->
+            @if($event->status === 'approved')
             <div class="report-event mb-5">
                 @if(auth()->check() && $event->user_id !== auth()->id())
-                    <div class="text-center">
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#reportModal">
-                            <i class="fas fa-flag me-2"></i>Reportar evento
-                        </button>
-                    </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#reportModal">
+                        <i class="fas fa-flag me-2"></i>Reportar evento
+                    </button>
+                </div>
 
-                    <!-- Report Modal -->
-                    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="reportModalLabel">
-                                        <i class="fas fa-flag me-2"></i>Reportar evento
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form action="{{ route('report.store') }}" method="POST">
-                                    @csrf
-                                    <div class="modal-body">
-                                        <input type="hidden" name="reportable_type" value="App\Models\Event">
-                                        <input type="hidden" name="reportable_id" value="{{ $event->id }}">
-                                        
-                                        <div class="mb-3">
-                                            <label for="reason" class="form-label">Motivo del reporte</label>
-                                            <textarea class="form-control" id="reason" name="reason" rows="4" 
-                                                      placeholder="Describe el motivo por el cual reportas este evento..." required minlength="10" maxlength="500"></textarea>
-                                            <div class="form-text">Mínimo 10 caracteres, máximo 500 caracteres</div>
-                                        </div>
-
-                                        @error('reason')
-                                            <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
-
-                                        @error('reportable_id')
-                                            <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="submit" class="btn btn-danger">
-                                            <i class="fas fa-paper-plane me-2"></i>Enviar reporte
-                                        </button>
-                                    </div>
-                                </form>
+                <!-- Report Modal -->
+                <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="reportModalLabel">
+                                    <i class="fas fa-flag me-2"></i>Reportar evento
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
+                            <form action="{{ route('report.store') }}" method="POST">
+                                @csrf
+                                <div class="modal-body">
+                                    <input type="hidden" name="reportable_type" value="App\Models\Event">
+                                    <input type="hidden" name="reportable_id" value="{{ $event->id }}">
+
+                                    <div class="mb-3">
+                                        <label for="reason" class="form-label">Motivo del reporte</label>
+                                        <textarea class="form-control" id="reason" name="reason" rows="4"
+                                            placeholder="Describe el motivo por el cual reportas este evento..." required minlength="10" maxlength="500"></textarea>
+                                        <div class="form-text">Mínimo 10 caracteres, máximo 500 caracteres</div>
+                                    </div>
+
+                                    @error('reason')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+
+                                    @error('reportable_id')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-paper-plane me-2"></i>Enviar reporte
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
+                </div>
                 @elseif(!auth()->check())
-                    <div class="text-center">
-                        <a href="{{ route('login') }}" class="btn btn-outline-danger btn-sm">
-                            <i class="fas fa-flag me-2"></i>Inicia sesión para reportar
-                        </a>
-                    </div>
+                <div class="text-center">
+                    <a href="{{ route('login') }}" class="btn btn-outline-danger btn-sm">
+                        <i class="fas fa-flag me-2"></i>Inicia sesión para reportar
+                    </a>
+                </div>
                 @endif
             </div>
+            @endif
         </div>
 
         <!-- Right Column - Sticky Registration Card -->
@@ -270,7 +269,7 @@
                 <div class="card registration-card">
                     <div class="card-body">
                         <h4 class="card-title mb-4">Apuntarse al evento</h4>
-                        
+
                         <div class="event-summary mb-4">
                             <div class="summary-item mb-2">
                                 <i class="fas fa-calendar text-primary me-2"></i>
@@ -286,28 +285,52 @@
                             </div>
                             <div class="summary-item">
                                 <i class="fas fa-users text-primary me-2"></i>
-                                <span>{{ $event->attendees_count ?? 0 }} asistentes</span>
+                                <span>{{ $event->attendees()->count() }} asistentes</span>
                             </div>
                         </div>
 
-                        @if(auth()->check())
-                            <button class="btn btn-primary w-100 mb-3">
+                        @if(auth()->check() && $event->status === 'approved')
+                        @if(auth()->id() !== $event->user_id)
+                        @if($isRegistered)
+                        <button type="button" class="btn btn-success w-100 mb-3" style="pointer-events: none; cursor: default;">
+                            <i class="fas fa-check me-2"></i>Ya te has unido
+                        </button>
+                        <form action="{{ route('events.cancel', $event->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-link w-100 text-decoration-none text-muted">
+                                Cancelar asistencia
+                            </button>
+                        </form>
+                        @else
+                        <form action="{{ route('events.register', $event->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-primary w-100 mb-3">
                                 <i class="fas fa-user-plus me-2"></i>Apuntarse al evento
                             </button>
-                            <button class="btn btn-outline-secondary w-100">
-                                <i class="fas fa-heart me-2"></i>Me interesa
-                            </button>
+                        </form>
+                        @endif
                         @else
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle me-2"></i>
-                                Debes <a href="{{ route('login') }}">iniciar sesión</a> para apuntarte a este evento.
-                            </div>
+                        <div class="alert alert-info mb-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Eres el creador de este evento.
+                        </div>
+                        @endif
+                        @elseif(auth()->check() && $event->status === 'pending' && auth()->id() === $event->user_id)
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Tu evento está pendiente de aprobación. Las acciones estarán disponibles cuando sea aprobado.
+                        </div>
+                        @else
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Debes <a href="{{ route('login') }}">iniciar sesión</a> para apuntarte a este evento.
+                        </div>
                         @endif
                     </div>
                 </div>
 
                 <!-- Share Event -->
-                <div class="card share-card mt-4">
+                <!-- <div class="card share-card mt-4">
                     <div class="card-body">
                         <h5 class="card-title mb-3">Compartir evento</h5>
                         <div class="d-flex gap-2">
@@ -325,7 +348,7 @@
                             </button>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -344,9 +367,9 @@
             <div class="event-card-inline">
                 <div class="card card-vertical">
                     @if($otherEvent->cover_image)
-                        <img src="{{ asset('storage/img/events/' . $otherEvent->cover_image) }}" class="card-img-top" alt="{{ $otherEvent->title }}">
+                    <img src="{{ asset('storage/img/events/' . $otherEvent->cover_image) }}" class="card-img-top" alt="{{ $otherEvent->title }}">
                     @else
-                        <img src="https://via.placeholder.com/280x180?text=Evento" class="card-img-top" alt="{{ $otherEvent->title }}">
+                    <img src="https://via.placeholder.com/280x180?text=Evento" class="card-img-top" alt="{{ $otherEvent->title }}">
                     @endif
                     <div class="card-body">
                         <div class="card-content">
@@ -369,123 +392,82 @@
 </div>
 @endif
 
-@push('scripts')
-<style>
-.event-cover-image {
-    position: relative;
-    height: 400px;
-    overflow: hidden;
-}
-
-.event-cover-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.cover-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-    padding: 2rem 0;
-}
-
-.event-title {
-    color: white;
-    font-size: 2.5rem;
-    font-weight: 600;
-    margin: 0;
-}
-
-.default-cover {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    height: 400px;
-    display: flex;
-    align-items: center;
-}
-
-.default-cover-content {
-    width: 100%;
-}
-
-.event-basic-info .event-meta {
-    font-size: 0.9rem;
-}
-
-.sticky-sidebar {
-    position: sticky;
-    top: 20px;
-}
-
-.organizer-card .organizer-avatar img,
-.organizer-card .avatar-placeholder {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-}
-
-.avatar-placeholder {
-    background: #e9ecef;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #6c757d;
-}
-
-.message-avatar img,
-.message-avatar .avatar-placeholder {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-}
-
-.carousel-container {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    padding-bottom: 1rem;
-    scrollbar-width: thin;
-}
-
-.carousel-container::-webkit-scrollbar {
-    height: 8px;
-}
-
-.carousel-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-}
-
-.carousel-container::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-}
-
-.carousel-container::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
-.event-card-inline {
-    flex: 0 0 280px;
-}
-
-@media (max-width: 768px) {
-    .event-title {
-        font-size: 1.8rem;
-    }
-    
-    .sticky-sidebar {
-        position: relative;
-        top: 0;
-    }
-    
-    .carousel-container {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-    }
-}
-</style>
-@endpush
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const followForm = document.getElementById('followForm');
+    const followBtn = document.getElementById('followBtn');
+    const followText = document.getElementById('followText');
+    
+    if (followForm) {
+        followForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const isCurrentlyFollowing = followBtn.classList.contains('btn-outline-secondary');
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Actualizar aspecto del botón
+                    if (isCurrentlyFollowing) {
+                        // Estaba siguiendo, ahora deja de seguir
+                        followBtn.classList.remove('btn-outline-secondary');
+                        followBtn.classList.add('btn-primary');
+                        followBtn.querySelector('i').classList.remove('fa-user-minus');
+                        followBtn.querySelector('i').classList.add('fa-user-plus');
+                        followText.textContent = 'Seguir';
+                    } else {
+                        // No estaba siguiendo, ahora sigue
+                        followBtn.classList.remove('btn-primary');
+                        followBtn.classList.add('btn-outline-secondary');
+                        followBtn.querySelector('i').classList.remove('fa-user-plus');
+                        followBtn.querySelector('i').classList.add('fa-user-minus');
+                        followText.textContent = 'Dejar de seguir';
+                    }
+                    
+                    // Mostrar mensaje de éxito
+                    showToast(data.message);
+                } else {
+                    showToast(data.message || 'Error al procesar la solicitud', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Error de conexión', 'error');
+            });
+        });
+    }
+    
+    function showToast(message, type = 'success') {
+        // Crear elemento toast
+        const toast = document.createElement('div');
+        toast.className = `alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+        toast.style.zIndex = '1050';
+        toast.innerHTML = `
+            <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'} me-2"></i>${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Eliminar automáticamente después de 3 segundos
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 3000);
+    }
+});
+</script>
+@endpush

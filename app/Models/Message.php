@@ -11,10 +11,8 @@ class Message extends Model
 
     protected $fillable = [
         'event_id',
-        'sender_id',
-        'receiver_id',
+        'user_id',
         'content',
-        'is_read',
     ];
 
     /**
@@ -26,18 +24,10 @@ class Message extends Model
     }
 
     /**
-     * Obtiene el remitente
+     * Obtiene el usuario que escribió el mensaje
      */
-    public function sender()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'sender_id');
-    }
-
-    /**
-     * Obtiene el destinatario
-     */
-    public function receiver()
-    {
-        return $this->belongsTo(User::class, 'receiver_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -127,5 +127,15 @@ class User extends Authenticatable
     }
 
     #endregion
+
+    #region INTERESES
+    /**
+     * Obtiene los tags de interés del user
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'user_interests');
+    }
+    #endregion
     #endregion
 }

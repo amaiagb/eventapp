@@ -1,0 +1,479 @@
+// Dark Mode Variables
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --border-color: #dee2e6;
+  --card-bg: #ffffff;
+  --navbar-bg: #ffffff;
+  --sidebar-bg: #f8f9fa;
+  --hover-bg: #f1f3f5;
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #1a1d23;
+  --bg-secondary: #22262e;
+  --bg-tertiary: #2d3139;
+  --text-primary: #e9ecef;
+  --text-secondary: #adb5bd;
+  --text-muted: #6c757d;
+  --border-color: #495057;
+  --card-bg: #22262e;
+  --navbar-bg: #1a1d23;
+  --sidebar-bg: #22262e;
+  --hover-bg: #2d3139;
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+}
+
+// Base Dark Mode Styles
+[data-theme="dark"] {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+  
+  // All text elements should be white/light in dark mode
+  * {
+    color: inherit;
+  }
+  
+  // Specific text elements - More comprehensive
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary) !important;
+  }
+  
+  p, span, div, td, th {
+    color: var(--text-primary) !important;
+  }
+  
+  // More specific text elements
+  .card-title, .card-text, .card-subtitle {
+    color: var(--text-primary) !important;
+  }
+  
+  .text-muted {
+    color: var(--text-muted) !important;
+  }
+  
+  // All text inside cards
+  .card * {
+    color: inherit !important;
+  }
+  
+  .card .card-title {
+    color: var(--text-primary) !important;
+  }
+  
+  .card .card-text {
+    color: var(--text-secondary) !important;
+    
+    &.text-muted {
+      color: var(--text-muted) !important;
+    }
+  }
+  
+  .card .category-badge-outline {
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+  }
+  
+  // Icons in cards
+  .card i, .card-text i {
+    color: var(--text-muted) !important;
+  }
+  
+  // Links
+  a {
+    color: #0d6efd !important;
+    
+    &:hover {
+      color: #0b5ed7 !important;
+    }
+  }
+  
+  // Secondary text
+  .text-muted, .text-secondary {
+    color: var(--text-muted) !important;
+  }
+  
+  // Primary text
+  .text-primary {
+    color: #0d6efd !important;
+  }
+  
+  // Success text
+  .text-success {
+    color: #198754 !important;
+  }
+  
+  // Warning text
+  .text-warning {
+    color: #ffc107 !important;
+  }
+  
+  // Danger text
+  .text-danger {
+    color: #dc3545 !important;
+  }
+  
+  // Info text
+  .text-info {
+    color: #0dcaf0 !important;
+  }
+  
+  // Navbar
+  .navbar {
+    background-color: var(--navbar-bg) !important;
+    border-bottom: 1px solid var(--border-color);
+    
+    .navbar-brand {
+      color: var(--text-primary) !important;
+    }
+    
+    .nav-link {
+      color: var(--text-secondary) !important;
+      
+      &:hover {
+        color: var(--text-primary) !important;
+      }
+    }
+    
+    .form-control {
+      background-color: var(--bg-secondary);
+      border-color: var(--border-color);
+      color: var(--text-primary);
+      
+      &::placeholder {
+        color: var(--text-muted);
+      }
+    }
+  }
+  
+  // Cards
+  .card {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    
+    .card-header {
+      background-color: var(--bg-tertiary);
+      border-color: var(--border-color);
+      color: var(--text-primary);
+    }
+    
+    .card-body {
+      color: var(--text-primary);
+    }
+    
+    .card-text {
+      color: var(--text-secondary);
+    }
+  }
+  
+  // Tables
+  .table {
+    color: var(--text-primary);
+    
+    th {
+      border-color: var(--border-color);
+      color: var(--text-primary);
+    }
+    
+    td {
+      border-color: var(--border-color);
+      color: var(--text-secondary);
+    }
+    
+    .table-hover tbody tr:hover {
+      background-color: var(--hover-bg);
+    }
+  }
+  
+  // Forms
+  .form-control {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+    
+    &:focus {
+      background-color: var(--bg-secondary);
+      border-color: #0d6efd;
+      color: var(--text-primary);
+    }
+    
+    &::placeholder {
+      color: var(--text-muted);
+    }
+  }
+  
+  .form-select {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+  }
+  
+  // Buttons
+  .btn-outline-primary {
+    border-color: #0d6efd;
+    color: #0d6efd;
+    
+    &:hover {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+    }
+  }
+  
+  .btn-outline-secondary {
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+    
+    &:hover {
+      background-color: var(--hover-bg);
+      border-color: var(--border-color);
+      color: var(--text-primary);
+    }
+  }
+  
+  // Alerts
+  .alert {
+    border-color: var(--border-color);
+    
+    &.alert-success {
+      background-color: rgba(25, 135, 84, 0.1);
+      border-color: rgba(25, 135, 84, 0.3);
+      color: #75b798;
+    }
+    
+    &.alert-danger {
+      background-color: rgba(220, 53, 69, 0.1);
+      border-color: rgba(220, 53, 69, 0.3);
+      color: #f1aeb5;
+    }
+    
+    &.alert-warning {
+      background-color: rgba(255, 193, 7, 0.1);
+      border-color: rgba(255, 193, 7, 0.3);
+      color: #ffda6a;
+    }
+  }
+  
+  // Dropdowns
+  .dropdown-menu {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    
+    .dropdown-item {
+      color: var(--text-primary);
+      
+      &:hover {
+        background-color: var(--hover-bg);
+        color: var(--text-primary);
+      }
+    }
+    
+    .dropdown-divider {
+      border-color: var(--border-color);
+    }
+  }
+  
+  // Modals
+  .modal {
+    .modal-content {
+      background-color: var(--card-bg);
+      color: var(--text-primary);
+    }
+    
+    .modal-header {
+      border-color: var(--border-color);
+    }
+    
+    .modal-footer {
+      border-color: var(--border-color);
+    }
+  }
+  
+  // Pagination
+  .pagination {
+    .page-link {
+      background-color: var(--card-bg);
+      border-color: var(--border-color);
+      color: var(--text-primary);
+      
+      &:hover {
+        background-color: var(--hover-bg);
+        color: var(--text-primary);
+      }
+    }
+    
+    .page-item.active .page-link {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+    }
+  }
+  
+  // Badges
+  .badge {
+    &.bg-secondary {
+      background-color: var(--bg-tertiary) !important;
+      color: var(--text-secondary) !important;
+    }
+  }
+  
+  // Admin specific styles
+  .admin-layout {
+    color: var(--text-primary);
+    
+    .page-title {
+      color: var(--text-primary) !important;
+    }
+    
+    .page-subtitle {
+      color: var(--text-secondary) !important;
+    }
+    
+    .stat-value {
+      color: var(--text-primary) !important;
+    }
+    
+    .stat-label {
+      color: var(--text-secondary) !important;
+    }
+    
+    .card-title {
+      color: var(--text-primary) !important;
+    }
+  }
+  
+  // Event Cards - Specific fix for the issue
+  .card {
+    background-color: var(--card-bg) !important;
+    border-color: var(--border-color) !important;
+    
+    .card-title {
+      color: var(--text-primary) !important;
+    }
+    
+    .card-text {
+      color: var(--text-secondary) !important;
+      
+      &.text-muted {
+        color: var(--text-muted) !important;
+      }
+    }
+    
+    .category-badge-outline {
+      background-color: transparent !important;
+      border: 1px solid var(--border-color) !important;
+      color: var(--text-primary) !important;
+    }
+    
+    // Icons inside card text
+    .card-text i {
+      color: var(--text-muted) !important;
+    }
+  }
+  
+  // Card vertical specific
+  .card-vertical {
+    background-color: var(--card-bg) !important;
+    border-color: var(--border-color) !important;
+    
+    .card-body {
+      background-color: var(--card-bg) !important;
+    }
+    
+    .card-content {
+      color: var(--text-primary) !important;
+    }
+    
+    h5.card-title {
+      color: var(--text-primary) !important;
+    }
+    
+    p.card-text {
+      color: var(--text-secondary) !important;
+      
+      &.text-muted {
+        color: var(--text-muted) !important;
+      }
+      
+      i {
+        color: var(--text-muted) !important;
+      }
+    }
+    
+    .category-badge-outline {
+      background-color: transparent !important;
+      border: 1px solid var(--border-color) !important;
+      color: var(--text-primary) !important;
+    }
+  }
+  
+  // Forms and inputs
+  input, textarea, select {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+    
+    &::placeholder {
+      color: var(--text-muted) !important;
+    }
+  }
+  
+  // Tables
+  .table {
+    color: var(--text-primary) !important;
+    
+    th {
+      color: var(--text-primary) !important;
+    }
+    
+    td {
+      color: var(--text-secondary) !important;
+    }
+  }
+  
+  // Lists
+  ul, ol, li {
+    color: var(--text-primary) !important;
+  }
+  
+  // Code blocks
+  code, pre {
+    background-color: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+  }
+  
+  // Blockquotes
+  blockquote {
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+  }
+  
+  // HR elements
+  hr {
+    border-color: var(--border-color) !important;
+  }
+}
+
+// Dark mode toggle animation
+.theme-toggle {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+// Smooth transitions for theme switching
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}

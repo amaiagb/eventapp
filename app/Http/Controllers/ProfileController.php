@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -23,18 +24,31 @@ class ProfileController extends Controller
     }
 
     /**
-     * Show the user's profile details.
+     * Show the form for editing.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function edit()
+    {
+        $cities = City::orderBy('name')->get();
+        return view('profile.edit', compact('cities'));
+    }
+
+    /**
+     * Show the profile details.
      *
      * @return \Illuminate\View\View
      */
     public function details()
     {
         $cities = City::orderBy('name')->get();
-        return view('profile.details', compact('cities'));
+        $tags = Tag::orderBy('name')->get();
+        $userTags = Auth::user()->tags->pluck('id')->toArray();
+        return view('profile.details', compact('cities', 'tags', 'userTags'));
     }
 
     /**
-     * Update the user's profile.
+     * Update the profile.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
@@ -63,6 +77,8 @@ class ProfileController extends Controller
             'bio' => ['nullable', 'string', 'max:1000'],
             'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'city_id' => ['nullable', 'exists:cities,id'],
+            'tags' => ['nullable', 'array'],
+            'tags.*' => ['exists:tags,id'],
         ]);
 
         $userData = [
@@ -93,6 +109,13 @@ class ProfileController extends Controller
         }
 
         $user->update($userData);
+
+        // Actualizar tags de interés
+        if ($request->has('tags')) {
+            $user->tags()->sync($request->tags);
+        } else {
+            $user->tags()->detach();
+        }
 
         return redirect()->route('profile.details')
             ->with('success', 'Profile updated successfully!');

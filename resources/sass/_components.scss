@@ -202,11 +202,9 @@ body {
 }
 
 .multiselect-item input[type="checkbox"]:checked + .multiselect-text {
-    color: $primary;
     font-weight: 500;
 
     &::before {
         content: '●';
-        color: $primary;
     }
 }

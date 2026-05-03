@@ -7,6 +7,12 @@
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
 
+// Dark Mode
+@import 'dark-mode';
+
+// Admin Styles
+@import 'admin';
+
 // Components
 @import 'components';
 
@@ -18,3 +24,5 @@
 
 // Pages
 @import 'pages/home';
+@import 'pages/event-show';
+@import 'pages/user-profile';

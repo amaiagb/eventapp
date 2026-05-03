@@ -6,19 +6,25 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\Category;
 use App\Models\Tag;
+use App\Models\City;
 
 class SearchController extends Controller
 {
     public function index(Request $request)
     {
-        // Get all categories and tags for filters
+        // Get all categories, tags and cities for filters
         $categories = Category::all();
         $tags = Tag::all();
+        $cities = City::orderBy('name')->get();
 
         // Build query
         $query = Event::with(['category', 'user', 'city'])
-            ->where('status', 'approved')
             ->where('event_date', '>=', now());
+
+        // Only filter by approved status for non-admin users
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            $query->where('status', 'approved');
+        }
 
         // Search by query term (from navbar search)
         if ($request->filled('q')) {
@@ -56,6 +62,6 @@ class SearchController extends Controller
         // Get results
         $events = $query->orderBy('event_date', 'asc')->paginate(12);
 
-        return view('search', compact('events', 'categories', 'tags'));
+        return view('search', compact('events', 'categories', 'tags', 'cities'));
     }
 }
