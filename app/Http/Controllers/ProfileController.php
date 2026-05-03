@@ -23,7 +23,18 @@ class ProfileController extends Controller
     }
 
     /**
-     * Show the user's profile details.
+     * Show the form for editing.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function edit()
+    {
+        $cities = City::orderBy('name')->get();
+        return view('profile.edit', compact('cities'));
+    }
+
+    /**
+     * Show the profile details.
      *
      * @return \Illuminate\View\View
      */
@@ -34,7 +45,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update the user's profile.
+     * Update the profile.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse

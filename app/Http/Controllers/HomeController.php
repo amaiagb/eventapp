@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\Category;
 use App\Models\Tag;
+use App\Models\Follow;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -26,50 +28,52 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // Obtener eventos por categorías para los carruseles
-        $categories = Category::with('events')->get();
-        $tags = Tag::all();
-        $eventsByCategory = [];
+        $user = Auth::user();
+        
+        // Especialmente para ti: eventos creados por las personas que sigo
+        $forYouEvents = collect();
+        if ($user) {
+            $followedUserIds = $user->following()->pluck('followed_id');
+            if ($followedUserIds->isNotEmpty()) {
+                $forYouEvents = Event::with(['category', 'user', 'city'])
+                    ->whereIn('user_id', $followedUserIds)
+                    ->where('status', 'approved')
+                    ->where('event_date', '>=', now())
+                    ->orderBy('event_date', 'asc')
+                    ->take(7)
+                    ->get();
+            }
+        }
 
-        foreach ($categories as $category) {
-            $eventsByCategory[$category->name] = $category->events()
+        // En tu ciudad: eventos de la misma ciudad que el usuario
+        $cityEvents = collect();
+        if ($user && $user->city_id) {
+            $cityEvents = Event::with(['category', 'user', 'city'])
+                ->where('city_id', $user->city_id)
                 ->where('status', 'approved')
                 ->where('event_date', '>=', now())
                 ->orderBy('event_date', 'asc')
-                ->take(10)
+                ->take(7)
                 ->get();
         }
 
-        // Eventos destacados (más populares o recientes)
-        $featuredEvents = Event::with(['category', 'user'])
-            ->where('status', 'approved')
-            ->where('event_date', '>=', now())
-            ->orderBy('created_at', 'desc')
-            ->take(8)
-            ->get();
-
-        // Eventos del usuario autenticado (creados por él)
-        $myEvents = auth()->user() ? auth()->user()->events()
-            ->where('event_date', '>=', now())
-            ->orderBy('event_date', 'asc')
-            ->take(5)
-            ->get() : collect();
-
-        // Eventos recomendados (basado en categorías de interés del usuario)
-        $recommendedEvents = Event::with(['category', 'user'])
+        // Según tus intereses: preparado para futura implementación
+        // Por ahora, mostramos eventos aleatorios como placeholder
+        $interestEvents = Event::with(['category', 'user', 'city'])
             ->where('status', 'approved')
             ->where('event_date', '>=', now())
             ->inRandomOrder()
-            ->take(6)
+            ->take(7)
             ->get();
 
+        // Obtener nombre de la ciudad del usuario
+        $userCityName = $user && $user->city ? $user->city->name : 'tu ciudad';
+
         return view('home', compact(
-            'eventsByCategory',
-            'featuredEvents',
-            'myEvents',
-            'recommendedEvents',
-            'categories',
-            'tags'
+            'forYouEvents',
+            'cityEvents', 
+            'interestEvents',
+            'userCityName'
         ));
     }
 }

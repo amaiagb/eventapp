@@ -94,13 +94,21 @@
                             </div>
                             <div class="organizer-actions">
                                 @if(auth()->check() && $event->status === 'approved')
-                                <a href="" class="btn btn-outline-primary btn-sm me-2">
+                                <a href="{{ route('users.show', $event->user->id) }}" class="btn btn-outline-primary btn-sm me-2">
                                     <i class="fas fa-eye me-1"></i>Ver perfil
                                 </a>
-                                <button class="btn btn-outline-secondary btn-sm">
-                                    <i class="fas fa-user-plus me-1"></i>Seguir
-                                </button>
-                                @elseif(auth()->check() && $event->status === 'pending' && auth()->id() === $event->user_id)
+                                @if(auth()->id() !== $event->user->id)
+                                <form id="followForm" action="{{ route('users.follow', $event->user->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" id="followBtn" class="btn @if($isFollowing) btn-outline-secondary @else btn-primary @endif btn-sm">
+                                        <i class="fas @if($isFollowing) fa-user-minus @else fa-user-plus @endif me-1"></i>
+                                        <span id="followText">@if($isFollowing) Dejar de seguir @else Seguir @endif</span>
+                                    </button>
+                                </form>
+                                @endif
+                                @endif
+                                
+                                @if(auth()->check() && auth()->id() === $event->user_id)
                                 <a href="{{ route('events.edit', $event->id) }}" class="btn btn-outline-primary btn-sm me-2">
                                     <i class="fas fa-edit me-1"></i>Editar evento
                                 </a>
@@ -110,49 +118,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- FAQs Section -->
-            <!-- <div class="faqs-section mb-5">
-                <h3 class="section-title mb-3">Preguntas Frecuentes</h3>
-                <div class="accordion" id="faqsAccordion">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                                ¿Cómo puedo apuntarme al evento?
-                            </button>
-                        </h2>
-                        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqsAccordion">
-                            <div class="accordion-body">
-                                Puedes apuntarte al evento haciendo clic en el botón "Apuntarse" que encontrarás en la columna derecha. Solo necesitas estar registrado en la plataforma.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                                ¿Es necesario pagar para participar?
-                            </button>
-                        </h2>
-                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqsAccordion">
-                            <div class="accordion-body">
-                                La mayoría de nuestros eventos son gratuitos. Si este evento tiene algún coste, se indicará específicamente en la descripción del evento.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                                ¿Puedo cancelar mi asistencia?
-                            </button>
-                        </h2>
-                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqsAccordion">
-                            <div class="accordion-body">
-                                Sí, puedes cancelar tu asistencia en cualquier momento desde tu panel de eventos. Te recomendamos hacerlo con al menos 24 horas de antelación.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
 
             <!-- Forum Section -->
             <div class="forum-section mb-5">
@@ -428,3 +393,81 @@
 @endif
 
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const followForm = document.getElementById('followForm');
+    const followBtn = document.getElementById('followBtn');
+    const followText = document.getElementById('followText');
+    
+    if (followForm) {
+        followForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const isCurrentlyFollowing = followBtn.classList.contains('btn-outline-secondary');
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Actualizar aspecto del botón
+                    if (isCurrentlyFollowing) {
+                        // Estaba siguiendo, ahora deja de seguir
+                        followBtn.classList.remove('btn-outline-secondary');
+                        followBtn.classList.add('btn-primary');
+                        followBtn.querySelector('i').classList.remove('fa-user-minus');
+                        followBtn.querySelector('i').classList.add('fa-user-plus');
+                        followText.textContent = 'Seguir';
+                    } else {
+                        // No estaba siguiendo, ahora sigue
+                        followBtn.classList.remove('btn-primary');
+                        followBtn.classList.add('btn-outline-secondary');
+                        followBtn.querySelector('i').classList.remove('fa-user-plus');
+                        followBtn.querySelector('i').classList.add('fa-user-minus');
+                        followText.textContent = 'Dejar de seguir';
+                    }
+                    
+                    // Mostrar mensaje de éxito
+                    showToast(data.message);
+                } else {
+                    showToast(data.message || 'Error al procesar la solicitud', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Error de conexión', 'error');
+            });
+        });
+    }
+    
+    function showToast(message, type = 'success') {
+        // Crear elemento toast
+        const toast = document.createElement('div');
+        toast.className = `alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+        toast.style.zIndex = '1050';
+        toast.innerHTML = `
+            <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'} me-2"></i>${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Eliminar automáticamente después de 3 segundos
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 3000);
+    }
+});
+</script>
+@endpush

@@ -8,6 +8,7 @@ use App\Models\City;
 use App\Models\Tag;
 use App\Models\EventAttendee;
 use App\Models\Message;
+use App\Models\Follow;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -109,6 +110,14 @@ class EventController extends Controller
                 ->exists();
         }
 
+        // Verificar si el usuario actual sigue al organizador del evento
+        $isFollowing = false;
+        if (auth()->check() && $event->user) {
+            $isFollowing = Follow::where('follower_id', auth()->id())
+                ->where('followed_id', $event->user->id)
+                ->exists();
+        }
+
         // Obtener mensajes del foro del evento ordenados por fecha
         $messages = Message::where('event_id', $event->id)
             ->with('user')
@@ -124,7 +133,7 @@ class EventController extends Controller
             ->limit(10)
             ->get();
 
-        return view('events.show', compact('event', 'otherEventsInCity', 'isRegistered', 'messages'));
+        return view('events.show', compact('event', 'otherEventsInCity', 'isRegistered', 'isFollowing', 'messages'));
     }
 
     /**
@@ -133,7 +142,7 @@ class EventController extends Controller
     public function edit(Event $event)
     {
         // Permitir a admin y al creador del evento
-        if (!auth()->check() || (!auth()->user()->isAdmin() && auth()->id() !== $event->user_id) || $event->status !== 'pending') {
+        if (!auth()->check() || (!auth()->user()->isAdmin() && auth()->id() !== $event->user_id)) {
             abort(403, 'No tienes permiso para editar este evento.');
         }
 
@@ -150,7 +159,7 @@ class EventController extends Controller
     public function update(Request $request, Event $event)
     {
         // Permitir editar a admin o al creador del evento
-        if (!auth()->check() || (!auth()->user()->isAdmin() && auth()->id() !== $event->user_id) || $event->status !== 'pending') {
+        if (!auth()->check() || (!auth()->user()->isAdmin() && auth()->id() !== $event->user_id)) {
             abort(403, 'No tienes permiso para editar este evento.');
         }
 

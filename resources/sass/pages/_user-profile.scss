@@ -1,0 +1,58 @@
+// Estilos para la página de perfil de usuario
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 4px solid white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.profile-avatar .profile-image:not(img) {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-header {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.profile-name {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.profile-username {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.profile-bio {
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.profile-stats .stat-item {
+    text-align: center;
+}
+
+.profile-stats .stat-item strong {
+    display: block;
+    font-size: 1.5rem;
+}
+
+.profile-stats .stat-item span {
+    font-size: 0.9rem;
+}
+
+.card-vertical {
+    transition: transform 0.2s ease-in-out;
+}
+
+.card-vertical:hover {
+    transform: translateY(-5px);
+}
