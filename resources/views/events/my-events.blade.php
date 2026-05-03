@@ -10,6 +10,20 @@
         Mis Eventos
     </h2>
 
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
     <!-- Main Tabs: Creados vs Asistidos -->
     <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
         <li class="nav-item" role="presentation">
@@ -58,6 +72,22 @@
                                             
                                             <div class="card-body">
                                                 <div class="card-content">
+                                                    <!-- Badge de estado -->
+                                                    <div class="mb-2">
+                                                        @if($event->status == 'approved')
+                                                            <span class="badge bg-success">
+                                                                <i class="fas fa-check-circle me-1"></i>Aprobado
+                                                            </span>
+                                                        @elseif($event->status == 'pending')
+                                                            <span class="badge bg-warning">
+                                                                <i class="fas fa-clock me-1"></i>Pendiente
+                                                            </span>
+                                                        @elseif($event->status == 'rejected')
+                                                            <span class="badge bg-danger">
+                                                                <i class="fas fa-times-circle me-1"></i>Rechazado
+                                                            </span>
+                                                        @endif
+                                                    </div>
                                                     <span class="category-badge-outline mb-2 d-inline-block">{{ $event->category->name ?? 'General' }}</span>
                                                     <h5 class="card-title">{{ Str::limit($event->title, 50) }}</h5>
                                                     
@@ -107,6 +137,22 @@
                                             
                                             <div class="card-body">
                                                 <div class="card-content">
+                                                    <!-- Badge de estado -->
+                                                    <div class="mb-2">
+                                                        @if($event->status == 'approved')
+                                                            <span class="badge bg-success">
+                                                                <i class="fas fa-check-circle me-1"></i>Aprobado
+                                                            </span>
+                                                        @elseif($event->status == 'pending')
+                                                            <span class="badge bg-warning">
+                                                                <i class="fas fa-clock me-1"></i>Pendiente
+                                                            </span>
+                                                        @elseif($event->status == 'rejected')
+                                                            <span class="badge bg-danger">
+                                                                <i class="fas fa-times-circle me-1"></i>Rechazado
+                                                            </span>
+                                                        @endif
+                                                    </div>
                                                     <span class="category-badge-outline mb-2 d-inline-block">{{ $event->category->name ?? 'General' }}</span>
                                                     <h5 class="card-title">{{ Str::limit($event->title, 50) }}</h5>
                                                     

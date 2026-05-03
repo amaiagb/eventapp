@@ -22,6 +22,16 @@
                 </div>
             </form>
 
+            <!-- Dark Mode Toggle -->
+            <div class="ms-3 d-flex align-items-center">
+                <button class="dark-mode-toggle btn btn-outline-secondary btn-sm theme-toggle" 
+                        type="button" 
+                        title="Cambiar modo oscuro/claro"
+                        onclick="toggleDarkMode()">
+                    <i class="fas fa-moon" id="theme-icon"></i>
+                </button>
+            </div>
+
             <!-- User Menu -->
             <ul class="navbar-nav ms-auto align-items-center">
                 @guest

@@ -179,7 +179,7 @@
                                 <input type="file" class="form-control @error('cover_image') is-invalid @enderror" 
                                        name="cover_image" accept="image/*">
                                 <div class="form-text">
-                                    Formatos: JPG, PNG, GIF. Máximo 5MB.
+                                    Formatos: JPG, PNG, GIF. Máximo 5MB. La imagen ayudará a que tu evento destaque.
                                 </div>
                                 @error('cover_image')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -203,110 +203,6 @@
 </div>
 
 <script>
-// Cities data loaded from server
-var citiesData = {!! json_encode($cities) !!};
-
-// City autocomplete functionality
-var selectedCityId = null;
-var cityInput = document.getElementById('city_input');
-var cityIdInput = document.getElementById('city_id');
-var citySuggestions = document.getElementById('city_suggestions');
-
-// Debounce function for search
-function debounce(func, wait) {
-    var timeout;
-    return function() {
-        var context = this;
-        var args = arguments;
-        var later = function() {
-            timeout = null;
-            func.apply(context, args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Search cities function
-function performSearch(query) {
-    if (query.length < 2) {
-        citySuggestions.style.display = 'none';
-        return;
-    }
-    
-    // Filter cities locally
-    var filteredCities = citiesData.filter(function(city) {
-        return city.name.toLowerCase().includes(query.toLowerCase());
-    }).slice(0, 20); // Limit to 20 results
-    
-    if (filteredCities.length === 0) {
-        citySuggestions.style.display = 'none';
-        return;
-    }
-    
-    citySuggestions.innerHTML = filteredCities.map(function(city) {
-        return '<div class="city-suggestion p-3 border-bottom cursor-pointer hover:bg-light" data-city-id="' + city.id + '" data-city-name="' + city.name + '">' +
-            '<div class="fw-medium">' + city.name + '</div>' +
-            '</div>';
-    }).join('');
-    
-    citySuggestions.style.display = 'block';
-    
-    // Add click handlers to suggestions
-    document.querySelectorAll('.city-suggestion').forEach(function(suggestion) {
-        suggestion.addEventListener('click', function() {
-            var cityName = this.dataset.cityName;
-            var cityId = this.dataset.cityId;
-            
-            cityInput.value = cityName;
-            cityIdInput.value = cityId;
-            selectedCityId = cityId;
-            citySuggestions.style.display = 'none';
-        });
-    });
-}
-
-// Create debounced version
-var searchCities = debounce(performSearch, 300);
-
-// Input event handler
-cityInput.addEventListener('input', function(e) {
-    var query = e.target.value;
-    
-    // Clear selection if user is typing
-    if (selectedCityId) {
-        var selectedCity = citiesData.find(function(city) {
-            return city.id == selectedCityId;
-        });
-        if (!selectedCity || selectedCity.name !== query) {
-            selectedCityId = null;
-            cityIdInput.value = '';
-        }
-    }
-    
-    searchCities(query);
-});
-
-// Close suggestions when clicking outside
-document.addEventListener('click', function(e) {
-    if (!cityInput.contains(e.target) && !citySuggestions.contains(e.target)) {
-        citySuggestions.style.display = 'none';
-    }
-});
-
-// Set initial value if there's a selected city
-@if(old('city_id'))
-    var initialCityId = {{ old('city_id') }};
-    var initialCity = citiesData.find(function(city) {
-        return city.id == initialCityId;
-    });
-    if (initialCity) {
-        cityInput.value = initialCity.name;
-        cityIdInput.value = initialCity.id;
-        selectedCityId = initialCity.id;
-    }
-@endif
-
 // Location type toggle
 document.querySelectorAll('input[name="location_type"]').forEach(radio => {
     radio.addEventListener('change', function() {

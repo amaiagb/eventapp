@@ -10,6 +10,7 @@ use App\Models\EventAttendee;
 use App\Models\Message;
 use App\Models\Follow;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -44,48 +45,60 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
+        // Validar los datos del formulario
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'event_date' => 'required|date|after_or_equal:today',
-            'event_time' => 'required',
+            'description' => 'required|string|min:10',
             'category_id' => 'required|exists:categories,id',
             'city_id' => 'required|exists:cities,id',
+            'event_date' => 'required|date|after:today',
+            'event_time' => 'required|date_format:H:i',
             'location' => 'required|string|max:255',
-            'max_attendees' => 'nullable|integer|min:0',
-            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'max_attendees' => 'nullable|integer|min:1|max:10000',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id',
         ]);
 
-        $coverImagePath = null;
-        if ($request->hasFile('cover_image')) {
-            $image = $request->file('cover_image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('storage/img/events'), $imageName);
-            $coverImagePath = $imageName;
+        try {
+            // Crear el evento
+            $event = new Event();
+            $event->user_id = Auth::id();
+            $event->category_id = $validated['category_id'];
+            $event->city_id = $validated['city_id'];
+            $event->title = $validated['title'];
+            $event->description = $validated['description'];
+            $event->event_date = $validated['event_date'];
+            $event->event_time = $validated['event_time'];
+            $event->location = $validated['location'];
+            $event->max_attendees = $validated['max_attendees'] ?? null;
+            $event->status = 'pending'; // Los eventos nuevos quedan pendientes de aprobación
+
+            // Manejar la imagen de portada si se subió
+            if ($request->hasFile('cover_image')) {
+                $image = $request->file('cover_image');
+                $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('storage/img/events'), $imageName);
+                $event->cover_image = $imageName;
+            }
+
+            // Guardar el evento
+            $event->save();
+
+            // Asignar tags si se proporcionaron
+            if (!empty($validated['tags'])) {
+                $event->tags()->attach($validated['tags']);
+            }
+
+            // Redirigir a Mis Eventos con mensaje de éxito
+            return redirect()->route('my.events')->with('success', 'Evento creado exitosamente. Está pendiente de aprobación.');
+
+        } catch (\Exception $e) {
+            // En caso de error, redirigir de vuelta con mensaje de error
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Hubo un error al crear el evento: ' . $e->getMessage());
         }
-
-        $event = Event::create([
-            'user_id' => auth()->id(),
-            'title' => $validated['title'],
-            'description' => $validated['description'],
-            'event_date' => $validated['event_date'],
-            'event_time' => $validated['event_time'],
-            'category_id' => $validated['category_id'],
-            'city_id' => $validated['city_id'],
-            'location' => $validated['location'],
-            'max_attendees' => $validated['max_attendees'] ?? null,
-            'cover_image' => $coverImagePath,
-            'status' => 'pending', 
-        ]);
-
-        if (!empty($validated['tags'])) {
-            $event->tags()->attach($validated['tags']);
-        }
-
-        return redirect()->route('events.show', $event)
-            ->with('success', 'Evento creado exitosamente. Está pendiente de aprobación.');
     }
 
     /**

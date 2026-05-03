@@ -46,6 +46,9 @@ Route::middleware('auth')->prefix('report')->name('report.')->group(function () 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/events', [AdminController::class, 'events'])->name('events');
+    Route::get('/events/{event}', [AdminController::class, 'showEvent'])->name('events.show');
+    Route::patch('/events/{event}/approve', [AdminController::class, 'approveEvent'])->name('events.approve');
+    Route::patch('/events/{event}/reject', [AdminController::class, 'rejectEvent'])->name('events.reject');
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
     
@@ -70,3 +73,8 @@ Route::post('/users/{user}/follow', [UserController::class, 'toggleFollow'])->na
 
 // Message routes
 Route::post('/messages', [MessageController::class, 'store'])->name('messages.store')->middleware('auth');
+// Event routes (require authentication)
+Route::middleware('auth')->group(function () {
+    Route::resource('events', EventController::class);
+    Route::get('/mis-eventos', [EventController::class, 'myEvents'])->name('my.events');
+});
