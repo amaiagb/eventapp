@@ -19,10 +19,10 @@
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     @yield('navbar')
 
-    <main>
+    <main class="flex-grow-1">
         @yield('content')
     </main>
 
