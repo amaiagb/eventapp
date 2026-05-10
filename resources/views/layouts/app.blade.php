@@ -365,6 +365,112 @@
         [data-theme="dark"] * {
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
+        
+        /* Login Page Custom Styles */
+        .bg-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        }
+        
+        [data-theme="dark"] .bg-gradient {
+            background: linear-gradient(135deg, #4c51bf 0%, #553c9a 100%) !important;
+        }
+        
+        .login-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        [data-theme="dark"] .login-card {
+            background: rgba(34, 38, 46, 0.95);
+        }
+        
+        .form-control-lg {
+            border-radius: 0.5rem;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control-lg:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        [data-theme="dark"] .form-control-lg {
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        [data-theme="dark"] .form-control-lg:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(102, 126, 234, 0.3);
+        }
+        
+        [data-theme="dark"] .btn-primary:hover {
+            box-shadow: 0 0.5rem 1rem rgba(102, 126, 234, 0.4);
+        }
+        
+        .dark-mode-toggle {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .card.shadow-lg {
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        [data-theme="dark"] .card.shadow-lg {
+            box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5) !important;
+        }
+        
+        /* Additional login form styles */
+        [data-theme="dark"] .form-label {
+            color: var(--text-primary) !important;
+        }
+        
+        [data-theme="dark"] .form-check-label {
+            color: var(--text-primary) !important;
+        }
+        
+        [data-theme="dark"] .form-control-lg::placeholder {
+            color: var(--text-muted) !important;
+        }
+        
+        [data-theme="dark"] .text-muted {
+            color: var(--text-muted) !important;
+        }
+        
+        [data-theme="dark"] .btn-link {
+            color: #667eea !important;
+        }
+        
+        [data-theme="dark"] .btn-link:hover {
+            color: #764ba2 !important;
+        }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
