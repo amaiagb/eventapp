@@ -35,7 +35,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="username" class="form-label fw-semibold">
-                                        <i class="fas fa-user me-2 text-primary"></i>{{ __('Username') }}
+                                        <i class="fas fa-user me-2 text-primary"></i>{{ __('auth.username') }}
                                     </label>
                                     <input id="username" type="text" class="form-control form-control-lg @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus placeholder="Ingrese su nombre de usuario">
                                     @error('username')
@@ -47,7 +47,7 @@
 
                                 <div class="mb-3">
                                     <label for="name" class="form-label fw-semibold">
-                                        <i class="fas fa-id-card me-2 text-primary"></i>{{ __('Name') }}
+                                        <i class="fas fa-id-card me-2 text-primary"></i>{{ __('auth.name') }}
                                     </label>
                                     <input id="name" type="text" class="form-control form-control-lg @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" placeholder="{{ __('auth.name_placeholder') }}">
                                     @error('name')
@@ -59,7 +59,7 @@
 
                                 <div class="mb-3">
                                     <label for="surname" class="form-label fw-semibold">
-                                        <i class="fas fa-id-card me-2 text-primary"></i>{{ __('Surname') }}
+                                        <i class="fas fa-id-card me-2 text-primary"></i>{{ __('auth.surname') }}
                                     </label>
                                     <input id="surname" type="text" class="form-control form-control-lg @error('surname') is-invalid @enderror" name="surname" value="{{ old('surname') }}" required autocomplete="surname" placeholder="{{ __('auth.surname_placeholder') }}">
                                     @error('surname')
@@ -71,7 +71,7 @@
 
                                 <div class="mb-3">
                                     <label for="email" class="form-label fw-semibold">
-                                        <i class="fas fa-envelope me-2 text-primary"></i>{{ __('Email Address') }}
+                                        <i class="fas fa-envelope me-2 text-primary"></i>{{ __('auth.email_address') }}
                                     </label>
                                     <input id="email" type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="{{ __('auth.email_placeholder') }}">
                                     @error('email')
@@ -85,7 +85,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="bio" class="form-label fw-semibold">
-                                        <i class="fas fa-info-circle me-2 text-primary"></i>{{ __('Bio') }}
+                                        <i class="fas fa-info-circle me-2 text-primary"></i>{{ __('auth.bio') }}
                                     </label>
                                     <textarea id="bio" class="form-control @error('bio') is-invalid @enderror" name="bio" rows="3" placeholder="{{ __('auth.bio_placeholder') }}">{{ old('bio') }}</textarea>
                                     @error('bio')
@@ -97,7 +97,7 @@
 
                                 <div class="mb-3">
                                     <label for="profile_image" class="form-label fw-semibold">
-                                        <i class="fas fa-image me-2 text-primary"></i>{{ __('Profile Image') }}
+                                        <i class="fas fa-image me-2 text-primary"></i>{{ __('auth.profile_image') }}
                                     </label>
                                     <input id="profile_image" type="file" class="form-control @error('profile_image') is-invalid @enderror" name="profile_image" accept="image/*">
                                     @error('profile_image')
@@ -109,10 +109,10 @@
 
                                 <div class="mb-3">
                                     <label for="city_id" class="form-label fw-semibold">
-                                        <i class="fas fa-city me-2 text-primary"></i>{{ __('City') }}
+                                        <i class="fas fa-city me-2 text-primary"></i>{{ __('auth.city') }}
                                     </label>
                                     <select id="city_id" class="form-select form-select-lg @error('city_id') is-invalid @enderror" name="city_id" required>
-                                        <option value="">{{ __('Select a city') }}</option>
+                                        <option value="">{{ __('auth.select_city') }}</option>
                                         @if(isset($cities))
                                             @foreach($cities as $city)
                                                 <option value="{{ $city->id }}" {{ old('city_id') == $city->id ? 'selected' : '' }}>
@@ -134,7 +134,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="password" class="form-label fw-semibold">
-                                        <i class="fas fa-lock me-2 text-primary"></i>{{ __('Password') }}
+                                        <i class="fas fa-lock me-2 text-primary"></i>{{ __('auth.password') }}
                                     </label>
                                     <input id="password" type="password" class="form-control form-control-lg @error('password') is-invalid @enderror" name="password" required autocomplete="new-password" placeholder="••••••••">
                                     @error('password')
@@ -148,7 +148,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="password-confirm" class="form-label fw-semibold">
-                                        <i class="fas fa-lock me-2 text-primary"></i>{{ __('Confirm Password') }}
+                                        <i class="fas fa-lock me-2 text-primary"></i>{{ __('auth.confirm_password') }}
                                     </label>
                                     <input id="password-confirm" type="password" class="form-control form-control-lg @error('password_confirmation') is-invalid @enderror" name="password_confirmation" required autocomplete="new-password" placeholder="••••••••">
                                     @error('password_confirmation')
@@ -169,7 +169,7 @@
                                 <div class="text-center mt-3">
                                     <span class="text-muted">{{ __('auth.already_account') }}</span>
                                     <a href="{{ route('login') }}" class="btn btn-link text-decoration-none">
-                                        {{ __('Login') }}
+                                        {{ __('auth.login') }}
                                     </a>
                                 </div>
                             @endif
