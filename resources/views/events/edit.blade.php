@@ -10,12 +10,12 @@
         <div class="col-lg-6">
             <!-- Header Section -->
             <div class="text-center mb-5">
-                <h1 class="h2 mb-3 fw-bold">Editar evento</h1>
-                <p class="text-muted">Modifica los detalles de tu evento</p>
+                <h1 class="h2 mb-3 fw-bold">{{ __('events.edit') }}</h1>
+                <p class="text-muted">{{ __('events.edit_subtitle') }}</p>
                 @if($event->status === 'pending')
                     <div class="alert alert-warning d-inline-block">
                         <i class="fas fa-exclamation-triangle me-2"></i>
-                        Tu evento está pendiente de aprobación. Puedes editarlo mientras sea revisado.
+                        {{ __('events.pending_approval') }}
                     </div>
                 @endif
             </div>
@@ -26,9 +26,9 @@
                         
                         <!-- Event Name Section -->
                         <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
-                            <h5 class="mb-4 fw-semibold">¿Cómo se llama tu evento?</h5>
+                            <h5 class="mb-4 fw-semibold">{{ __('events.name_question') }}</h5>
                             <div class="mb-3">
-                                <label class="form-label fw-medium">Nombre del evento <span class="text-danger">*</span></label>
+                                <label class="form-label fw-medium">{{ __('events.name_label') }} <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control form-control-lg @error('title') is-invalid @enderror" 
                                        name="title" placeholder="Ej: Concierto de Rock en el Parque" 
                                        value="{{ old('title', $event->title) }}" required>
@@ -40,10 +40,10 @@
 
                         <!-- Date and Time Section -->
                         <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
-                            <h5 class="mb-4 fw-semibold">¿Cuándo empieza tu evento?</h5>
+                            <h5 class="mb-4 fw-semibold">{{ __('events.start_question') }}</h5>
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label class="form-label fw-medium">Fecha <span class="text-danger">*</span></label>
+                                    <label class="form-label fw-medium">{{ __('events.date') }} <span class="text-danger">*</span></label>
                                     <input type="date" class="form-control form-control-lg @error('event_date') is-invalid @enderror" 
                                            name="event_date" value="{{ old('event_date', $event->event_date->format('Y-m-d')) }}" required>
                                     @error('event_date')
@@ -52,7 +52,7 @@
                                 </div>
                                 
                                 <div class="col-md-6">
-                                    <label class="form-label fw-medium">Hora <span class="text-danger">*</span></label>
+                                    <label class="form-label fw-medium">{{ __('events.time') }} <span class="text-danger">*</span></label>
                                     <input type="time" class="form-control @error('event_time') is-invalid @enderror" 
                                            name="event_time" value="{{ old('event_time', $event->event_time->format('H:i')) }}" required>
                                     @error('event_time')
@@ -64,7 +64,7 @@
 
                         <!-- Location Section -->
                         <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
-                            <h5 class="mb-4 fw-semibold">¿Dónde se ubica?</h5>
+                            <h5 class="mb-4 fw-semibold">{{ __('events.location_question') }}</h5>
                             
                             <!-- City Selection -->
                             <x-city-autocomplete 
@@ -73,24 +73,24 @@
                                 name="city_name" 
                                 :value="old('city_name', $event->city->name ?? '')"
                                 :required="true"
-                                label="Ciudad"
+                                label="{{ __('auth.city') }}"
                                 :error="$errors->first('city_id')"
                             />
                             
                             <!-- Location Type -->
                             <div class="mb-3">
-                                <label class="form-label fw-medium">Ubicación</label>
+                                <label class="form-label fw-medium">{{ __('events.location') }}</label>
                                 <div class="btn-group d-flex" role="group">
                                     <input type="radio" class="btn-check" name="location_type" id="location_specific" value="specific" 
                                            @if(old('location_type', 'specific') === 'specific') checked @endif>
                                     <label class="btn btn-outline-primary" for="location_specific">
-                                        <i class="fas fa-map-marker-alt me-2"></i>Especificar ubicación
+                                        <i class="fas fa-map-marker-alt me-2"></i>{{ __('events.location_specify') }}
                                     </label>
                                     
                                     <input type="radio" class="btn-check" name="location_type" id="location_pending" value="pending"
                                            @if(old('location_type', 'specific') === 'pending') checked @endif>
                                     <label class="btn btn-outline-primary" for="location_pending">
-                                        <i class="fas fa-clock me-2"></i>Por anunciar
+                                        <i class="fas fa-clock me-2"></i>{{ __('events.location_tba') }}
                                     </label>
                                 </div>
                             </div>
@@ -98,7 +98,7 @@
                             <!-- Location Input -->
                             <div id="location_input_container" @if(old('location_type', 'specific') === 'pending') style="display: none;" @endif>
                                 <div class="mb-3">
-                                    <label class="form-label fw-medium">Ubicación específica</label>
+                                    <label class="form-label fw-medium">{{ __('events.location_specific') }}</label>
                                     <input type="text" class="form-control @error('location') is-invalid @enderror" 
                                            name="location" placeholder="Ej: Plaza Mayor, Madrid" 
                                            value="{{ old('location', $event->location) }}" required>
@@ -111,9 +111,9 @@
 
                         <!-- Description Section -->
                         <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
-                            <h5 class="mb-4 fw-semibold">Describe tu evento</h5>
+                            <h5 class="mb-4 fw-semibold">{{ __('events.describe') }}</h5>
                             <div class="mb-3">
-                                <label class="form-label fw-medium">Descripción <span class="text-danger">*</span></label>
+                                <label class="form-label fw-medium">{{ __('events.description') }} <span class="text-danger">*</span></label>
                                 <textarea class="form-control @error('description') is-invalid @enderror" 
                                           name="description" rows="5" 
                                           placeholder="Describe tu evento, actividades, requisitos, etc..."
@@ -126,12 +126,12 @@
 
                         <!-- Category Section -->
                         <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
-                            <h5 class="mb-4 fw-semibold">¿Qué tipo de evento es?</h5>
+                            <h5 class="mb-4 fw-semibold">{{ __('events.type_question') }}</h5>
                             <div class="mb-3">
-                                <label class="form-label fw-medium">Categoría <span class="text-danger">*</span></label>
+                                <label class="form-label fw-medium">{{ __('events.category') }} <span class="text-danger">*</span></label>
                                 <select class="form-select @error('category_id') is-invalid @enderror" 
                                         name="category_id" required>
-                                    <option value="">Seleccionar categoría</option>
+                                    <option value="">{{ __('events.category_select') }}</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}" 
                                                 {{ old('category_id', $event->category_id) == $category->id ? 'selected' : '' }}>
@@ -147,8 +147,8 @@
 
                         <!-- Tags Section -->
                         <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
-                            <h5 class="mb-4 fw-semibold">Etiquetas (Tags)</h5>
-                            <p class="text-muted mb-4">Selecciona las etiquetas que mejor describan tu evento.</p>
+                            <h5 class="mb-4 fw-semibold">{{ __('events.tags') }}</h5>
+                            <p class="text-muted mb-4">{{ __('events.tags_help') }}</p>
                             
                             <div class="multiselect-container">
                                 @foreach($tags as $tag)
@@ -163,13 +163,13 @@
 
                         <!-- Capacity Section -->
                         <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
-                            <h5 class="mb-4 fw-semibold">¿Cuál es la capacidad para tu evento?</h5>
-                            <p class="text-muted mb-4">Este es el número total de entradas que pondrás a la venta.</p>
+                            <h5 class="mb-4 fw-semibold">{{ __('events.capacity_question') }}</h5>
+                            <p class="text-muted mb-4">{{ __('events.capacity_help') }}</p>
                             
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label class="form-label fw-medium">Capacidad total</label>
+                                        <label class="form-label fw-medium">{{ __('events.capacity_total') }}</label>
                                         <input type="number" class="form-control @error('max_attendees') is-invalid @enderror" 
                                                name="max_attendees" placeholder="0" min="0" 
                                                value="{{ old('max_attendees', $event->max_attendees) }}">
@@ -183,25 +183,25 @@
                         
                         <!-- Image Upload Section -->
                         <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
-                            <h5 class="mb-4 fw-semibold">Imagen del evento</h5>
+                            <h5 class="mb-4 fw-semibold">{{ __('events.image') }}</h5>
                             @if($event->cover_image && $event->cover_image !== 'default.png')
                                 <div class="mb-3">
-                                    <label class="form-label fw-medium">Imagen actual</label>
+                                    <label class="form-label fw-medium">{{ __('events.current_image') }}</label>
                                     <div class="d-flex align-items-center gap-3">
                                         <img src="{{ $event->cover_image_url }}" alt="Imagen actual" class="img-thumbnail" style="max-width: 150px; max-height: 100px;">
                                         <div>
-                                            <p class="mb-0 small text-muted">Imagen actual</p>
-                                            <p class="mb-0 small">Puedes cambiarla o mantener la actual</p>
+                                            <p class="mb-0 small text-muted">{{ __('events.current_image') }}</p>
+                                            <p class="mb-0 small">{{ __('events.current_image_help') }}</p>
                                         </div>
                                     </div>
                                 </div>
                             @endif
                             <div class="mb-3">
-                                <label class="form-label fw-medium">Cambiar imagen de portada</label>
+                                <label class="form-label fw-medium">{{ __('events.change_image') }}</label>
                                 <input type="file" class="form-control @error('cover_image') is-invalid @enderror" 
                                        name="cover_image" accept="image/*">
                                 <div class="form-text">
-                                    Formatos: JPG, PNG, GIF. Máximo 5MB. Deja vacío para mantener la imagen actual.
+                                    {{ __('events.change_image_help') }}
                                 </div>
                                 @error('cover_image')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -211,11 +211,11 @@
                         <!-- Footer Buttons -->
                         <div class="d-flex justify-content-between gap-3 mt-5">
                             <a href="{{ route('events.show', $event->id) }}" class="btn btn-outline-secondary">
-                                Cancelar
+                                {{ __('events.cancel') }}
                             </a>
                             <div class="d-flex gap-3">
                                 <button type="submit" class="btn btn-primary px-4">
-                                    Guardar cambios
+                                    {{ __('events.save_changes') }}
                                 </button>
                             </div>
                         </div>

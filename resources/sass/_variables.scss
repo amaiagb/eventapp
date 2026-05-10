@@ -17,12 +17,19 @@ $primary-active: #0a58ca;
 $primary-light: #e7f1ff;
 $primary-dark: #0a58ca;
 
-// Secondary Color (Verde)
-$secondary: #198754;
-$secondary-hover: #157347;
-$secondary-active: #146c43;
-$secondary-light: #d1e7dd;
-$secondary-dark: #146c43;
+// // Secondary Color (Verde)
+// $secondary: #198754;
+// $secondary-hover: #157347;
+// $secondary-active: #146c43;
+// $secondary-light: #d1e7dd;
+// $secondary-dark: #146c43;
+
+// Secondary Color (Gris)
+$secondary: #6c757d;  // Color gris estándar de Bootstrap
+$secondary-hover: #5c636a;
+$secondary-active: #565e64;
+$secondary-light: #e9ecef;
+$secondary-dark: #565e64;
 
 // Accent Color (Naranja)
 $accent: #fd7e14;
