@@ -336,4 +336,73 @@ class EventController extends Controller
             'attendedPast'
         ));
     }
+
+    /**
+     * Mostrar eventos filtrados por categoría (following, city, interests)
+     */
+    public function filteredEvents($type)
+    {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        $user = auth()->user();
+        $events = collect();
+        $title = '';
+        $subtitle = '';
+
+        switch ($type) {
+            case 'following':
+                // Eventos creados por las personas que el usuario sigue
+                $followedUserIds = $user->following()->pluck('followed_id');
+                if ($followedUserIds->isNotEmpty()) {
+                    $events = Event::with(['category', 'user', 'city'])
+                        ->whereIn('user_id', $followedUserIds)
+                        ->where('status', 'approved')
+                        ->where('event_date', '>=', now())
+                        ->orderBy('event_date', 'asc')
+                        ->paginate(12);
+                }
+                $title = __('home.for_you_title');
+                $subtitle = __('home.for_you_subtitle');
+                break;
+
+            case 'city':
+                // Eventos de la ciudad del usuario
+                if ($user && $user->city_id) {
+                    $events = Event::with(['category', 'user', 'city'])
+                        ->where('city_id', $user->city_id)
+                        ->where('status', 'approved')
+                        ->where('event_date', '>=', now())
+                        ->orderBy('event_date', 'asc')
+                        ->paginate(12);
+                }
+                $cityName = $user && $user->city ? $user->city->name : 'tu ciudad';
+                $title = __('home.city_title') . ' ' . $cityName;
+                $subtitle = __('home.city_subtitle');
+                break;
+
+            case 'interests':
+                // Eventos que tienen tags marcados como intereses por el usuario
+                $userTagIds = $user->tags()->pluck('tags.id');
+                if ($userTagIds->isNotEmpty()) {
+                    $events = Event::with(['category', 'user', 'city', 'tags'])
+                        ->where('status', 'approved')
+                        ->where('event_date', '>=', now())
+                        ->whereHas('tags', function ($query) use ($userTagIds) {
+                            $query->whereIn('tags.id', $userTagIds);
+                        })
+                        ->orderBy('event_date', 'asc')
+                        ->paginate(12);
+                }
+                $title = __('home.interests_title');
+                $subtitle = __('home.interests_subtitle');
+                break;
+
+            default:
+                return redirect()->route('home');
+        }
+
+        return view('events.filtered', compact('events', 'title', 'subtitle'));
+    }
 }

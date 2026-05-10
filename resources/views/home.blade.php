@@ -51,11 +51,11 @@
                     </h4>
                     <p class="section-subtitle">{{ __('home.for_you_subtitle') }}</p>
                 </div>
-                <a href="#" class="view-all-link">
+                <a href="{{ route('events.filtered', 'following') }}" class="view-all-link">
                     {{ __('home.view_all') }} <i class="fas fa-arrow-right ms-1"></i>
                 </a>
             </div>
-            <div class="modern-carousel" data-carousel="for-you">
+            <div class="modern-carousel" data-carousel="following">
                 <div class="carousel-track">
                     @foreach($forYouEvents as $event)
                         <div class="event-card-modern">
@@ -112,7 +112,7 @@
                     </h4>
                     <p class="section-subtitle">{{ __('home.city_subtitle') }}</p>
                 </div>
-                <a href="#" class="view-all-link">
+                <a href="{{ route('events.filtered', 'city') }}" class="view-all-link">
                     {{ __('home.view_all') }} <i class="fas fa-arrow-right ms-1"></i>
                 </a>
             </div>
@@ -173,7 +173,7 @@
                     </h4>
                     <p class="section-subtitle">{{ __('home.interests_subtitle') }}</p>
                 </div>
-                <a href="#" class="view-all-link">
+                <a href="{{ route('events.filtered', 'interests') }}" class="view-all-link">
                     {{ __('home.view_all') }} <i class="fas fa-arrow-right ms-1"></i>
                 </a>
             </div>
