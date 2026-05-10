@@ -95,19 +95,18 @@
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="city_id" class="col-md-4 col-form-label text-md-end">{{ __('auth.city') }}</label>
+                                    <label class="col-md-4 col-form-label text-md-end">{{ __('auth.city') }}</label>
                                     <div class="col-md-8">
-                                        <select id="city_id" name="city_id" class="form-select @error('city_id') is-invalid @enderror">
-                                            <option value="">{{ __('auth.select_city') }}</option>
-                                            @foreach($cities as $city)
-                                                <option value="{{ $city->id }}" {{ old('city_id', Auth::user()->city_id) == $city->id ? 'selected' : '' }}>
-                                                    {{ $city->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('city_id')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <x-city-autocomplete 
+                                            :cities="$cities ?? []"
+                                            name="city_name"
+                                            id="city_input"
+                                            :value="old('city_name', Auth::user()->city->name ?? null)"
+                                            required="false"
+                                            placeholder="{{ __('auth.select_city') }}"
+                                            :label="__('auth.city')"
+                                            :error="$errors->first('city_id')"
+                                        />
                                     </div>
                                 </div>
                             </div>

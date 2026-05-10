@@ -107,26 +107,16 @@
                                     @enderror
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="city_id" class="form-label fw-semibold">
-                                        <i class="fas fa-city me-2 text-primary"></i>{{ __('auth.city') }}
-                                    </label>
-                                    <select id="city_id" class="form-select form-select-lg @error('city_id') is-invalid @enderror" name="city_id" required>
-                                        <option value="">{{ __('auth.select_city') }}</option>
-                                        @if(isset($cities))
-                                            @foreach($cities as $city)
-                                                <option value="{{ $city->id }}" {{ old('city_id') == $city->id ? 'selected' : '' }}>
-                                                    {{ $city->name }}
-                                                </option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                    @error('city_id')
-                                        <div class="invalid-feedback d-block">
-                                            <strong>{{ $message }}</strong>
-                                        </div>
-                                    @enderror
-                                </div>
+                                <x-city-autocomplete 
+                                    :cities="$cities ?? []"
+                                    name="city_name"
+                                    id="city_input"
+                                    :value="old('city_name')"
+                                    required="true"
+                                    placeholder="{{ __('auth.select_city') }}"
+                                    :label="__('auth.city')"
+                                    :error="$errors->first('city_id')"
+                                />
                             </div>
                         </div>
 

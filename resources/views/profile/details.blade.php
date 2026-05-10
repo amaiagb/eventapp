@@ -110,21 +110,16 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-medium">Ciudad</label>
-                            <select id="city_id" name="city_id" class="form-select @error('city_id') is-invalid @enderror">
-                                <option value="">Seleccionar ciudad</option>
-                                @if(isset($cities))
-                                    @foreach($cities as $city)
-                                        <option value="{{ $city->id }}" 
-                                                {{ old('city_id', Auth::user()->city_id) == $city->id ? 'selected' : '' }}>
-                                            {{ $city->name }}
-                                        </option>
-                                    @endforeach
-                                @endif
-                            </select>
-                            @error('city_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <x-city-autocomplete 
+                                :cities="$cities ?? []"
+                                name="city_name"
+                                id="city_input"
+                                :value="old('city_name', Auth::user()->city->name ?? null)"
+                                required="false"
+                                placeholder="Seleccionar ciudad"
+                                label="Ciudad"
+                                :error="$errors->first('city_id')"
+                            />
                         </div>
                     </div>
                 </div>
