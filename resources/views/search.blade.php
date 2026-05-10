@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<div class="container-fluid py-4">
+<div class="container py-4">
     <div class="row">
         <!-- Sidebar Filters -->
         <div class="col-lg-3">
@@ -74,7 +74,7 @@
         </div>
 
         <!-- Results List -->
-        <div class="col-lg-5">
+        <div class="col-lg-6 results-container">
             <h5 class="mb-4"><i class="fas fa-list me-2"></i>{{ __('search.results') }} ({{ $events->total() }})</h5>
 
             @if($events->count() > 0)
@@ -121,14 +121,7 @@
             @endif
         </div>
 
-        <!-- Map -->
-        <div class="col-lg-4">
-            <div class="map-container">
-                <h5 class="mb-4"><i class="fas fa-map me-2"></i>{{ __('search.map') }}</h5>
-                <div class="alert alert-warning">
-                    <i class="fas fa-exclamation-triangle me-2"></i>{{ __('search.map_coming_soon') }}
-                </div>
-            </div>
+        <div class="col-lg-3">
         </div>
     </div>
 </div>
@@ -137,8 +130,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const searchForm = document.getElementById('searchForm');
     const applyFiltersBtn = document.getElementById('applyFilters');
-    const resultsContainer = document.querySelector('.col-lg-5');
-    const resultsTitle = document.querySelector('.col-lg-5 h5');
+    const resultsContainer = document.querySelector('.results-container');
+    const resultsTitle = document.querySelector('.results-container h5');
     
     // Function to update search results
     function updateSearchResults() {
@@ -165,8 +158,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const doc = parser.parseFromString(html, 'text/html');
             
             // Update results
-            const newResultsContainer = doc.querySelector('.col-lg-5');
-            const newResultsTitle = doc.querySelector('.col-lg-5 h5');
+            const newResultsContainer = doc.querySelector('.results-container');
+            const newResultsTitle = doc.querySelector('.results-container h5');
             
             if (newResultsContainer && newResultsTitle) {
                 resultsContainer.innerHTML = newResultsContainer.innerHTML;
@@ -202,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             // Reset form and update results
             searchForm.reset();
-            window.location.href = '/buscador';
+            window.location.href = '{{ route('search.index') }}';
         });
     }
     

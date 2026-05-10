@@ -66,6 +66,7 @@ Route::resource('events', EventController::class);
 Route::post('/events/{event}/register', [EventController::class, 'register'])->name('events.register')->middleware('auth');
 Route::post('/events/{event}/cancel', [EventController::class, 'cancel'])->name('events.cancel')->middleware('auth');
 Route::get('/my-events', [EventController::class, 'myEvents'])->name('events.my-events')->middleware('auth');
+Route::get('/events/filtered/{type}', [EventController::class, 'filteredEvents'])->name('events.filtered')->middleware('auth');
 
 // User profile routes
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show')->middleware('auth');
