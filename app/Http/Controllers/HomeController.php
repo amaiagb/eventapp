@@ -57,14 +57,22 @@ class HomeController extends Controller
                 ->get();
         }
 
-        // Según tus intereses: preparado para futura implementación
-        // Por ahora, mostramos eventos aleatorios como placeholder
-        $interestEvents = Event::with(['category', 'user', 'city'])
-            ->where('status', 'approved')
-            ->where('event_date', '>=', now())
-            ->inRandomOrder()
-            ->take(7)
-            ->get();
+        // Según tus intereses: eventos que tienen tags marcados como intereses por el usuario
+        $interestEvents = collect();
+        if ($user) {
+            $userTagIds = $user->tags()->pluck('tags.id');
+            if ($userTagIds->isNotEmpty()) {
+                $interestEvents = Event::with(['category', 'user', 'city', 'tags'])
+                    ->where('status', 'approved')
+                    ->where('event_date', '>=', now())
+                    ->whereHas('tags', function ($query) use ($userTagIds) {
+                        $query->whereIn('tags.id', $userTagIds);
+                    })
+                    ->orderBy('event_date', 'asc')
+                    ->take(7)
+                    ->get();
+            }
+        }
 
         // Obtener nombre de la ciudad del usuario
         $userCityName = $user && $user->city ? $user->city->name : 'tu ciudad';
