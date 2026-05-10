@@ -3,8 +3,8 @@
 @section('content')
 <!-- Admin Header -->
 <div class="admin-header">
-    <h1 class="page-title">Dashboard de Administrador</h1>
-    <p class="page-subtitle">Resumen general del sistema</p>
+    <h1 class="page-title">{{ __('admin.dashboard.title') }}</h1>
+    <p class="page-subtitle">{{ __('admin.dashboard.subtitle') }}</p>
 </div>
 
 <!-- Alertas -->
@@ -30,10 +30,10 @@
                 <i class="fas fa-calendar-alt"></i>
             </div>
             <div class="stat-value">{{ $stats['total_events'] }}</div>
-            <div class="stat-label">Total Eventos</div>
+            <div class="stat-label">{{ __('admin.stats.total_events') }}</div>
             <div class="stat-change positive">
                 <i class="fas fa-arrow-up"></i>
-                <span>12% este mes</span>
+                <span>12% {{ __('admin.stats.new_this_month') }}</span>
             </div>
         </div>
     </div>
@@ -44,10 +44,10 @@
                 <i class="fas fa-check-circle"></i>
             </div>
             <div class="stat-value">{{ $stats['active_events'] }}</div>
-            <div class="stat-label">Eventos Activos</div>
+            <div class="stat-label">{{ __('admin.stats.active_events') }}</div>
             <div class="stat-change positive">
                 <i class="fas fa-arrow-up"></i>
-                <span>8% este mes</span>
+                <span>8% {{ __('admin.stats.new_this_month') }}</span>
             </div>
         </div>
     </div>
@@ -58,10 +58,10 @@
                 <i class="fas fa-users"></i>
             </div>
             <div class="stat-value">{{ $stats['total_users'] }}</div>
-            <div class="stat-label">Total Usuarios</div>
+            <div class="stat-label">{{ __('admin.stats.total_users') }}</div>
             <div class="stat-change positive">
                 <i class="fas fa-arrow-up"></i>
-                <span>23% este mes</span>
+                <span>23% {{ __('admin.stats.new_this_month') }}</span>
             </div>
         </div>
     </div>
@@ -72,10 +72,10 @@
                 <i class="fas fa-flag"></i>
             </div>
             <div class="stat-value">{{ $stats['total_reports'] }}</div>
-            <div class="stat-label">Reportes Totales</div>
+            <div class="stat-label">{{ __('admin.reports.title') }}</div>
             <div class="stat-change negative">
                 <i class="fas fa-arrow-down"></i>
-                <span>5% este mes</span>
+                <span>5% {{ __('admin.stats.new_this_month') }}</span>
             </div>
         </div>
     </div>
@@ -88,7 +88,7 @@
             <div class="card-header">
                 <h6 class="card-title">
                     <i class="fas fa-calendar-alt"></i>
-                    Eventos Activos Recientes
+                    {{ __('admin.events.recent_active') }}
                 </h6>
             </div>
             <div class="card-body">
@@ -97,10 +97,10 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Evento</th>
-                                    <th>Categoría</th>
-                                    <th>Fecha</th>
-                                    <th>Acciones</th>
+                                    <th>{{ __('admin.events.name') }}</th>
+                                    <th>{{ __('admin.events.category') }}</th>
+                                    <th>{{ __('admin.events.date') }}</th>
+                                    <th>{{ __('admin.events.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -124,10 +124,10 @@
                         </table>
                     </div>
                     <div class="text-center mt-3">
-                        <a href="{{ route('admin.events') }}" class="btn-admin btn-primary">Ver todos los eventos</a>
+                        <a href="{{ route('admin.events') }}" class="btn-admin btn-primary">{{ __('admin.events.view_all') }}</a>
                     </div>
                 @else
-                    <p class="text-muted">No hay eventos activos recientes.</p>
+                    <p class="text-muted">{{ __('admin.events.no_recent_active') }}</p>
                 @endif
             </div>
         </div>
@@ -139,7 +139,7 @@
             <div class="card-header">
                 <h6 class="card-title">
                     <i class="fas fa-flag"></i>
-                    Reportes Recientes
+                    {{ __('admin.reports.recent') }}
                 </h6>
             </div>
             <div class="card-body">
@@ -148,10 +148,10 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Reportado por</th>
-                                    <th>Tipo</th>
-                                    <th>Motivo</th>
-                                    <th>Fecha</th>
+                                    <th>{{ __('admin.reports.reporter') }}</th>
+                                    <th>{{ __('admin.reports.type') }}</th>
+                                    <th>{{ __('admin.reports.reason') }}</th>
+                                    <th>{{ __('admin.reports.date') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -167,10 +167,10 @@
                         </table>
                     </div>
                     <div class="text-center mt-3">
-                        <a href="{{ route('admin.reports') }}" class="btn-admin btn-warning">Ver todos los reportes</a>
+                        <a href="{{ route('admin.reports') }}" class="btn-admin btn-warning">{{ __('admin.reports.view_all') }}</a>
                     </div>
                 @else
-                    <p class="text-muted">No hay reportes recientes.</p>
+                    <p class="text-muted">{{ __('admin.reports.no_recent') }}</p>
                 @endif
             </div>
         </div>
@@ -184,7 +184,7 @@
             <div class="card-header">
                 <h6 class="card-title">
                     <i class="fas fa-users"></i>
-                    Usuarios Registrados Recientes
+                    {{ __('admin.users.recent_registered') }}
                 </h6>
             </div>
             <div class="card-body">
@@ -193,12 +193,12 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Usuario</th>
-                                    <th>Email</th>
-                                    <th>Rol</th>
-                                    <th>Estado</th>
-                                    <th>Fecha Registro</th>
-                                    <th>Acciones</th>
+                                    <th>{{ __('admin.users.name') }}</th>
+                                    <th>{{ __('admin.users.email') }}</th>
+                                    <th>{{ __('admin.users.role') }}</th>
+                                    <th>{{ __('admin.users.status') }}</th>
+                                    <th>{{ __('admin.users.register_date') }}</th>
+                                    <th>{{ __('admin.users.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -222,7 +222,7 @@
                                                 @csrf
                                                 @method('PATCH')
                                                 <button type="submit" class="btn-admin {{ $user->is_active ? 'btn-warning' : 'btn-success' }} btn-sm" 
-                                                        title="{{ $user->is_active ? 'Desactivar' : 'Activar' }}">
+                                                        title="{{ $user->is_active ? __('admin.users.deactivate') : __('admin.users.activate') }}">
                                                     <i class="fas {{ $user->is_active ? 'fa-pause' : 'fa-play' }}"></i>
                                                 </button>
                                             </form>
@@ -233,10 +233,10 @@
                         </table>
                     </div>
                     <div class="text-center mt-3">
-                        <a href="{{ route('admin.users') }}" class="btn-admin btn-primary">Ver todos los usuarios</a>
+                        <a href="{{ route('admin.users') }}" class="btn-admin btn-primary">{{ __('admin.users.view_all') }}</a>
                     </div>
                 @else
-                    <p class="text-muted">No hay usuarios registrados.</p>
+                    <p class="text-muted">{{ __('admin.users.no_registered') }}</p>
                 @endif
             </div>
         </div>

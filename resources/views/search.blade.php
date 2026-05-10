@@ -10,19 +10,19 @@
         <!-- Sidebar Filters -->
         <div class="col-lg-3">
             <div class="filter-sidebar ">
-                <h5 class="mb-4"><i class="fas fa-filter me-2"></i>Filtros</h5>
+                <h5 class="mb-4"><i class="fas fa-filter me-2"></i>{{ __('search.filters') }}</h5>
 
                 <form id="searchForm" method="GET" action="{{ route('search.index') }}">
 
                     <!-- Apply Button -->
                     <button type="button" id="applyFilters" class="btn btn-primary w-100 mb-3">
-                        <i class="fas fa-search me-2"></i>Aplicar Filtros
+                        <i class="fas fa-search me-2"></i>{{ __('search.apply_filters') }}
                     </button>
 
                     
                     <!-- Location Filter -->
                     <div class="mb-4">
-                        <label class="form-label fw-bold">Ubicación</label>
+                        <label class="form-label fw-bold">{{ __('search.location') }}</label>
                         <x-city-autocomplete 
                             :cities="$cities ?? []"
                             id="search_location"
@@ -35,13 +35,13 @@
 
                     <!-- Date Filter -->
                     <div class="mb-4">
-                        <label class="form-label fw-bold">Fecha</label>
+                        <label class="form-label fw-bold">{{ __('search.date') }}</label>
                         <input type="date" class="form-control" name="date" value="{{ request('date') }}">
                     </div>
 
                     <!-- Category Filter -->
                     <div class="mb-4">
-                        <label class="form-label fw-bold">Categoría</label>
+                        <label class="form-label fw-bold">{{ __('search.category') }}</label>
                         <div class="multiselect-container">
                             @foreach($categories as $category)
                             <label class="multiselect-item">
@@ -54,7 +54,7 @@
 
                     <!-- Tags Filter -->
                     <div class="mb-4">
-                        <label class="form-label fw-bold">Tags</label>
+                        <label class="form-label fw-bold">{{ __('search.tags') }}</label>
                         <div class="multiselect-container">
                             @foreach($tags as $tag)
                             <label class="multiselect-item">
@@ -66,7 +66,7 @@
                     </div>
 
                     <a href="{{ route('search.index') }}" class="btn btn-outline-secondary w-100 mt-2">
-                        <i class="fas fa-undo me-2"></i>Limpiar Filtros
+                        <i class="fas fa-undo me-2"></i>{{ __('search.clear_filters') }}
                     </a>
 
                 </form>
@@ -75,7 +75,7 @@
 
         <!-- Results List -->
         <div class="col-lg-5">
-            <h5 class="mb-4"><i class="fas fa-list me-2"></i>Resultados ({{ $events->total() }})</h5>
+            <h5 class="mb-4"><i class="fas fa-list me-2"></i>{{ __('search.results') }} ({{ $events->total() }})</h5>
 
             @if($events->count() > 0)
             <div class="events-list">
@@ -116,7 +116,7 @@
             {{ $events->appends(request()->query())->links() }}
             @else
             <div class="alert alert-info">
-                <i class="fas fa-info-circle me-2"></i>No se encontraron eventos con los filtros aplicados.
+                <i class="fas fa-info-circle me-2"></i>{{ __('search.no_events_found') }}
             </div>
             @endif
         </div>
@@ -124,9 +124,9 @@
         <!-- Map -->
         <div class="col-lg-4">
             <div class="map-container">
-                <h5 class="mb-4"><i class="fas fa-map me-2"></i>Mapa</h5>
+                <h5 class="mb-4"><i class="fas fa-map me-2"></i>{{ __('search.map') }}</h5>
                 <div class="alert alert-warning">
-                    <i class="fas fa-exclamation-triangle me-2"></i>El mapa estará disponible próximamente.
+                    <i class="fas fa-exclamation-triangle me-2"></i>{{ __('search.map_coming_soon') }}
                 </div>
             </div>
         </div>
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show loading state
         resultsContainer.style.opacity = '0.5';
         applyFiltersBtn.disabled = true;
-        applyFiltersBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Buscando...';
+        applyFiltersBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>{{ __('search.searching') }}';
         
         // Make AJAX request
         fetch(`{{ route('search.index') }}?${params.toString()}`, {

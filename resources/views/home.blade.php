@@ -9,20 +9,20 @@
 <section class="hero-banner">
     <div class="hero-content">
         <div class="hero-text">
-            <h1 class="hero-title">Descubre Eventos Increíbles</h1>
-            <p class="hero-subtitle">Conecta con tu comunidad y vive experiencias únicas</p>
+            <h1 class="hero-title">{{ __('home.hero.title') }}</h1>
+            <p class="hero-subtitle">{{ __('home.hero.subtitle') }}</p>
             <div class="hero-stats">
                 <div class="stat-item">
                     <span class="stat-number">1000+</span>
-                    <span class="stat-label">Eventos</span>
+                    <span class="stat-label">{{ __('home.hero.events') }}</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-number">50+</span>
-                    <span class="stat-label">Ciudades</span>
+                    <span class="stat-label">{{ __('home.hero.cities') }}</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-number">24/7</span>
-                    <span class="stat-label">Actividad</span>
+                    <span class="stat-label">{{ __('home.hero.activity') }}</span>
                 </div>
             </div>
         </div>
@@ -47,12 +47,12 @@
             <div class="section-header">
                 <div class="section-title-wrapper">
                     <h4 class="section-title">
-                        <i class="fas fa-heart me-2 text-danger"></i>Especialmente para ti
+                        <i class="fas fa-heart me-2 text-danger"></i>{{ __('home.for_you_title') }}
                     </h4>
-                    <p class="section-subtitle">Eventos de las personas que sigues</p>
+                    <p class="section-subtitle">{{ __('home.for_you_subtitle') }}</p>
                 </div>
                 <a href="#" class="view-all-link">
-                    Ver todos <i class="fas fa-arrow-right ms-1"></i>
+                    {{ __('home.view_all') }} <i class="fas fa-arrow-right ms-1"></i>
                 </a>
             </div>
             <div class="modern-carousel" data-carousel="for-you">
@@ -108,12 +108,12 @@
             <div class="section-header">
                 <div class="section-title-wrapper">
                     <h4 class="section-title">
-                        <i class="fas fa-map-pin me-2 text-primary"></i>En {{ $userCityName }}
+                        <i class="fas fa-map-pin me-2 text-primary"></i>{{ __('home.city_title') }} {{ $userCityName }}
                     </h4>
-                    <p class="section-subtitle">Eventos cerca de ti</p>
+                    <p class="section-subtitle">{{ __('home.city_subtitle') }}</p>
                 </div>
                 <a href="#" class="view-all-link">
-                    Ver todos <i class="fas fa-arrow-right ms-1"></i>
+                    {{ __('home.view_all') }} <i class="fas fa-arrow-right ms-1"></i>
                 </a>
             </div>
             <div class="modern-carousel" data-carousel="city">
@@ -169,12 +169,12 @@
             <div class="section-header">
                 <div class="section-title-wrapper">
                     <h4 class="section-title">
-                        <i class="fas fa-star me-2 text-warning"></i>Según tus intereses
+                        <i class="fas fa-star me-2 text-warning"></i>{{ __('home.interests_title') }}
                     </h4>
-                    <p class="section-subtitle">Eventos personalizados para ti</p>
+                    <p class="section-subtitle">{{ __('home.interests_subtitle') }}</p>
                 </div>
                 <a href="#" class="view-all-link">
-                    Ver todos <i class="fas fa-arrow-right ms-1"></i>
+                    {{ __('home.view_all') }} <i class="fas fa-arrow-right ms-1"></i>
                 </a>
             </div>
             <div class="modern-carousel" data-carousel="interests">

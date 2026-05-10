@@ -7,7 +7,7 @@
 @section('content')
 <div class="container py-4">
     <h2 class="mb-4">
-        Mis Eventos
+        {{ __('events.my') }}
     </h2>
 
     @if(session('success'))
@@ -28,12 +28,12 @@
     <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="created-tab" data-bs-toggle="tab" data-bs-target="#created" type="button" role="tab">
-                <i class="fas fa-plus-circle me-2"></i>Mis Eventos Creados
+                <i class="fas fa-plus-circle me-2"></i>{{ __('events.my_created') }}
             </button>
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="attended-tab" data-bs-toggle="tab" data-bs-target="#attended" type="button" role="tab">
-                <i class="fas fa-user-check me-2"></i>Eventos a los que Asisto
+                <i class="fas fa-user-check me-2"></i>{{ __('events.attending') }}
             </button>
         </li>
     </ul>
@@ -45,12 +45,12 @@
             <ul class="nav nav-pills mb-4" id="createdSubTabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="created-upcoming-tab" data-bs-toggle="pill" data-bs-target="#created-upcoming" type="button" role="tab">
-                        <i class="fas fa-clock me-2"></i>Próximos Eventos
+                        <i class="fas fa-clock me-2"></i>{{ __('events.upcoming') }}
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="created-past-tab" data-bs-toggle="pill" data-bs-target="#created-past" type="button" role="tab">
-                        <i class="fas fa-history me-2"></i>Eventos Pasados
+                        <i class="fas fa-history me-2"></i>{{ __('events.past') }}
                     </button>
                 </li>
             </ul>
@@ -76,15 +76,15 @@
                                                     <div class="mb-2">
                                                         @if($event->status == 'approved')
                                                             <span class="badge bg-success">
-                                                                <i class="fas fa-check-circle me-1"></i>Aprobado
+                                                                <i class="fas fa-check-circle me-1"></i>{{ __('events.status.approved') }}
                                                             </span>
                                                         @elseif($event->status == 'pending')
                                                             <span class="badge bg-warning">
-                                                                <i class="fas fa-clock me-1"></i>Pendiente
+                                                                <i class="fas fa-clock me-1"></i>{{ __('events.status.pending') }}
                                                             </span>
                                                         @elseif($event->status == 'rejected')
                                                             <span class="badge bg-danger">
-                                                                <i class="fas fa-times-circle me-1"></i>Rechazado
+                                                                <i class="fas fa-times-circle me-1"></i>{{ __('events.status.rejected') }}
                                                             </span>
                                                         @endif
                                                     </div>
@@ -100,7 +100,7 @@
                                                     </p>
                                                     
                                                     <p class="card-text text-muted small mb-3">
-                                                        <i class="fas fa-users me-1"></i>{{ $event->attendees()->count() }} asistentes
+                                                        <i class="fas fa-users me-1"></i>{{ $event->attendees()->count() }} {{ __('events.attendees') }}
                                                     </p>
                                                 </div>
                                             </div>
@@ -112,10 +112,10 @@
                     @else
                         <div class="text-center py-5">
                             <i class="fas fa-calendar-plus fa-3x text-muted mb-3"></i>
-                            <h4 class="text-muted">No tienes próximos eventos creados</h4>
-                            <p class="text-muted">Aún no has creado eventos próximos. ¡Crea tu primer evento!</p>
+                            <h4 class="text-muted">{{ __('events.no_upcoming_created') }}</h4>
+                            <p class="text-muted">{{ __('events.no_upcoming_created_help') }}</p>
                             <a href="{{ route('events.create') }}" class="btn btn-primary mt-3">
-                                <i class="fas fa-plus me-2"></i>Crear Evento
+                                <i class="fas fa-plus me-2"></i>{{ __('events.create') }}
                             </a>
                         </div>
                     @endif
@@ -141,15 +141,15 @@
                                                     <div class="mb-2">
                                                         @if($event->status == 'approved')
                                                             <span class="badge bg-success">
-                                                                <i class="fas fa-check-circle me-1"></i>Aprobado
+                                                                <i class="fas fa-check-circle me-1"></i>{{ __('events.status.approved') }}
                                                             </span>
                                                         @elseif($event->status == 'pending')
                                                             <span class="badge bg-warning">
-                                                                <i class="fas fa-clock me-1"></i>Pendiente
+                                                                <i class="fas fa-clock me-1"></i>{{ __('events.status.pending') }}
                                                             </span>
                                                         @elseif($event->status == 'rejected')
                                                             <span class="badge bg-danger">
-                                                                <i class="fas fa-times-circle me-1"></i>Rechazado
+                                                                <i class="fas fa-times-circle me-1"></i>{{ __('events.status.rejected') }}
                                                             </span>
                                                         @endif
                                                     </div>
@@ -165,7 +165,7 @@
                                                     </p>
                                                     
                                                     <p class="card-text text-muted small mb-3">
-                                                        <i class="fas fa-users me-1"></i>{{ $event->attendees()->count() }} asistentes
+                                                        <i class="fas fa-users me-1"></i>{{ $event->attendees()->count() }} {{ __('events.attendees') }}
                                                     </p>
                                                 </div>
                                             </div>
@@ -177,8 +177,8 @@
                     @else
                         <div class="text-center py-5">
                             <i class="fas fa-history fa-3x text-muted mb-3"></i>
-                            <h4 class="text-muted">No tienes eventos pasados creados</h4>
-                            <p class="text-muted">Aún no has creado eventos que hayan finalizado.</p>
+                            <h4 class="text-muted">{{ __('events.no_past_created') }}</h4>
+                            <p class="text-muted">{{ __('events.no_past_created_help') }}</p>
                         </div>
                     @endif
                 </div>
@@ -191,12 +191,12 @@
             <ul class="nav nav-pills mb-4" id="attendedSubTabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="attended-upcoming-tab" data-bs-toggle="pill" data-bs-target="#attended-upcoming" type="button" role="tab">
-                        <i class="fas fa-clock me-2"></i>Próximos Eventos
+                        <i class="fas fa-clock me-2"></i>{{ __('events.upcoming') }}
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="attended-past-tab" data-bs-toggle="pill" data-bs-target="#attended-past" type="button" role="tab">
-                        <i class="fas fa-history me-2"></i>Eventos Pasados
+                        <i class="fas fa-history me-2"></i>{{ __('events.past') }}
                     </button>
                 </li>
             </ul>
@@ -230,7 +230,7 @@
                                                     </p>
                                                     
                                                     <p class="card-text text-muted small mb-3">
-                                                        <i class="fas fa-user me-1"></i>Organizador: {{ $event->user->name ?? 'Anónimo' }}
+                                                        <i class="fas fa-user me-1"></i>{{ __('events.organizer_label') }} {{ $event->user->name ?? 'Anónimo' }}
                                                     </p>
                                                 </div>
                                             </div>
@@ -242,10 +242,10 @@
                     @else
                         <div class="text-center py-5">
                             <i class="fas fa-calendar-check fa-3x text-muted mb-3"></i>
-                            <h4 class="text-muted">No tienes próximos eventos a los que asistir</h4>
-                            <p class="text-muted">Aún no te has apuntado a ningún evento próximo.</p>
+                            <h4 class="text-muted">{{ __('events.no_upcoming_attending') }}</h4>
+                            <p class="text-muted">{{ __('events.no_upcoming_attending_help') }}</p>
                             <a href="{{ route('events.index') }}" class="btn btn-primary mt-3">
-                                <i class="fas fa-search me-2"></i>Buscar Eventos
+                                <i class="fas fa-search me-2"></i>{{ __('events.search') }}
                             </a>
                         </div>
                     @endif
@@ -279,7 +279,7 @@
                                                     </p>
                                                     
                                                     <p class="card-text text-muted small mb-3">
-                                                        <i class="fas fa-user me-1"></i>Organizador: {{ $event->user->name ?? 'Anónimo' }}
+                                                        <i class="fas fa-user me-1"></i>{{ __('events.organizer_label') }} {{ $event->user->name ?? 'Anónimo' }}
                                                     </p>
                                                 </div>
                                             </div>
@@ -291,8 +291,8 @@
                     @else
                         <div class="text-center py-5">
                             <i class="fas fa-history fa-3x text-muted mb-3"></i>
-                            <h4 class="text-muted">No tienes eventos pasados a los que hayas asistido</h4>
-                            <p class="text-muted">Aún no has asistido a ningún evento que haya finalizado.</p>
+                            <h4 class="text-muted">{{ __('events.no_past_attending') }}</h4>
+                            <p class="text-muted">{{ __('events.no_past_attending_help') }}</p>
                         </div>
                     @endif
                 </div>

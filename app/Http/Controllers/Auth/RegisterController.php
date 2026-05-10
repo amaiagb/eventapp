@@ -118,8 +118,8 @@ class RegisterController extends Controller
 
         event(new Registered($user = $this->create($request->all())));
 
-        // Don't login the user automatically, just redirect to login
+        // No iniciar sesión automáticamente, redirigir a login
         return redirect($this->redirectPath())
-            ->with('success', 'Registration successful! Please login with your new account.');
+            ->with('success', '¡Registro exitoso! Por favor, inicia sesión con tu nueva cuenta.');
     }
 }

@@ -8,7 +8,7 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>
-            <i class="fas fa-calendar-alt me-2"></i>Todos los Eventos
+            <i class="fas fa-calendar-alt me-2"></i>{{ __('events.all') }}
         </h2>
         <!-- <div class="d-flex gap-2">
             <div class="dropdown">
@@ -69,8 +69,8 @@
     @else
         <div class="text-center py-5">
             <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
-            <h4 class="text-muted">No hay eventos disponibles</h4>
-            <p class="text-muted">No se encontraron eventos aprobados para mostrar.</p>
+            <h4 class="text-muted">{{ __('events.none') }}</h4>
+            <p class="text-muted">{{ __('events.no_approved') }}</p>
         </div>
     @endif
 </div>

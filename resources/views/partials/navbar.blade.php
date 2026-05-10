@@ -15,7 +15,7 @@
             <!-- Search Bar -->
             <form class="d-flex mx-auto my-2 my-lg-0" style="max-width: 400px;" action="{{ route('search.index') }}" method="GET">
                 <div class="input-group">
-                    <input class="form-control" type="search" name="q" placeholder="Buscar eventos..." aria-label="Search" value="{{ request('q') }}">
+                    <input class="form-control" type="search" name="q" placeholder="{{ __('nav.search_placeholder') }}" aria-label="Search" value="{{ request('q') }}">
                     <button class="btn btn-primary" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
@@ -26,7 +26,7 @@
             <div class="ms-3 d-flex align-items-center">
                 <button class="dark-mode-toggle btn btn-outline-secondary btn-sm theme-toggle" 
                         type="button" 
-                        title="Cambiar modo oscuro/claro"
+                        title="{{ __('nav.dark_mode') }}"
                         onclick="toggleDarkMode()">
                     <i class="fas fa-moon" id="theme-icon"></i>
                 </button>
@@ -37,24 +37,24 @@
                 @guest
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">
-                            <i class="fas fa-sign-in-alt me-1"></i> Iniciar Sesión
+                            <i class="fas fa-sign-in-alt me-1"></i> {{ __('nav.login') }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="btn btn-primary ms-2" href="{{ route('register') }}">
-                            Registrarse
+                            {{ __('nav.register') }}
                         </a>
                     </li>
                 @else
                     <!-- Quick Access Links -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('events.create') }}" title="Crear evento">
-                            <span class="d-none d-lg-inline ms-1">Crear Evento</span>
+                        <a class="nav-link" href="{{ route('events.create') }}" title="{{ __('nav.create_event') }}">
+                            <span class="d-none d-lg-inline ms-1">{{ __('events.create') }}</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('events.my-events') }}" title="Mis eventos">
-                            <span class="d-none d-lg-inline ms-1">Mis Eventos</span>
+                        <a class="nav-link" href="{{ route('events.my-events') }}" title="{{ __('nav.my_events') }}">
+                            <span class="d-none d-lg-inline ms-1">{{ __('events.my') }}</span>
                         </a>
                     </li>
 
@@ -77,20 +77,20 @@
                         <ul id="userDropdownMenu" class="dropdown-menu dropdown-menu-end" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #dee2e6; border-radius: 0.375rem; box-shadow: 0 0.5rem 1rem rgba(0,0,0,.175); min-width: 200px; z-index: 1000;">
                             <li>
                                 <a class="dropdown-item d-block px-4 py-2 text-decoration-none text-dark" href="{{ route('profile.details') }}" style="color: #212529 !important;">
-                                    <i class="fas fa-user me-2"></i> Mi Perfil
+                                    <i class="fas fa-user me-2"></i> {{ __('nav.my_profile') }}
                                 </a>
                             </li>
                             @if(Auth::user()->role && Auth::user()->role->name === 'admin')
                                 <li>
                                     <a class="dropdown-item d-block px-4 py-2 text-decoration-none text-warning" href="{{ route('admin.dashboard') }}" style="color: #f6c23e !important;">
-                                        <i class="fas fa-tachometer-alt me-2"></i> Panel de Administración
+                                        <i class="fas fa-tachometer-alt me-2"></i> {{ __('nav.admin_panel') }}
                                     </a>
                                 </li>
                             @endif
                             <li><hr class="dropdown-divider my-2"></li>
                             <li>
                                 <a class="dropdown-item d-block px-4 py-2 text-decoration-none text-danger" href="{{ route('logout.direct') }}" style="color: #dc3545 !important;">
-                                    <i class="fas fa-sign-out-alt me-2"></i> Cerrar Sesión
+                                    <i class="fas fa-sign-out-alt me-2"></i> {{ __('nav.logout') }}
                                 </a>
                             </li>
                         </ul>

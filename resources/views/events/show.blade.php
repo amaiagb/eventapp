@@ -32,8 +32,8 @@
         <div class="d-flex align-items-center">
             <i class="fas fa-exclamation-triangle me-3 fs-4"></i>
             <div>
-                <h5 class="alert-heading mb-1">Evento Pendiente de Aprobación</h5>
-                <p class="mb-0">Este evento está pendiente de aprobación por un administrador. Mientras sea aprobado, solo tú como creador puedes ver esta página.</p>
+                <h5 class="alert-heading mb-1">{{ __('events.pending_approval_title') }}</h5>
+                <p class="mb-0">{{ __('events.pending_approval_msg') }}</p>
             </div>
         </div>
     </div>
@@ -67,7 +67,7 @@
 
             <!-- Event Description -->
             <div class="event-description mb-5">
-                <h3 class="section-title mb-3">Descripción del evento</h3>
+                <h3 class="section-title mb-3">{{ __('events.description_title') }}</h3>
                 <div class="description-content">
                     <p>{{ $event->description }}</p>
                 </div>
@@ -75,7 +75,7 @@
 
             <!-- Organizer Info -->
             <div class="organizer-info mb-5">
-                <h3 class="section-title mb-3">Organizado por</h3>
+                <h3 class="section-title mb-3">{{ __('events.organized_by') }}</h3>
                 <div class="card organizer-card">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
@@ -90,19 +90,19 @@
                             </div>
                             <div class="organizer-details flex-grow-1">
                                 <h5 class="mb-1">{{ $event->user->name ?? 'Anónimo' }}</h5>
-                                <p class="text-muted small mb-0">Organizador del evento</p>
+                                <p class="text-muted small mb-0">{{ __('events.organizer') }}</p>
                             </div>
                             <div class="organizer-actions">
                                 @if(auth()->check() && $event->status === 'approved')
                                 <a href="{{ route('users.show', $event->user->id) }}" class="btn btn-outline-primary btn-sm me-2">
-                                    <i class="fas fa-eye me-1"></i>Ver perfil
+                                    <i class="fas fa-eye me-1"></i>{{ __('events.view_profile') }}
                                 </a>
                                 @if(auth()->id() !== $event->user->id)
                                 <form id="followForm" action="{{ route('users.follow', $event->user->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     <button type="submit" id="followBtn" class="btn @if($isFollowing) btn-outline-secondary @else btn-primary @endif btn-sm">
                                         <i class="fas @if($isFollowing) fa-user-minus @else fa-user-plus @endif me-1"></i>
-                                        <span id="followText">@if($isFollowing) Dejar de seguir @else Seguir @endif</span>
+                                        <span id="followText">@if($isFollowing) {{ __('events.unfollow') }} @else {{ __('events.follow') }} @endif</span>
                                     </button>
                                 </form>
                                 @endif
@@ -110,7 +110,7 @@
                                 
                                 @if(auth()->check() && auth()->id() === $event->user_id)
                                 <a href="{{ route('events.edit', $event->id) }}" class="btn btn-outline-primary btn-sm me-2">
-                                    <i class="fas fa-edit me-1"></i>Editar evento
+                                    <i class="fas fa-edit me-1"></i>{{ __('events.edit') }}
                                 </a>
                                 @endif
                             </div>
@@ -121,7 +121,7 @@
 
             <!-- Forum Section -->
             <div class="forum-section mb-5">
-                <h3 class="section-title mb-3">Foro del evento</h3>
+                <h3 class="section-title mb-3">{{ __('events.forum') }}</h3>
                 <div class="forum-container">
                     @if($event->status === 'approved')
                     <!-- New Message Form -->
@@ -129,15 +129,15 @@
                     <div class="new-message-form mb-4">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title mb-3">Escribe un mensaje</h5>
+                                <h5 class="card-title mb-3">{{ __('events.forum_write') }}</h5>
                                 <form action="{{ route('messages.store') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="event_id" value="{{ $event->id }}">
                                     <div class="mb-3">
-                                        <textarea class="form-control" name="content" rows="3" placeholder="Comparte algo sobre este evento..." required></textarea>
+                                        <textarea class="form-control" name="content" rows="3" placeholder="{{ __('events.forum_placeholder') }}" required></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-paper-plane me-2"></i>Enviar mensaje
+                                        <i class="fas fa-paper-plane me-2"></i>{{ __('events.forum_send') }}
                                     </button>
                                 </form>
                             </div>
@@ -146,7 +146,7 @@
                     @else
                     <div class="alert alert-info mb-4">
                         <i class="fas fa-info-circle me-2"></i>
-                        Debes estar <a href="{{ route('login') }}">iniciado sesión</a> para participar en el foro.
+                        {{ __('events.forum_login_required') }}
                     </div>
                     @endif
 
@@ -181,20 +181,20 @@
                             @else
                             <div class="alert alert-info">
                                 <i class="fas fa-info-circle me-2"></i>
-                                No hay mensajes en el foro todavía. ¡Sé el primero en escribir!
+                                {{ __('events.forum_no_messages') }}
                             </div>
                             @endif
                         @else
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle me-2"></i>
-                            Debes estar <a href="{{ route('login') }}">iniciado sesión</a> para ver los mensajes del foro.
+                            {{ __('events.forum_login_required_view') }}
                         </div>
                         @endif
                     </div>
                     @else
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-triangle me-2"></i>
-                        El foro del evento estará disponible cuando el evento sea aprobado.
+                        {{ __('events.forum_approval_required') }}
                     </div>
                     @endif
                 </div>
@@ -206,7 +206,7 @@
                 @if(auth()->check() && $event->user_id !== auth()->id())
                 <div class="text-center">
                     <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#reportModal">
-                        <i class="fas fa-flag me-2"></i>Reportar evento
+                        <i class="fas fa-flag me-2"></i>{{ __('events.report') }}
                     </button>
                 </div>
 
@@ -216,7 +216,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="reportModalLabel">
-                                    <i class="fas fa-flag me-2"></i>Reportar evento
+                                    <i class="fas fa-flag me-2"></i>{{ __('events.report') }}
                                 </h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
@@ -227,10 +227,10 @@
                                     <input type="hidden" name="reportable_id" value="{{ $event->id }}">
 
                                     <div class="mb-3">
-                                        <label for="reason" class="form-label">Motivo del reporte</label>
+                                        <label for="reason" class="form-label">{{ __('events.report_reason') }}</label>
                                         <textarea class="form-control" id="reason" name="reason" rows="4"
-                                            placeholder="Describe el motivo por el cual reportas este evento..." required minlength="10" maxlength="500"></textarea>
-                                        <div class="form-text">Mínimo 10 caracteres, máximo 500 caracteres</div>
+                                            placeholder="{{ __('events.report_placeholder') }}" required minlength="10" maxlength="500"></textarea>
+                                        <div class="form-text">{{ __('events.report_chars') }}</div>
                                     </div>
 
                                     @error('reason')
@@ -242,9 +242,9 @@
                                     @enderror
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('events.cancel') }}</button>
                                     <button type="submit" class="btn btn-danger">
-                                        <i class="fas fa-paper-plane me-2"></i>Enviar reporte
+                                        <i class="fas fa-paper-plane me-2"></i>{{ __('events.report_send') }}
                                     </button>
                                 </div>
                             </form>
@@ -254,7 +254,7 @@
                 @elseif(!auth()->check())
                 <div class="text-center">
                     <a href="{{ route('login') }}" class="btn btn-outline-danger btn-sm">
-                        <i class="fas fa-flag me-2"></i>Inicia sesión para reportar
+                        <i class="fas fa-flag me-2"></i>{{ __('events.report_login') }}
                     </a>
                 </div>
                 @endif
@@ -268,7 +268,7 @@
                 <!-- Registration Card -->
                 <div class="card registration-card">
                     <div class="card-body">
-                        <h4 class="card-title mb-4">Apuntarse al evento</h4>
+                        <h4 class="card-title mb-4">{{ __('events.register') }}</h4>
 
                         <div class="event-summary mb-4">
                             <div class="summary-item mb-2">
@@ -277,7 +277,7 @@
                             </div>
                             <div class="summary-item mb-2">
                                 <i class="fas fa-clock text-primary me-2"></i>
-                                <span>{{ $event->event_time?->format('H:i') ?? 'Por determinar' }}</span>
+                                <span>{{ $event->event_time?->format('H:i') ?? __('events.tbd') }}</span>
                             </div>
                             <div class="summary-item mb-2">
                                 <i class="fas fa-map-marker-alt text-primary me-2"></i>
@@ -285,7 +285,7 @@
                             </div>
                             <div class="summary-item">
                                 <i class="fas fa-users text-primary me-2"></i>
-                                <span>{{ $event->attendees()->count() }} asistentes</span>
+                                <span>{{ $event->attendees()->count() }} {{ __('events.attendees') }}</span>
                             </div>
                         </div>
 
@@ -293,37 +293,37 @@
                         @if(auth()->id() !== $event->user_id)
                         @if($isRegistered)
                         <button type="button" class="btn btn-success w-100 mb-3" style="pointer-events: none; cursor: default;">
-                            <i class="fas fa-check me-2"></i>Ya te has unido
+                            <i class="fas fa-check me-2"></i>{{ __('events.registered') }}
                         </button>
                         <form action="{{ route('events.cancel', $event->id) }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-link w-100 text-decoration-none text-muted">
-                                Cancelar asistencia
+                                {{ __('events.cancel_attendance') }}
                             </button>
                         </form>
                         @else
                         <form action="{{ route('events.register', $event->id) }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-primary w-100 mb-3">
-                                <i class="fas fa-user-plus me-2"></i>Apuntarse al evento
+                                <i class="fas fa-user-plus me-2"></i>{{ __('events.register') }}
                             </button>
                         </form>
                         @endif
                         @else
                         <div class="alert alert-info mb-3">
                             <i class="fas fa-info-circle me-2"></i>
-                            Eres el creador de este evento.
+                            {{ __('events.creator') }}
                         </div>
                         @endif
                         @elseif(auth()->check() && $event->status === 'pending' && auth()->id() === $event->user_id)
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle me-2"></i>
-                            Tu evento está pendiente de aprobación. Las acciones estarán disponibles cuando sea aprobado.
+                            {{ __('events.pending_approval_actions') }}
                         </div>
                         @else
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle me-2"></i>
-                            Debes <a href="{{ route('login') }}">iniciar sesión</a> para apuntarte a este evento.
+                            {{ __('events.login_required_register') }}
                         </div>
                         @endif
                     </div>
@@ -360,7 +360,7 @@
     <div class="container">
         <h3 class="section-title mb-4">
             <i class="fas fa-map-marker-alt me-2 text-primary"></i>
-            Otros eventos en {{ $event->city->name ?? 'la misma ciudad' }}
+            {{ __('events.other_in') }} {{ $event->city->name ?? __('events.same_city') }}
         </h3>
         <div class="carousel-container">
             @foreach($otherEventsInCity as $otherEvent)
@@ -382,7 +382,7 @@
                                 <i class="fas fa-map-marker-alt me-1"></i>{{ $otherEvent->city->name ?? $otherEvent->location }}
                             </p>
                         </div>
-                        <a href="{{ route('events.show', $otherEvent->id) }}" class="btn btn-primary btn-sm w-100">Ver detalles</a>
+                        <a href="{{ route('events.show', $otherEvent->id) }}" class="btn btn-primary btn-sm w-100">{{ __('events.view_details') }}</a>
                     </div>
                 </div>
             </div>

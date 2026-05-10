@@ -49,7 +49,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="row mb-3">
-                                    <label for="username" class="col-md-4 col-form-label text-md-end">{{ __('Username') }}</label>
+                                    <label for="username" class="col-md-4 col-form-label text-md-end">{{ __('auth.username') }}</label>
                                     <div class="col-md-8">
                                         <input type="text" id="username" name="username" class="form-control @error('username') is-invalid @enderror" 
                                                value="{{ old('username', Auth::user()->username) }}" required>
@@ -60,7 +60,7 @@
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
+                                    <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('auth.name') }}</label>
                                     <div class="col-md-8">
                                         <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror" 
                                                value="{{ old('name', Auth::user()->name) }}" required>
@@ -71,7 +71,7 @@
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="surname" class="col-md-4 col-form-label text-md-end">{{ __('Surname') }}</label>
+                                    <label for="surname" class="col-md-4 col-form-label text-md-end">{{ __('auth.surname') }}</label>
                                     <div class="col-md-8">
                                         <input type="text" id="surname" name="surname" class="form-control @error('surname') is-invalid @enderror" 
                                                value="{{ old('surname', Auth::user()->surname) }}" required>
@@ -84,7 +84,7 @@
 
                             <div class="col-md-6">
                                 <div class="row mb-3">
-                                    <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email') }}</label>
+                                    <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('auth.email_address') }}</label>
                                     <div class="col-md-8">
                                         <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror" 
                                                value="{{ old('email', Auth::user()->email) }}" required>
@@ -95,10 +95,10 @@
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="city_id" class="col-md-4 col-form-label text-md-end">{{ __('City') }}</label>
+                                    <label for="city_id" class="col-md-4 col-form-label text-md-end">{{ __('auth.city') }}</label>
                                     <div class="col-md-8">
                                         <select id="city_id" name="city_id" class="form-select @error('city_id') is-invalid @enderror">
-                                            <option value="">Seleccionar ciudad</option>
+                                            <option value="">{{ __('auth.select_city') }}</option>
                                             @foreach($cities as $city)
                                                 <option value="{{ $city->id }}" {{ old('city_id', Auth::user()->city_id) == $city->id ? 'selected' : '' }}>
                                                     {{ $city->name }}
@@ -114,7 +114,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="bio" class="col-md-2 col-form-label text-md-end">{{ __('Bio') }}</label>
+                            <label for="bio" class="col-md-2 col-form-label text-md-end">{{ __('auth.bio') }}</label>
                             <div class="col-md-10">
                                 <textarea id="bio" name="bio" class="form-control @error('bio') is-invalid @enderror" 
                                           rows="4" placeholder="Cuéntanos sobre ti...">{{ old('bio', Auth::user()->bio) }}</textarea>
@@ -128,11 +128,11 @@
                             <div class="col-md-12">
                                 <div class="d-flex justify-content-between">
                                     <a href="{{ route('profile.change-password') }}" class="btn btn-outline-warning">
-                                        <i class="fas fa-key me-2"></i>Cambiar Contraseña
+                                        <i class="fas fa-key me-2"></i>{{ __('profile.change_password') }}
                                     </a>
                                     <div>
                                         <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-save me-2"></i>Guardar Cambios
+                                            <i class="fas fa-save me-2"></i>{{ __('profile.save_changes') }}
                                         </button>
                                     </div>
                                 </div>
