@@ -123,6 +123,16 @@ class EventController extends Controller
                 ->exists();
         }
 
+        // Verificar si el evento ha alcanzado el aforo máximo
+        $isEventFull = false;
+        if ($event->max_attendees !== null) {
+            $currentAttendees = $event->attendees()->count();
+            $isEventFull = $currentAttendees >= $event->max_attendees;
+        }
+
+        // Verificar si el evento ya ha pasado
+        $isEventPast = $event->event_date < now()->startOfDay();
+
         // Verificar si el usuario actual sigue al organizador del evento
         $isFollowing = false;
         if (auth()->check() && $event->user) {
@@ -146,7 +156,7 @@ class EventController extends Controller
             ->limit(10)
             ->get();
 
-        return view('events.show', compact('event', 'otherEventsInCity', 'isRegistered', 'isFollowing', 'messages'));
+        return view('events.show', compact('event', 'otherEventsInCity', 'isRegistered', 'isEventFull', 'isEventPast', 'isFollowing', 'messages'));
     }
 
     /**
