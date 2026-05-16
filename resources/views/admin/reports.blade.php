@@ -75,10 +75,9 @@
                             <table class="table table-bordered" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
                                         <th>{{ __('admin.reports.table_reporter') }}</th>
                                         <th>{{ __('admin.reports.table_type') }}</th>
-                                        <th>Elemento</th>
+                                        <th>{{ __('admin.reports.table_element') }}</th>
                                         <th>{{ __('admin.reports.table_reason') }}</th>
                                         <th>{{ __('admin.reports.table_status') }}</th>
                                         <th>{{ __('admin.reports.table_date') }}</th>
@@ -88,7 +87,6 @@
                                 <tbody>
                                     @foreach($reports as $report)
                                         <tr>
-                                            <td>{{ $report->id }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center me-2" 

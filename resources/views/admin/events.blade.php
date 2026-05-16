@@ -77,7 +77,6 @@
                             <table class="table table-bordered" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
                                         <th>{{ __('admin.events.table_name') }}</th>
                                         <th>{{ __('admin.events.organizer') }}</th>
                                         <th>{{ __('admin.events.category') }}</th>
@@ -90,7 +89,6 @@
                                 <tbody>
                                     @foreach($events as $event)
                                         <tr>
-                                            <td>{{ $event->id }}</td>
                                             <td>
                                                 <a href="{{ route('admin.events.show', $event) }}" class="text-decoration-none">
                                                     {{ Str::limit($event->title, 40) }}

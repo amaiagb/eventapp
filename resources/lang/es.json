@@ -339,6 +339,7 @@
     "admin.events.no_tags": "No hay tags",
     "admin.events.tags_help": "Selecciona los tags que mejor describan tu evento",
     "admin.events.filter_status": "Estado",
+    "admin.events.filter_category": "Categoría",
     "admin.events.filter_search": "Buscar",
     "admin.events.filter_all": "Todos",
     "admin.events.filter_active": "Activos",
@@ -456,5 +457,8 @@
     "common.error_processing": "Error al procesar la solicitud",
     "common.connection_error": "Error de conexión",
     "common.na": "N/A",
-    "common.general": "General"
+    "common.general": "General",
+    "common.id": "ID",
+    "admin.reports.table_element": "Elemento",
+    "admin.events.table_actions": "Acciones"
 }
