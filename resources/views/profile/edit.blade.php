@@ -11,10 +11,10 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">
-                        <i class="fas fa-user-edit me-2"></i>Editar Perfil
+                        <i class="fas fa-user-edit me-2"></i>{{ __('profile.edit_title') }}
                     </h4>
                     <a href="{{ route('profile.details') }}" class="btn btn-outline-secondary btn-sm">
-                        <i class="fas fa-arrow-left me-1"></i>Volver
+                        <i class="fas fa-arrow-left me-1"></i>{{ __('common.back') }}
                     </a>
                 </div>
 
@@ -28,7 +28,7 @@
                             <div class="position-relative d-inline-block">
                                 @if(Auth::user()->profile_image)
                                     <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" 
-                                         alt="Profile Image" 
+                                         alt="{{ __('auth.profile_image') }}" 
                                          class="rounded-circle" 
                                          style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #007bff;">
                                 @else
@@ -116,7 +116,7 @@
                             <label for="bio" class="col-md-2 col-form-label text-md-end">{{ __('auth.bio') }}</label>
                             <div class="col-md-10">
                                 <textarea id="bio" name="bio" class="form-control @error('bio') is-invalid @enderror" 
-                                          rows="4" placeholder="Cuéntanos sobre ti...">{{ old('bio', Auth::user()->bio) }}</textarea>
+                                          rows="4" placeholder="{{ __('profile.bio_placeholder') }}\">{{ old('bio', Auth::user()->bio) }}</textarea>
                                 @error('bio')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

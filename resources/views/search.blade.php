@@ -28,7 +28,7 @@
                             id="search_location"
                             name="location"
                             :value="request('location')"
-                            placeholder="Localidad"
+                            placeholder="{{ __('search.location') }}"
                             label=""
                         />
                     </div>
@@ -104,7 +104,7 @@
                                     <i class="fas fa-user organizer-icon me-1"></i>{{ $event->user->name }}
                                     @endif
                                 </p>
-                                <a href="{{ route('events.show', $event->id) }}" class="btn btn-primary btn-sm w-100">Ver detalles</a>
+                                <a href="{{ route('events.show', $event->id) }}" class="btn btn-primary btn-sm w-100">{{ __('user.view_details') }}</a>
                             </div>
                         </div>
                     </div>
@@ -141,10 +141,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show loading state
         resultsContainer.style.opacity = '0.5';
         applyFiltersBtn.disabled = true;
-        applyFiltersBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>{{ __('search.searching') }}';
+        applyFiltersBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>' + translations.searching;
         
         // Make AJAX request
-        fetch(`{{ route('search.index') }}?${params.toString()}`, {
+        fetch(translations.searchIndex + '?' + params.toString(), {
             method: 'GET',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Update URL without reload
-            history.pushState(null, '', `{{ route('search.index') }}?${params.toString()}`);
+            history.pushState(null, '', translations.searchIndex + '?' + params.toString());
         })
         .catch(error => {
             console.error('Error:', error);
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             // Reset form and update results
             searchForm.reset();
-            window.location.href = '{{ route('search.index') }}';
+            window.location.href = translations.searchIndex;
         });
     }
     

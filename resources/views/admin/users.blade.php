@@ -3,15 +3,15 @@
 @section('content')
 <!-- Admin Header -->
 <div class="admin-header">
-    <h1 class="page-title">Gestión de Usuarios</h1>
-    <p class="page-subtitle">Administra todos los usuarios del sistema</p>
+    <h1 class="page-title">{{ __('admin.users.title') }}</h1>
+    <p class="page-subtitle">{{ __('admin.users.subtitle') }}</p>
 </div>
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Gestión de Usuarios</h1>
+                <h1 class="h2">{{ __('admin.users.title') }}</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
                         <a href="{{ route('admin.dashboard') }}" class="btn btn-sm btn-outline-secondary">
-                            <i class="fas fa-arrow-left me-1"></i> Volver al Dashboard
+                            <i class="fas fa-arrow-left me-1"></i> {{ __('admin.common.back_dashboard') }}
                         </a>
                     </div>
                 </div>
@@ -30,37 +30,37 @@
                 <div class="card-body">
                     <form action="{{ route('admin.users') }}" method="GET" class="row g-3">
                         <div class="col-md-3">
-                            <label for="role" class="form-label">Rol</label>
+                            <label for="role" class="form-label">{{ __('admin.users.filter_role') }}</label>
                             <select class="form-select" id="role" name="role">
-                                <option value="">Todos</option>
-                                <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Administradores</option>
-                                <option value="user" {{ request('role') == 'user' ? 'selected' : '' }}>Usuarios</option>
+                                <option value="">{{ __('admin.users.filter_all_roles') }}</option>
+                                <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>{{ __('admin.users.filter_admins') }}</option>
+                                <option value="user" {{ request('role') == 'user' ? 'selected' : '' }}>{{ __('admin.users.filter_users') }}</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label for="status" class="form-label">Estado</label>
+                            <label for="status" class="form-label">{{ __('admin.users.filter_status') }}</label>
                             <select class="form-select" id="status" name="status">
-                                <option value="">Todos</option>
-                                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Activos</option>
-                                <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactivos</option>
+                                <option value="">{{ __('admin.users.filter_all_status') }}</option>
+                                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>{{ __('admin.users.filter_active') }}</option>
+                                <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>{{ __('admin.users.filter_inactive') }}</option>
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <label for="search" class="form-label">Buscar</label>
+                            <label for="search" class="form-label">{{ __('admin.users.filter_search') }}</label>
                             <input type="text" class="form-control" id="search" name="search" 
-                                   value="{{ request('search') }}" placeholder="Buscar usuarios...">
+                                   value="{{ request('search') }}" placeholder="{{ __('admin.users.search_placeholder') }}">
                         </div>
                         <div class="col-md-2">
                             <label class="form-label">&nbsp;</label>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-search me-2"></i> Filtrar
+                                    <i class="fas fa-search me-2"></i> {{ __('admin.users.filter_button') }}
                                 </button>
                             </div>
                         </div>
                         <div class="col-12">
                             <a href="{{ route('admin.users') }}" class="btn btn-secondary">
-                                <i class="fas fa-times me-2"></i> Limpiar filtros
+                                <i class="fas fa-times me-2"></i> {{ __('admin.users.clear_filters') }}
                             </a>
                         </div>
                     </form>
@@ -71,7 +71,7 @@
             <div class="card shadow">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-info">
-                        <i class="fas fa-users me-2"></i>Lista de Usuarios ({{ $users->total() }})
+                        <i class="fas fa-users me-2"></i>{{ __('admin.users.list') }} ({{ $users->total() }})
                     </h6>
                 </div>
                 <div class="card-body">
@@ -81,13 +81,13 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Usuario</th>
-                                        <th>Nombre</th>
-                                        <th>Email</th>
-                                        <th>Rol</th>
-                                        <th>Estado</th>
-                                        <th>Fecha Registro</th>
-                                        <th>Acciones</th>
+                                        <th>{{ __('admin.users.table_username') }}</th>
+                                        <th>{{ __('auth.name') }}</th>
+                                        <th>{{ __('admin.users.table_email') }}</th>
+                                        <th>{{ __('admin.users.table_role') }}</th>
+                                        <th>{{ __('admin.users.table_status') }}</th>
+                                        <th>{{ __('admin.users.table_created') }}</th>
+                                        <th>{{ __('admin.users.table_actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -112,7 +112,7 @@
                                             </td>
                                             <td>
                                                 <span class="badge {{ $user->is_active ? 'bg-success' : 'bg-secondary' }}">
-                                                    {{ $user->is_active ? 'Activo' : 'Inactivo' }}
+                                                    {{ $user->is_active ? __('admin.common.active') : __('admin.common.inactive') }}
                                                 </span>
                                             </td>
                                             <td>{{ $user->created_at->format('d/m/Y H:i') }}</td>
@@ -123,18 +123,18 @@
                                                         @method('PATCH')
                                                         <button type="submit" 
                                                                 class="btn btn-sm {{ $user->is_active ? 'btn-warning' : 'btn-success' }}"
-                                                                title="{{ $user->is_active ? 'Desactivar usuario' : 'Activar usuario' }}">
+                                                                title="{{ $user->is_active ? __('admin.users.deactivate_user') : __('admin.users.activate_user') }}">
                                                             <i class="fas {{ $user->is_active ? 'fa-pause' : 'fa-play' }}"></i>
                                                         </button>
                                                     </form>
-                                                    <button class="btn btn-sm btn-info" title="Ver detalles">
+                                                    <button class="btn btn-sm btn-info" title="{{ __('admin.users.view_details') }}">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
-                                                    <button class="btn btn-sm btn-warning" title="Editar rol">
+                                                    <button class="btn btn-sm btn-warning" title="{{ __('admin.users.edit_role') }}">
                                                         <i class="fas fa-user-cog"></i>
                                                     </button>
-                                                    <button class="btn btn-sm btn-danger" title="Eliminar usuario" 
-                                                            @if($user->role && $user->role->name === 'admin') disabled @endif title="@if($user->role && $user->role->name === 'admin') No se puede eliminar administrador @else Eliminar usuario @endif">
+                                                    <button class="btn btn-sm btn-danger" 
+                                                            @if($user->role && $user->role->name === 'admin') disabled @endif title="@if($user->role && $user->role->name === 'admin') {{ __('admin.users.cannot_delete_admin') }} @else {{ __('admin.users.delete_user') }} @endif">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </div>
@@ -152,8 +152,8 @@
                     @else
                         <div class="text-center py-4">
                             <i class="fas fa-users-slash fa-3x text-muted mb-3"></i>
-                            <h5 class="text-muted">No se encontraron usuarios</h5>
-                            <p class="text-muted">No hay usuarios que coincidan con los filtros seleccionados.</p>
+                            <h5 class="text-muted">{{ __('admin.users.no_found') }}</h5>
+                            <p class="text-muted">{{ __('admin.users.no_found_help') }}</p>
                         </div>
                     @endif
                 </div>

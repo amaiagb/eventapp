@@ -26,42 +26,15 @@
 <div class="row mb-4">
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="stat-card">
-            <div class="stat-icon primary">
-                <i class="fas fa-calendar-alt"></i>
-            </div>
-            <div class="stat-value">{{ $stats['total_events'] }}</div>
-            <div class="stat-label">{{ __('admin.stats.total_events') }}</div>
-            <div class="stat-change positive">
-                <i class="fas fa-arrow-up"></i>
-                <span>12% {{ __('admin.stats.new_this_month') }}</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="stat-card">
-            <div class="stat-icon success">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <div class="stat-value">{{ $stats['active_events'] }}</div>
-            <div class="stat-label">{{ __('admin.stats.active_events') }}</div>
-            <div class="stat-change positive">
-                <i class="fas fa-arrow-up"></i>
-                <span>8% {{ __('admin.stats.new_this_month') }}</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="stat-card">
             <div class="stat-icon warning">
-                <i class="fas fa-users"></i>
+                <i class="fas fa-clock"></i>
             </div>
-            <div class="stat-value">{{ $stats['total_users'] }}</div>
-            <div class="stat-label">{{ __('admin.stats.total_users') }}</div>
-            <div class="stat-change positive">
-                <i class="fas fa-arrow-up"></i>
-                <span>23% {{ __('admin.stats.new_this_month') }}</span>
+            <div class="stat-value">{{ $stats['pending_events'] }}</div>
+            <div class="stat-label">{{ __('admin.dashboard.pending_events_label') }}</div>
+            <div class="stat-action">
+                <a href="{{ route('admin.events', ['status' => 'pending']) }}" class="btn btn-sm btn-outline-warning">
+                    {{ __('admin.common.review') }}
+                </a>
             </div>
         </div>
     </div>
@@ -71,52 +44,79 @@
             <div class="stat-icon danger">
                 <i class="fas fa-flag"></i>
             </div>
-            <div class="stat-value">{{ $stats['total_reports'] }}</div>
-            <div class="stat-label">{{ __('admin.reports.title') }}</div>
-            <div class="stat-change negative">
-                <i class="fas fa-arrow-down"></i>
-                <span>5% {{ __('admin.stats.new_this_month') }}</span>
+            <div class="stat-value">{{ $stats['pending_reports'] }}</div>
+            <div class="stat-label">{{ __('admin.dashboard.pending_reports_label') }}</div>
+            <div class="stat-action">
+                <a href="{{ route('admin.reports') }}" class="btn btn-sm btn-outline-danger">
+                    {{ __('admin.common.review') }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stat-card">
+            <div class="stat-icon success">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="stat-value">{{ $stats['active_events'] }}</div>
+            <div class="stat-label">{{ __('admin.dashboard.active_events_label') }}</div>
+            <div class="stat-action">
+                <a href="{{ route('admin.events', ['status' => 'active']) }}" class="btn btn-sm btn-outline-success">
+                    {{ __('admin.common.view_all') }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stat-card">
+            <div class="stat-icon primary">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-value">{{ $stats['active_users'] }}</div>
+            <div class="stat-label">{{ __('admin.dashboard.active_users_label') }}</div>
+            <div class="stat-action">
+                <a href="{{ route('admin.users', ['status' => 'active']) }}" class="btn btn-sm btn-outline-primary">
+                    {{ __('admin.common.view_all') }}
+                </a>
             </div>
         </div>
     </div>
 </div>
 
-            <!-- Eventos Activos Recientes -->
+            <!-- Eventos Pendientes de Aprobación -->
 <div class="row">
     <div class="col-lg-6">
         <div class="admin-card">
             <div class="card-header">
                 <h6 class="card-title">
-                    <i class="fas fa-calendar-alt"></i>
-                    {{ __('admin.events.recent_active') }}
+                    <i class="fas fa-clock"></i>
+                    {{ __('admin.dashboard.pending_approval_title') }}
                 </h6>
             </div>
             <div class="card-body">
-                @if($activeEvents->count() > 0)
+                @if($pendingEvents->count() > 0)
                     <div class="admin-table">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>{{ __('admin.events.name') }}</th>
-                                    <th>{{ __('admin.events.category') }}</th>
-                                    <th>{{ __('admin.events.date') }}</th>
+                                    <th>{{ __('admin.dashboard.table_name') }}</th>
+                                    <th>{{ __('admin.dashboard.table_category') }}</th>
+                                    <th>{{ __('admin.dashboard.table_date') }}</th>
                                     <th>{{ __('admin.events.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($activeEvents->take(5) as $event)
+                                @foreach($pendingEvents->take(5) as $event)
                                     <tr>
                                         <td>{{ Str::limit($event->title, 30) }}</td>
                                         <td>{{ $event->category->name ?? 'N/A' }}</td>
                                         <td>{{ $event->event_date->format('d/m/Y') }}</td>
                                         <td>
-                                            <form action="{{ route('admin.events.toggle', $event) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="btn-admin btn-warning btn-sm" title="Desactivar">
-                                                    <i class="fas fa-pause"></i>
-                                                </button>
-                                            </form>
+                                            <a href="{{ route('admin.events.show', $event) }}" class="btn btn-sm btn-info" title="{{ __('admin.common.view_details') }}">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -124,38 +124,38 @@
                         </table>
                     </div>
                     <div class="text-center mt-3">
-                        <a href="{{ route('admin.events') }}" class="btn-admin btn-primary">{{ __('admin.events.view_all') }}</a>
+                        <a href="{{ route('admin.events', ['status' => 'pending']) }}" class="btn btn-primary">{{ __('admin.common.view_all') }}</a>
                     </div>
                 @else
-                    <p class="text-muted">{{ __('admin.events.no_recent_active') }}</p>
+                    <p class="text-muted">{{ __('admin.dashboard.no_pending_events') }}</p>
                 @endif
             </div>
         </div>
     </div>
 
-    <!-- Reportes Recientes -->
+    <!-- Reportes Pendientes -->
     <div class="col-lg-6">
         <div class="admin-card">
             <div class="card-header">
                 <h6 class="card-title">
                     <i class="fas fa-flag"></i>
-                    {{ __('admin.reports.recent') }}
+                    {{ __('admin.dashboard.pending_reports_title') }}
                 </h6>
             </div>
             <div class="card-body">
-                @if($reports->count() > 0)
+                @if($pendingReports->count() > 0)
                     <div class="admin-table">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>{{ __('admin.reports.reporter') }}</th>
-                                    <th>{{ __('admin.reports.type') }}</th>
-                                    <th>{{ __('admin.reports.reason') }}</th>
-                                    <th>{{ __('admin.reports.date') }}</th>
+                                    <th>{{ __('admin.dashboard.table_reported_by') }}</th>
+                                    <th>{{ __('admin.dashboard.table_type') }}</th>
+                                    <th>{{ __('admin.dashboard.table_reason') }}</th>
+                                    <th>{{ __('admin.dashboard.table_date') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($reports->take(5) as $report)
+                                @foreach($pendingReports->take(5) as $report)
                                     <tr>
                                         <td>{{ $report->reporter->username ?? 'N/A' }}</td>
                                         <td>{{ class_basename($report->reportable_type) }}</td>
@@ -167,10 +167,10 @@
                         </table>
                     </div>
                     <div class="text-center mt-3">
-                        <a href="{{ route('admin.reports') }}" class="btn-admin btn-warning">{{ __('admin.reports.view_all') }}</a>
+                        <a href="{{ route('admin.reports') }}" class="btn btn-danger">{{ __('admin.common.view_all') }}</a>
                     </div>
                 @else
-                    <p class="text-muted">{{ __('admin.reports.no_recent') }}</p>
+                    <p class="text-muted">{{ __('admin.dashboard.no_pending_reports') }}</p>
                 @endif
             </div>
         </div>
@@ -213,7 +213,7 @@
                                         </td>
                                         <td>
                                             <span class="badge {{ $user->is_active ? 'bg-success' : 'bg-secondary' }}">
-                                                {{ $user->is_active ? 'Activo' : 'Inactivo' }}
+                                                {{ $user->is_active ? __('admin.common.active') : __('admin.common.inactive') }}
                                             </span>
                                         </td>
                                         <td>{{ $user->created_at->format('d/m/Y') }}</td>

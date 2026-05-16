@@ -42,15 +42,15 @@
                     <div class="profile-stats d-flex gap-4 mb-3">
                         <div class="stat-item">
                             <strong id="followersCount" class="text-primary">{{ $followersCount }}</strong>
-                            <span class="text-muted">seguidores</span>
+                            <span class="text-muted">{{ __('user.followers') }}</span>
                         </div>
                         <div class="stat-item">
                             <strong class="text-primary">{{ $followingCount }}</strong>
-                            <span class="text-muted">siguiendo</span>
+                            <span class="text-muted">{{ __('user.following') }}</span>
                         </div>
                         <div class="stat-item">
                             <strong class="text-primary">{{ $events->total() }}</strong>
-                            <span class="text-muted">eventos</span>
+                            <span class="text-muted">{{ __('user.events') }}</span>
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                     
                     @if(auth()->check() && auth()->id() === $user->id)
                     <a href="{{ route('profile.edit') }}" class="btn btn-outline-primary w-100 mb-2">
-                        <i class="fas fa-edit me-2"></i>Editar perfil
+                        <i class="fas fa-edit me-2"></i>{{ __('profile.edit_title') }}
                     </a>
                     @endif
                 </div>
@@ -86,7 +86,7 @@
             <div class="col-12">
                 <h2 class="section-title mb-4">
                     <i class="fas fa-calendar-alt me-2 text-primary"></i>
-                    Eventos creados por {{ $user->name }}
+                    {{ __('user.events_by') }} {{ $user->name }}
                 </h2>
                 
                 @if($events->count() > 0)
@@ -110,10 +110,10 @@
                                         <i class="fas fa-map-marker-alt me-1"></i>{{ $event->city->name ?? $event->location }}
                                     </p>
                                     <p class="card-text text-muted small mb-2">
-                                        <i class="fas fa-users me-1"></i>{{ $event->attendees()->count() }} asistentes
+                                        <i class="fas fa-users me-1"></i>{{ $event->attendees()->count() }} {{ __('user.attendees') }}
                                     </p>
                                 </div>
-                                <a href="{{ route('events.show', $event->id) }}" class="btn btn-primary btn-sm w-100 mt-auto">Ver detalles</a>
+                                <a href="{{ route('events.show', $event->id) }}" class="btn btn-primary btn-sm w-100 mt-auto">{{ __('user.view_details') }}</a>
                             </div>
                         </div>
                     </div>
@@ -130,7 +130,7 @@
                 @else
                 <div class="alert alert-info">
                     <i class="fas fa-info-circle me-2"></i>
-                    {{ $user->name }} todavía no ha creado ningún evento público.
+                    {{ $user->name }} {{ __('user.no_events_created') }}
                 </div>
                 @endif
             </div>
@@ -163,6 +163,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const followText = document.getElementById('followText');
     const followersCount = document.getElementById('followersCount');
     
+    // Traducciones para JavaScript
+    const translations = {
+        follow: "{{ __('common.follow') }}",
+        unfollow: "{{ __('common.unfollow') }}",
+        errorProcessing: "{{ __('common.error_processing') }}",
+        connectionError: "{{ __('common.connection_error') }}"
+    };
+    
     if (followForm) {
         followForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -188,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         followBtn.classList.add('btn-primary');
                         followBtn.querySelector('i').classList.remove('fa-user-minus');
                         followBtn.querySelector('i').classList.add('fa-user-plus');
-                        followText.textContent = 'Seguir';
+                        followText.textContent = translations.follow;
                         
                         // Disminuir contador de seguidores
                         followersCount.textContent = parseInt(followersCount.textContent) - 1;
@@ -198,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         followBtn.classList.add('btn-outline-secondary');
                         followBtn.querySelector('i').classList.remove('fa-user-plus');
                         followBtn.querySelector('i').classList.add('fa-user-minus');
-                        followText.textContent = 'Dejar de seguir';
+                        followText.textContent = translations.unfollow;
                         
                         // Aumentar contador de seguidores
                         followersCount.textContent = parseInt(followersCount.textContent) + 1;
@@ -207,12 +215,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Mostrar mensaje de éxito
                     showToast(data.message);
                 } else {
-                    showToast(data.message || 'Error al procesar la solicitud', 'error');
+                    showToast(data.message || translations.errorProcessing, 'error');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                showToast('Error de conexión', 'error');
+                showToast(translations.connectionError, 'error');
             });
         });
     }

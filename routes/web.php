@@ -47,6 +47,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/events', [AdminController::class, 'events'])->name('events');
     Route::get('/events/{event}', [AdminController::class, 'showEvent'])->name('events.show');
+    Route::put('/events/{event}', [AdminController::class, 'updateEvent'])->name('events.update');
     Route::patch('/events/{event}/approve', [AdminController::class, 'approveEvent'])->name('events.approve');
     Route::patch('/events/{event}/reject', [AdminController::class, 'rejectEvent'])->name('events.reject');
     Route::get('/users', [AdminController::class, 'users'])->name('users');
@@ -59,10 +60,25 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Report management routes
     Route::patch('/reports/{report}/resolve', [AdminController::class, 'resolveReport'])->name('reports.resolve');
     Route::patch('/reports/{report}/reject', [AdminController::class, 'rejectReport'])->name('reports.reject');
+    
+    // Category management routes
+    Route::get('/categories', [AdminController::class, 'categories'])->name('categories');
+    Route::get('/categories/create', [AdminController::class, 'createCategory'])->name('categories.create');
+    Route::post('/categories', [AdminController::class, 'storeCategory'])->name('categories.store');
+    Route::get('/categories/{category}/edit', [AdminController::class, 'editCategory'])->name('categories.edit');
+    Route::put('/categories/{category}', [AdminController::class, 'updateCategory'])->name('categories.update');
+    Route::delete('/categories/{category}', [AdminController::class, 'deleteCategory'])->name('categories.delete');
+    
+    // Tag management routes
+    Route::get('/tags', [AdminController::class, 'tags'])->name('tags');
+    Route::get('/tags/create', [AdminController::class, 'createTag'])->name('tags.create');
+    Route::post('/tags', [AdminController::class, 'storeTag'])->name('tags.store');
+    Route::get('/tags/{tag}/edit', [AdminController::class, 'editTag'])->name('tags.edit');
+    Route::put('/tags/{tag}', [AdminController::class, 'updateTag'])->name('tags.update');
+    Route::delete('/tags/{tag}', [AdminController::class, 'deleteTag'])->name('tags.delete');
 });
 
 // Event routes
-Route::resource('events', EventController::class);
 Route::post('/events/{event}/register', [EventController::class, 'register'])->name('events.register')->middleware('auth');
 Route::post('/events/{event}/cancel', [EventController::class, 'cancel'])->name('events.cancel')->middleware('auth');
 Route::get('/my-events', [EventController::class, 'myEvents'])->name('events.my-events')->middleware('auth');

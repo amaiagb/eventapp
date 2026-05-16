@@ -31,6 +31,13 @@ $secondary-active: #565e64;
 $secondary-light: #e9ecef;
 $secondary-dark: #565e64;
 
+// Success Color (Verde)
+$success: #198754;
+$success-hover: #157347;
+$success-active: #146c43;
+$success-light: #d1e7dd;
+$success-dark: #146c43;
+
 // Accent Color (Naranja)
 $accent: #fd7e14;
 $accent-hover: #fd9c4a;
@@ -61,6 +68,9 @@ $border-light: #e9ecef;
     --secondary-color: #{$secondary};
     --secondary-hover: #{$secondary-hover};
     --secondary-active: #{$secondary-active};
+    --success-color: #{$success};
+    --success-hover: #{$success-hover};
+    --success-active: #{$success-active};
     --accent-color: #{$accent};
     --accent-hover: #{$accent-hover};
     --accent-active: #{$accent-active};
