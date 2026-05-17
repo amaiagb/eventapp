@@ -30,7 +30,7 @@
                             <div class="mb-3">
                                 <label class="form-label fw-medium">{{ __('events.name_label') }} <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control form-control-lg @error('title') is-invalid @enderror" 
-                                       name="title" placeholder="Ej: Concierto de Rock en el Parque" 
+                                       name="title" placeholder="{{ __('common.name_placeholder') }}" 
                                        value="{{ old('title', $event->title) }}" required>
                                 @error('title')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -100,7 +100,7 @@
                                 <div class="mb-3">
                                     <label class="form-label fw-medium">{{ __('events.location_specific') }}</label>
                                     <input type="text" class="form-control @error('location') is-invalid @enderror" 
-                                           name="location" placeholder="Ej: Plaza Mayor, Madrid" 
+                                           name="location" placeholder="{{ __('common.location_placeholder') }}" 
                                            value="{{ old('location', $event->location) }}" required>
                                     @error('location')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -116,7 +116,7 @@
                                 <label class="form-label fw-medium">{{ __('events.description') }} <span class="text-danger">*</span></label>
                                 <textarea class="form-control @error('description') is-invalid @enderror" 
                                           name="description" rows="5" 
-                                          placeholder="Describe tu evento, actividades, requisitos, etc..."
+                                          placeholder="{{ __('common.description_placeholder') }}"
                                           required>{{ old('description', $event->description) }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>

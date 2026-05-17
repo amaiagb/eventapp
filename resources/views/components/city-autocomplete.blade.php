@@ -3,9 +3,10 @@
     'name' => 'city_name',
     'id' => 'city_input',
     'value' => null,
+    'city_id' => null,
     'required' => false,
-    'placeholder' => 'Escribe el nombre de la ciudad...',
-    'label' => 'Ciudad',
+    'placeholder' => __('common.city_placeholder'),
+    'label' => __('common.city'),
     'error' => null
 ])
 
@@ -26,7 +27,7 @@
                value="{{ $value }}"
                @if($required) required @endif>
         
-        <input type="hidden" id="{{ $id }}_hidden" name="city_id" value="{{ old('city_id') }}">
+        <input type="hidden" id="{{ $id }}_hidden" name="city_id" value="{{ old('city_id') ?? $city_id }}">
         
         @if($error)
             <div class="invalid-feedback">{{ $error }}</div>
@@ -149,9 +150,20 @@
         }
         
         var oldCityId = @json(old('city_id'));
+        var initialCityId = @json($city_id);
+
         if (oldCityId) {
             var initialCity = citiesData.find(function(city) {
                 return city.id == oldCityId;
+            });
+            if (initialCity && cityInput && cityIdInput) {
+                cityInput.value = initialCity.name;
+                cityIdInput.value = initialCity.id;
+                selectedCityId = initialCity.id;
+            }
+        } else if (initialCityId) {
+            var initialCity = citiesData.find(function(city) {
+                return city.id == initialCityId;
             });
             if (initialCity && cityInput && cityIdInput) {
                 cityInput.value = initialCity.name;

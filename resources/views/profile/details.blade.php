@@ -25,8 +25,8 @@
         <div class="col-lg-6">
             <!-- Header Section -->
             <div class="text-center mb-5">
-                <h1 class="h2 mb-3 fw-bold">Mi Perfil</h1>
-                <p class="text-muted">Gestiona tu información personal</p>
+                <h1 class="h2 mb-3 fw-bold">{{ __('profile.title') }}</h1>
+                <p class="text-muted">{{ __('profile.subtitle') }}</p>
             </div>
 
             <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
@@ -35,7 +35,7 @@
 
                 <!-- Profile Image Section -->
                 <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
-                    <h5 class="mb-4 fw-semibold">Foto de perfil</h5>
+                    <h5 class="mb-4 fw-semibold">{{ __('profile.photo') }}</h5>
                     <div class="text-center">
                         <div class="position-relative d-inline-block">
                             @if(Auth::user()->profile_image)
@@ -56,16 +56,16 @@
                             <input type="file" id="profile_image" name="profile_image" class="d-none" 
                                    accept="image/*" onchange="document.getElementById('profile-form').submit();">
                         </div>
-                        <p class="text-muted mt-3 mb-0">Haz clic en la cámara para cambiar tu foto</p>
+                        <p class="text-muted mt-3 mb-0">{{ __('profile.photo_help') }}</p>
                     </div>
                 </div>
 
                 <!-- Personal Information Section -->
                 <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
-                    <h5 class="mb-4 fw-semibold">Información personal</h5>
+                    <h5 class="mb-4 fw-semibold">{{ __('profile.personal_info') }}</h5>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-medium">Nombre de usuario <span class="text-danger">*</span></label>
+                            <label class="form-label fw-medium">{{ __('auth.username') }} <span class="text-danger">*</span></label>
                             <input type="text" id="username" name="username" class="form-control form-control-lg @error('username') is-invalid @enderror" 
                                    value="{{ old('username', Auth::user()->username) }}" required>
                             @error('username')
@@ -74,7 +74,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-medium">Email <span class="text-danger">*</span></label>
+                            <label class="form-label fw-medium">{{ __('auth.email_address') }} <span class="text-danger">*</span></label>
                             <input type="email" id="email" name="email" class="form-control form-control-lg @error('email') is-invalid @enderror" 
                                    value="{{ old('email', Auth::user()->email) }}" required>
                             @error('email')
@@ -83,7 +83,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-medium">Nombre <span class="text-danger">*</span></label>
+                            <label class="form-label fw-medium">{{ __('auth.name') }} <span class="text-danger">*</span></label>
                             <input type="text" id="name" name="name" class="form-control form-control-lg @error('name') is-invalid @enderror" 
                                    value="{{ old('name', Auth::user()->name) }}" required>
                             @error('name')
@@ -92,7 +92,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-medium">Apellidos <span class="text-danger">*</span></label>
+                            <label class="form-label fw-medium">{{ __('auth.surname') }} <span class="text-danger">*</span></label>
                             <input type="text" id="surname" name="surname" class="form-control form-control-lg @error('surname') is-invalid @enderror" 
                                    value="{{ old('surname', Auth::user()->surname) }}" required>
                             @error('surname')
@@ -101,9 +101,9 @@
                         </div>
 
                         <div class="col-12">
-                            <label class="form-label fw-medium">Biografía</label>
+                            <label class="form-label fw-medium">{{ __('profile.bio') }}</label>
                             <textarea id="bio" name="bio" class="form-control @error('bio') is-invalid @enderror" 
-                                      rows="4" placeholder="Cuéntanos sobre ti...">{{ old('bio', Auth::user()->bio) }}</textarea>
+                                      rows="4" placeholder="{{ __('profile.bio_placeholder') }}">{{ old('bio', Auth::user()->bio) }}</textarea>
                             @error('bio')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -116,8 +116,8 @@
                                 id="city_input"
                                 :value="old('city_name', Auth::user()->city->name ?? null)"
                                 required="false"
-                                placeholder="Seleccionar ciudad"
-                                label="Ciudad"
+                                placeholder="{{ __('common.select_city') }}"
+                                :label="__('common.city')"
                                 :error="$errors->first('city_id')"
                             />
                         </div>
@@ -126,8 +126,8 @@
 
                 <!-- Interests Section -->
                 <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
-                    <h5 class="mb-4 fw-semibold">Mis intereses</h5>
-                    <p class="text-muted mb-4">Selecciona las etiquetas que mejor describan tus intereses.</p>
+                    <h5 class="mb-4 fw-semibold">{{ __('profile.interests') }}</h5>
+                    <p class="text-muted mb-4">{{ __('profile.interests_help') }}</p>
                     
                     <div class="multiselect-container">
                         @if(isset($tags))
@@ -145,18 +145,18 @@
                 <div class="d-flex justify-content-between gap-3 mt-5">
                     <div class="d-flex gap-2">
                         <a href="{{ route('profile.change-password') }}" class="btn btn-outline-secondary">
-                            <i class="fas fa-lock me-1"></i> Cambiar contraseña
+                            <i class="fas fa-lock me-1"></i> {{ __('profile.change_password') }}
                         </a>
                         <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
-                            <i class="fas fa-trash me-1"></i> Eliminar cuenta
+                            <i class="fas fa-trash me-1"></i> {{ __('common.delete_account') }}
                         </button>
                     </div>
                     <div class="d-flex gap-2">
                         <a href="{{ route('home') }}" class="btn btn-outline-secondary">
-                            Cancelar
+                            {{ __('common.cancel') }}
                         </a>
                         <button type="submit" class="btn btn-primary px-4">
-                            <i class="fas fa-save me-1"></i> Guardar cambios
+                            <i class="fas fa-save me-1"></i> {{ __('profile.save_changes') }}
                         </button>
                     </div>
                 </div>
@@ -171,18 +171,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="deleteAccountModalLabel">
-                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>Eliminar cuenta
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>{{ __('common.delete_account') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer y todos tus datos serán eliminados permanentemente.</p>
+                <p>{{ __('common.delete_account_confirm') }}</p>
                 <div class="alert alert-warning">
-                    <strong>Advertencia:</strong> Esto eliminará permanentemente tu perfil, eventos y todos los datos asociados.
+                    <strong>{{ __('common.delete_account_warning') }}</strong>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="delete_password" class="form-label">Por favor, introduce tu contraseña para confirmar:</label>
+                    <label for="delete_password" class="form-label">{{ __('common.delete_password_confirm') }}</label>
                     <input type="password" class="form-control" id="delete_password" name="password" required>
                     @error('password')
                         <div class="text-danger small mt-1">{{ $message }}</div>
@@ -190,12 +190,12 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('common.cancel') }}</button>
                 <form action="{{ route('profile.delete') }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">
-                        <i class="fas fa-trash me-1"></i>Eliminar cuenta
+                        <i class="fas fa-trash me-1"></i>{{ __('common.delete_account') }}
                     </button>
                 </form>
             </div>

@@ -3,15 +3,15 @@
 @section('content')
 <!-- Admin Header -->
 <div class="admin-header">
-    <h1 class="page-title">Gestión de Reportes</h1>
-    <p class="page-subtitle">Administra todos los reportes del sistema</p>
+    <h1 class="page-title">{{ __('admin.reports.title') }}</h1>
+    <p class="page-subtitle">{{ __('admin.reports.subtitle') }}</p>
 </div>
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Gestión de Reportes</h1>
+                <h1 class="h2">{{ __('admin.reports.title') }}</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
                         <a href="{{ route('admin.dashboard') }}" class="btn btn-sm btn-outline-secondary">
-                            <i class="fas fa-arrow-left me-1"></i> Volver al Dashboard
+                            <i class="fas fa-arrow-left me-1"></i> {{ __('admin.common.back_dashboard') }}
                         </a>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                 <div class="col-md-3">
                     <div class="card bg-primary text-white">
                         <div class="card-body">
-                            <h5 class="card-title">Total Reportes</h5>
+                            <h5 class="card-title">{{ __('admin.reports.total') }}</h5>
                             <h3>{{ \App\Models\Report::count() }}</h3>
                         </div>
                     </div>
@@ -38,7 +38,7 @@
                 <div class="col-md-3">
                     <div class="card bg-warning text-white">
                         <div class="card-body">
-                            <h5 class="card-title">Pendientes</h5>
+                            <h5 class="card-title">{{ __('admin.reports.pending') }}</h5>
                             <h3>{{ \App\Models\Report::where('status', 'pending')->count() }}</h3>
                         </div>
                     </div>
@@ -46,7 +46,7 @@
                 <div class="col-md-3">
                     <div class="card bg-success text-white">
                         <div class="card-body">
-                            <h5 class="card-title">Resueltos</h5>
+                            <h5 class="card-title">{{ __('admin.reports.resolved') }}</h5>
                             <h3>{{ \App\Models\Report::where('status', 'resolved')->count() }}</h3>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
                 <div class="col-md-3">
                     <div class="card bg-danger text-white">
                         <div class="card-body">
-                            <h5 class="card-title">Rechazados</h5>
+                            <h5 class="card-title">{{ __('admin.reports.reviewed') }}</h5>
                             <h3>{{ \App\Models\Report::where('status', 'reviewed')->count() }}</h3>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
             <div class="card shadow">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-warning">
-                        <i class="fas fa-flag me-2"></i>Lista de Reportes ({{ $reports->total() }})
+                        <i class="fas fa-flag me-2"></i>{{ __('admin.reports.list') }} ({{ $reports->total() }})
                     </h6>
                 </div>
                 <div class="card-body">
@@ -75,20 +75,18 @@
                             <table class="table table-bordered" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Reportado por</th>
-                                        <th>Tipo</th>
-                                        <th>Elemento</th>
-                                        <th>Motivo</th>
-                                        <th>Estado</th>
-                                        <th>Fecha</th>
-                                        <th>Acciones</th>
+                                        <th>{{ __('admin.reports.table_reporter') }}</th>
+                                        <th>{{ __('admin.reports.table_type') }}</th>
+                                        <th>{{ __('admin.reports.table_element') }}</th>
+                                        <th>{{ __('admin.reports.table_reason') }}</th>
+                                        <th>{{ __('admin.reports.table_status') }}</th>
+                                        <th>{{ __('admin.reports.table_date') }}</th>
+                                        <th>{{ __('admin.reports.table_actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($reports as $report)
                                         <tr>
-                                            <td>{{ $report->id }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center me-2" 
@@ -119,7 +117,7 @@
                                             <td>{{ $report->created_at->format('d/m/Y H:i') }}</td>
                                             <td>
                                                 <div class="btn-group" role="group">
-                                                    <button class="btn btn-sm btn-info" title="Ver detalles" 
+                                                    <button class="btn btn-sm btn-info" title="{{ __('admin.reports.view_details') }}" 
                                                             onclick="showReportDetails({{ $report->id }})">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
@@ -127,14 +125,14 @@
                                                         <form action="{{ route('admin.reports.resolve', $report) }}" method="POST" style="display: inline;">
                                                             @csrf
                                                             @method('PATCH')
-                                                            <button type="submit" class="btn btn-sm btn-success" title="Marcar como resuelto">
+                                                            <button type="submit" class="btn btn-sm btn-success" title="{{ __('admin.reports.resolve') }}">
                                                                 <i class="fas fa-check"></i>
                                                             </button>
                                                         </form>
                                                         <form action="{{ route('admin.reports.reject', $report) }}" method="POST" style="display: inline;">
                                                             @csrf
                                                             @method('PATCH')
-                                                            <button type="submit" class="btn btn-sm btn-danger" title="Rechazar reporte">
+                                                            <button type="submit" class="btn btn-sm btn-danger" title="{{ __('admin.reports.reject') }}">
                                                                 <i class="fas fa-times"></i>
                                                             </button>
                                                         </form>
@@ -154,8 +152,8 @@
                     @else
                         <div class="text-center py-4">
                             <i class="fas fa-flag-slash fa-3x text-muted mb-3"></i>
-                            <h5 class="text-muted">No se encontraron reportes</h5>
-                            <p class="text-muted">No hay reportes que coincidan con los filtros seleccionados.</p>
+                            <h5 class="text-muted">{{ __('admin.reports.no_found') }}</h5>
+                            <p class="text-muted">{{ __('admin.reports.no_found_help') }}</p>
                         </div>
                     @endif
                 </div>
@@ -169,7 +167,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Detalles del Reporte</h5>
+                <h5 class="modal-title">{{ __('admin.reports.details_modal_title') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -178,7 +176,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('admin.reports.close') }}</button>
             </div>
         </div>
     </div>
@@ -210,13 +208,19 @@
 </style>
 
 <script>
+const reportTranslations = {
+    loadingDetails: "{{ __('admin.reports.loading_details') }}",
+    detailsModalTitle: "{{ __('admin.reports.details_modal_title') }}",
+    detailsNote: "{{ __('admin.reports.details_note') }}"
+};
+
 function showReportDetails(reportId) {
     // Aquí podrías añadir una llamada AJAX para cargar los detalles del reporte
     // Por ahora, mostraremos un mensaje simple
     document.getElementById('reportDetailsContent').innerHTML = 
         '<div class="text-center">' +
         '<i class="fas fa-spinner fa-spin fa-2x mb-3"></i>' +
-        '<p>Cargando detalles del reporte #' + reportId + '...</p>' +
+        '<p>' + reportTranslations.loadingDetails + ' #' + reportId + '...</p>' +
         '</div>';
     
     // Mostrar el modal
@@ -227,8 +231,8 @@ function showReportDetails(reportId) {
     setTimeout(function() {
         document.getElementById('reportDetailsContent').innerHTML = 
             '<div class="alert alert-info">' +
-            '<strong>Reporte #' + reportId + '</strong><br>' +
-            'Los detalles completos del reporte se cargarían aquí mediante una llamada AJAX al servidor.' +
+            '<strong>' + reportTranslations.detailsModalTitle + ' #' + reportId + '</strong><br>' +
+            reportTranslations.detailsNote +
             '</div>';
     }, 1000);
 }

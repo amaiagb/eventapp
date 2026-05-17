@@ -18,6 +18,11 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        // Verificar que el usuario esté activo
+        if ($user->is_active === null || $user->is_active === false || $user->is_active === 0) {
+            abort(404);
+        }
+
         // Obtener eventos públicos (solo eventos aprobados)
         $events = $user->events()
             ->where('status', 'approved')

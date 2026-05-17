@@ -37,7 +37,7 @@
                                     <label for="username" class="form-label fw-semibold">
                                         <i class="fas fa-user me-2 text-primary"></i>{{ __('auth.username') }}
                                     </label>
-                                    <input id="username" type="text" class="form-control form-control-lg @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus placeholder="Ingrese su nombre de usuario">
+                                    <input id="username" type="text" class="form-control form-control-lg @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus placeholder="{{ __('auth.username_placeholder_alt') }}">
                                     @error('username')
                                         <div class="invalid-feedback d-block">
                                             <strong>{{ $message }}</strong>

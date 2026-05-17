@@ -291,7 +291,21 @@
 
                         @if(auth()->check() && $event->status === 'approved')
                         @if(auth()->id() !== $event->user_id)
-                        @if($isRegistered)
+                        @if($isEventPast)
+                        <button type="button" class="btn btn-secondary w-100 mb-3" style="pointer-events: none; cursor: default;">
+                            <i class="fas fa-history me-2"></i>{{ __('events.event_past') }}
+                        </button>
+                        <p class="text-muted small text-center mb-3">
+                            {{ __('events.event_past_message') }}
+                        </p>
+                        @elseif($isEventFull)
+                        <button type="button" class="btn btn-secondary w-100 mb-3" style="pointer-events: none; cursor: default;">
+                            <i class="fas fa-ban me-2"></i>{{ __('events.capacity_full') }}
+                        </button>
+                        <p class="text-muted small text-center mb-3">
+                            {{ __('events.capacity_full_message') }}
+                        </p>
+                        @elseif($isRegistered)
                         <button type="button" class="btn btn-success w-100 mb-3" style="pointer-events: none; cursor: default;">
                             <i class="fas fa-check me-2"></i>{{ __('events.registered') }}
                         </button>

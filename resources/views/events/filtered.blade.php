@@ -14,7 +14,7 @@
             <p class="text-muted mb-0">{{ $subtitle }}</p>
         </div>
         <a href="{{ route('home') }}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left me-1"></i>{{ __('Volver') }}
+            <i class="fas fa-arrow-left me-1"></i>{{ __('common.back') }}
         </a>
     </div>
 

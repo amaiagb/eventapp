@@ -33,6 +33,14 @@ class User extends Authenticatable
     ];
 
     /**
+     * Scope para filtrar solo usuarios activos
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>

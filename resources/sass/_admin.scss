@@ -4,6 +4,7 @@
 .admin-layout {
   background-color: var(--bg-primary);
   min-height: 100vh;
+  padding-top: 0; // Eliminar el padding-top del body principal
 }
 
 // Modern Sidebar
@@ -133,6 +134,12 @@
     background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
     border-bottom: 1px solid var(--border-color);
     padding: 1.5rem;
+
+    // Card-header de gráficos sin background ni border
+    &.py-3 {
+      background: none;
+      border: none;
+    }
     
     .card-title {
       font-size: 1.25rem;
@@ -316,17 +323,17 @@
   }
   
   &.btn-success {
-    background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+    background-color: #198754;
     color: white;
   }
   
   &.btn-warning {
-    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    background-color: #ffc107;
     color: white;
   }
   
   &.btn-danger {
-    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    background-color: #dc3545;
     color: white;
   }
   
@@ -416,7 +423,7 @@
   top: 1rem;
   left: 1rem;
   z-index: 1001;
-  background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
+  background-color: #0d6efd;
   border: none;
   border-radius: 0.5rem;
   color: white;

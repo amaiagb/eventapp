@@ -66,7 +66,7 @@
                                 name="city_name" 
                                 :value="old('city_name')"
                                 :required="true"
-                                label="Ciudad"
+                                :label="__('common.city')"
                                 :error="$errors->first('city_id')"
                             />
                             
@@ -91,7 +91,7 @@
                                 <div class="mb-3">
                                     <label class="form-label fw-medium">{{ __('events.location_specific') }}</label>
                                     <input type="text" class="form-control @error('location') is-invalid @enderror" 
-                                           name="location" placeholder="Ej: Plaza Mayor, Madrid" 
+                                           name="location" placeholder="{{ __('common.location_placeholder') }}" 
                                            value="{{ old('location') }}" required>
                                     @error('location')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -107,7 +107,7 @@
                                 <label class="form-label fw-medium">{{ __('events.description') }} <span class="text-danger">*</span></label>
                                 <textarea class="form-control @error('description') is-invalid @enderror" 
                                           name="description" rows="5" 
-                                          placeholder="Describe tu evento, actividades, requisitos, etc..."
+                                          placeholder="{{ __('common.description_placeholder') }}"
                                           required>{{ old('description') }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -80,12 +81,16 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        // Obtener el rol "user" por defecto
+        $userRole = Role::where('name', 'user')->first();
+
         $userData = [
             'username' => $data['username'],
             'name' => $data['name'],
             'surname' => $data['surname'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'role_id' => $userRole ? $userRole->id : null,
         ];
 
         // Add optional fields if they exist

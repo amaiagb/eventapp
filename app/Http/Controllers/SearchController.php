@@ -19,7 +19,8 @@ class SearchController extends Controller
 
         // Build query
         $query = Event::with(['category', 'user', 'city'])
-            ->where('event_date', '>=', now());
+            ->where('event_date', '>=', now())
+            ->fromActiveUsers();
 
         // Only filter by approved status for non-admin users
         if (!auth()->check() || !auth()->user()->isAdmin()) {

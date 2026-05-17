@@ -52,7 +52,7 @@ body {
     }
 }
 
-.btn-success {
+.btn-secondary {
     background-color: $secondary;
     border-color: $secondary;
 
@@ -64,6 +64,21 @@ body {
     &:active {
         background-color: $secondary-active;
         border-color: $secondary-active;
+    }
+}
+
+.btn-success {
+    background-color: $success;
+    border-color: $success;
+
+    &:hover {
+        background-color: $success-hover;
+        border-color: $success-hover;
+    }
+
+    &:active {
+        background-color: $success-active;
+        border-color: $success-active;
     }
 }
 

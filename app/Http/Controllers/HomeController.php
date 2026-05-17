@@ -39,6 +39,7 @@ class HomeController extends Controller
                     ->whereIn('user_id', $followedUserIds)
                     ->where('status', 'approved')
                     ->where('event_date', '>=', now())
+                    ->fromActiveUsers()
                     ->orderBy('event_date', 'asc')
                     ->take(7)
                     ->get();
@@ -52,6 +53,7 @@ class HomeController extends Controller
                 ->where('city_id', $user->city_id)
                 ->where('status', 'approved')
                 ->where('event_date', '>=', now())
+                ->fromActiveUsers()
                 ->orderBy('event_date', 'asc')
                 ->take(7)
                 ->get();
@@ -68,6 +70,7 @@ class HomeController extends Controller
                     ->whereHas('tags', function ($query) use ($userTagIds) {
                         $query->whereIn('tags.id', $userTagIds);
                     })
+                    ->fromActiveUsers()
                     ->orderBy('event_date', 'asc')
                     ->take(7)
                     ->get();

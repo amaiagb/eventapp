@@ -17,6 +17,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     
     <style>
@@ -422,7 +425,7 @@
         }
         
         [data-theme="dark"] .badge.bg-info {
-            background-color: #0dcaf0 !important;
+            background-color: #0d6efd !important;
             color: white !important;
         }
         
@@ -452,8 +455,8 @@
         }
         
         [data-theme="dark"] .btn.btn-info {
-            background-color: #0dcaf0 !important;
-            border-color: #0dcaf0 !important;
+            background-color: #0d6efd !important;
+            border-color: #0d6efd !important;
             color: white !important;
         }
     </style>
@@ -474,7 +477,7 @@
                 </a>
                 <button class="dark-mode-toggle btn btn-outline-secondary btn-sm theme-toggle" 
                         type="button" 
-                        title="Cambiar modo oscuro/claro"
+                        title="{{ __('nav.dark_mode') }}"
                         onclick="toggleDarkMode()">
                     <i class="fas fa-moon" id="theme-icon"></i>
                 </button>
@@ -483,38 +486,54 @@
         
         <nav class="sidebar-nav">
             <div class="nav-section">
-                <div class="nav-title">Principal</div>
+                <div class="nav-title">{{ __('admin.sidebar.main') }}</div>
                 <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                     <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
+                    <span>{{ __('admin.sidebar.dashboard') }}</span>
                 </a>
                 <a href="{{ route('admin.events') }}" class="nav-link {{ request()->routeIs('admin.events*') ? 'active' : '' }}">
                     <i class="fas fa-calendar-alt"></i>
-                    <span>Eventos</span>
+                    <span>{{ __('admin.sidebar.events') }}</span>
                 </a>
                 <a href="{{ route('admin.users') }}" class="nav-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
                     <i class="fas fa-users"></i>
-                    <span>Usuarios</span>
+                    <span>{{ __('admin.sidebar.users') }}</span>
                 </a>
-                <a href="{{ route('admin.reports') }}" class="nav-link {{ request()->routeIs('admin.reports*') ? 'active' : '' }}">
-                    <i class="fas fa-flag"></i>
-                    <span>Reportes</span>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">{{ __('admin.sidebar.content_management') }}</div>
+                <a href="{{ route('admin.categories') }}" class="nav-link {{ request()->routeIs('admin.categories*') ? 'active' : '' }}">
+                    <i class="fas fa-folder"></i>
+                    <span>{{ __('admin.sidebar.categories') }}</span>
+                </a>
+                <a href="{{ route('admin.tags') }}" class="nav-link {{ request()->routeIs('admin.tags*') ? 'active' : '' }}">
+                    <i class="fas fa-tags"></i>
+                    <span>{{ __('admin.sidebar.tags') }}</span>
                 </a>
             </div>
             
             <div class="nav-section">
-                <div class="nav-title">Sistema</div>
+                <div class="nav-title">{{ __('admin.sidebar.moderation') }}</div>
+                <a href="{{ route('admin.reports') }}" class="nav-link {{ request()->routeIs('admin.reports*') ? 'active' : '' }}">
+                    <i class="fas fa-flag"></i>
+                    <span>{{ __('admin.sidebar.reports') }}</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">{{ __('admin.sidebar.system') }}</div>
                 <a href="{{ route('home') }}" class="nav-link">
                     <i class="fas fa-home"></i>
-                    <span>Volver al Sitio</span>
+                    <span>{{ __('admin.sidebar.back_to_site') }}</span>
                 </a>
                 <a href="{{ route('profile.details') }}" class="nav-link">
                     <i class="fas fa-user"></i>
-                    <span>Mi Perfil</span>
+                    <span>{{ __('admin.sidebar.my_profile') }}</span>
                 </a>
                 <a href="{{ route('logout.direct') }}" class="nav-link">
                     <i class="fas fa-sign-out-alt"></i>
-                    <span>Cerrar Sesión</span>
+                    <span>{{ __('admin.sidebar.logout') }}</span>
                 </a>
             </div>
         </nav>
@@ -543,6 +562,19 @@
                 sidebar.classList.contains('show')) {
                 sidebar.classList.remove('show');
             }
+        });
+
+        // Manejar formularios de eliminación con data-attributes
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteForms = document.querySelectorAll('.delete-form');
+            deleteForms.forEach(function(form) {
+                form.addEventListener('submit', function(e) {
+                    const confirmMessage = this.getAttribute('data-confirm');
+                    if (confirmMessage && !confirm(confirmMessage)) {
+                        e.preventDefault();
+                    }
+                });
+            });
         });
     </script>
 

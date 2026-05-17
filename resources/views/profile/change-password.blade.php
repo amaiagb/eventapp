@@ -11,10 +11,10 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">
-                        <i class="fas fa-lock me-2"></i>Cambiar Contraseña
+                        <i class="fas fa-lock me-2"></i>{{ __('profile.change_password') }}
                     </h4>
                     <a href="{{ route('profile.details') }}" class="btn btn-outline-secondary btn-sm">
-                        <i class="fas fa-arrow-left me-1"></i>Volver
+                        <i class="fas fa-arrow-left me-1"></i>{{ __('common.back') }}
                     </a>
                 </div>
 
@@ -24,7 +24,7 @@
                         @method('PUT')
 
                         <div class="row mb-3">
-                            <label for="current_password" class="col-md-4 col-form-label text-md-end">Contraseña Actual</label>
+                            <label for="current_password" class="col-md-4 col-form-label text-md-end">{{ __('profile.current_password') }}</label>
                             <div class="col-md-8">
                                 <input id="current_password" type="password" class="form-control @error('current_password') is-invalid @enderror" 
                                        name="current_password" required autocomplete="current-password">
@@ -37,7 +37,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">Nueva Contraseña</label>
+                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('profile.new_password') }}</label>
                             <div class="col-md-8">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
                                        name="password" required autocomplete="new-password">
@@ -50,7 +50,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="password_confirmation" class="col-md-4 col-form-label text-md-end">Confirmar Contraseña</label>
+                            <label for="password_confirmation" class="col-md-4 col-form-label text-md-end">{{ __('profile.confirm_new_password') }}</label>
                             <div class="col-md-8">
                                 <input id="password_confirmation" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" 
                                        name="password_confirmation" required autocomplete="new-password">
@@ -65,10 +65,10 @@
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save me-1"></i>Cambiar Contraseña
+                                    <i class="fas fa-save me-1"></i>{{ __('profile.change_password') }}
                                 </button>
                                 <a href="{{ route('profile.details') }}" class="btn btn-outline-secondary ms-2">
-                                    Cancelar
+                                    {{ __('common.cancel') }}
                                 </a>
                             </div>
                         </div>
