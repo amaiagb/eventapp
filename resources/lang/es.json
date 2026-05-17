@@ -32,7 +32,8 @@
     "auth.email_placeholder": "correo@ejemplo.com",
     "auth.bio_placeholder": "Cuéntanos sobre ti...",
     "auth.password_placeholder": "••••••••",
-    
+    "auth.inactive_account": "Tu cuenta está inactiva. Contacta al administrador.",
+
     "events.create_subtitle": "Crea un evento increíble y compártelo con tu comunidad",
     "events.name_placeholder": "Ej: Concierto de Rock en el Parque",
     "events.all": "Todos los Eventos",

@@ -55,6 +55,16 @@ class Event extends Model
     }
 
     /**
+     * Scope para filtrar solo eventos de usuarios activos
+     */
+    public function scopeFromActiveUsers($query)
+    {
+        return $query->whereHas('user', function($query) {
+            $query->where('is_active', true);
+        });
+    }
+
+    /**
      * Obtiene la categoría del evento
      */
     public function category()

@@ -23,6 +23,7 @@ class EventController extends Controller
         $events = Event::with(['category', 'user', 'city'])
             ->where('status', 'approved')
             ->where('event_date', '>=', now())
+            ->fromActiveUsers()
             ->orderBy('event_date', 'asc')
             ->paginate(12);
 
