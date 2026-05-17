@@ -82,7 +82,7 @@
                             </li>
                             @if(Auth::user()->role && Auth::user()->role->name === 'admin')
                                 <li>
-                                    <a class="dropdown-item d-block px-4 py-2 text-decoration-none text-warning" href="{{ route('admin.dashboard') }}" style="color: #f6c23e !important;">
+                                    <a class="dropdown-item d-block px-4 py-2 text-decoration-none text-dark" href="{{ route('admin.dashboard') }}" ">
                                         <i class="fas fa-tachometer-alt me-2"></i> {{ __('nav.admin_panel') }}
                                     </a>
                                 </li>

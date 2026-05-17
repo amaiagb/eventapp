@@ -50,7 +50,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/events/{event}', [AdminController::class, 'updateEvent'])->name('events.update');
     Route::patch('/events/{event}/approve', [AdminController::class, 'approveEvent'])->name('events.approve');
     Route::patch('/events/{event}/reject', [AdminController::class, 'rejectEvent'])->name('events.reject');
+    Route::delete('/events/{event}', [AdminController::class, 'deleteEvent'])->name('events.delete');
+    Route::get('/events/{event}/info', [AdminController::class, 'getEventInfo'])->name('events.info');
     Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::get('/users/{user}', [AdminController::class, 'showUser'])->name('users.show');
+    Route::get('/users/{user}/edit', [AdminController::class, 'editUser'])->name('users.edit');
+    Route::put('/users/{user}', [AdminController::class, 'updateUser'])->name('users.update');
+    Route::delete('/users/{user}', [AdminController::class, 'deleteUser'])->name('users.delete');
+    Route::get('/users/{user}/events-count', [AdminController::class, 'getUserEventsCount'])->name('users.events-count');
     Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
     
     // Toggle routes

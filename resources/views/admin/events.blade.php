@@ -115,7 +115,14 @@
                                                             <i class="fas {{ $event->is_active ? 'fa-pause' : 'fa-play' }}"></i>
                                                         </button>
                                                     </form>
-                                                    <button class="btn btn-sm btn-danger" title="{{ __('admin.common.delete') }}">
+                                                    <button type="button" 
+                                                            class="btn btn-sm btn-danger" 
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#deleteEventModal"
+                                                            data-event-id="{{ $event->id }}"
+                                                            data-event-title="{{ $event->title }}"
+                                                            data-delete-url="{{ route('admin.events.delete', $event) }}"
+                                                            title="{{ __('admin.common.delete') }}">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </div>
@@ -167,4 +174,87 @@
     }
 }
 </style>
+
+<!-- Modal de confirmación de eliminación de evento -->
+<div class="modal fade" id="deleteEventModal" tabindex="-1" aria-labelledby="deleteEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteEventModalLabel">{{ __('admin.events.delete_confirm_title') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ __('admin.events.delete_confirm_message') }} <strong id="deleteEventTitle"></strong>?</p>
+                <p class="text-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span id="eventOrganizerMessage">{{ __('admin.events.loading_info') }}</span>
+                </p>
+                <form id="deleteEventForm" method="POST" style="display: none;">
+                    @csrf
+                    @method('DELETE')
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+                <button type="submit" form="deleteEventForm" class="btn btn-danger">
+                    <i class="fas fa-trash me-2"></i>{{ __('admin.events.delete_confirm_button') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteEventModal = document.getElementById('deleteEventModal');
+    const deleteEventTitleSpan = document.getElementById('deleteEventTitle');
+    const eventOrganizerMessage = document.getElementById('eventOrganizerMessage');
+    const deleteEventForm = document.getElementById('deleteEventForm');
+
+    // Textos de traducción
+    const texts = {
+        organizerInfo: "{{ __('admin.events.organizer_info', ['organizer' => 'X']) }}",
+        errorLoadingInfo: "{{ __('admin.events.error_loading_info') }}"
+    };
+
+    // Evento show.bs.modal de Bootstrap
+    deleteEventModal.addEventListener('show.bs.modal', async function(event) {
+        const button = event.relatedTarget;
+        
+        if (!button) return;
+        
+        const eventId = button.dataset.eventId;
+        const eventTitle = button.dataset.eventTitle;
+        const deleteUrl = button.dataset.deleteUrl;
+
+        // Establecer el título del evento
+        deleteEventTitleSpan.textContent = eventTitle;
+        
+        // Establecer la acción del formulario
+        deleteEventForm.action = deleteUrl;
+
+        // Mostrar mensaje de carga
+        eventOrganizerMessage.textContent = "{{ __('admin.events.loading_info') }}";
+
+        // Obtener información del evento
+        try {
+            const response = await fetch(`{{ route('admin.events.info', ':eventId') }}`.replace(':eventId', eventId));
+            const data = await response.json();
+            
+            // Mostrar el mensaje con el organizador
+            eventOrganizerMessage.textContent = texts.organizerInfo.replace('X', data.organizer);
+        } catch (error) {
+            eventOrganizerMessage.textContent = texts.errorLoadingInfo;
+        }
+    });
+
+    // Limpiar al cerrar el modal
+    deleteEventModal.addEventListener('hidden.bs.modal', function() {
+        deleteEventTitleSpan.textContent = '';
+        eventOrganizerMessage.textContent = '';
+        deleteEventForm.action = '';
+    });
+});
+</script>
+
 @endsection
