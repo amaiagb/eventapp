@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<!-- Cover Image Full Width -->
+<!-- Imagen de portada completa -->
 @if($event->cover_image)
 <div class="event-cover-image">
     <img src="{{ asset('storage/img/events/' . $event->cover_image) }}" alt="{{ $event->title }}" class="w-100">
@@ -26,7 +26,7 @@
 @endif
 
 @if($event->status === 'pending')
-<!-- Pending Event Warning Banner -->
+<!-- Banner de evento pendiente de aprobación -->
 <div class="alert alert-warning mb-4">
     <div class="container">
         <div class="d-flex align-items-center">
@@ -43,29 +43,27 @@
 <!-- Main Content -->
 <div class="container py-4">
     <div class="row">
-        <!-- Left Column - Main Content -->
+        <!-- Columna izquierda - Contenido principal -->
         <div class="col-lg-8">
-            <!-- Event Basic Info -->
+            <!-- Información básica del evento -->
             <div class="event-basic-info mb-4">
                 <div class="d-flex align-items-center mb-3">
                     <span class="category-badge-outline me-3">{{ $event->category->name ?? 'General' }}</span>
-                    <div class="event-meta">
-                        <span class="me-3">
-                            <i class="fas fa-map-marker-alt text-primary"></i>
-                            {{ $event->city->name ?? $event->location }}
-                        </span>
-                        <span>
-                            <i class="far fa-calendar text-primary"></i>
-                            {{ $event->event_date->format('d M Y') }}
-                            @if($event->event_time)
-                            {{ $event->event_time->format('H:i') }}
-                            @endif
-                        </span>
-                    </div>
+                    <span class="me-3 event-info-text">
+                        <i class="fas fa-map-marker-alt text-primary"></i>
+                        {{ $event->city->name ?? $event->location }}
+                    </span>
+                    <span class="event-info-text">
+                        <i class="far fa-calendar text-primary"></i>
+                        {{ $event->event_date->format('d M Y') }}
+                        @if($event->event_time)
+                        {{ $event->event_time->format('H:i') }}
+                        @endif
+                    </span>
                 </div>
             </div>
 
-            <!-- Event Description -->
+            <!-- Descripción del evento -->
             <div class="event-description mb-5">
                 <h3 class="section-title mb-3">{{ __('events.description_title') }}</h3>
                 <div class="description-content">
@@ -73,7 +71,7 @@
                 </div>
             </div>
 
-            <!-- Organizer Info -->
+            <!-- Información del organizador -->
             <div class="organizer-info mb-5">
                 <h3 class="section-title mb-3">{{ __('events.organized_by') }}</h3>
                 <div class="card organizer-card">
@@ -119,12 +117,12 @@
                 </div>
             </div>
 
-            <!-- Forum Section -->
+            <!-- Sección foro -->
             <div class="forum-section mb-5">
                 <h3 class="section-title mb-3">{{ __('events.forum') }}</h3>
                 <div class="forum-container">
                     @if($event->status === 'approved')
-                    <!-- New Message Form -->
+                    <!-- Form Nuevo mensaje -->
                     @if(auth()->check())
                     <div class="new-message-form mb-4">
                         <div class="card">
@@ -150,7 +148,7 @@
                     </div>
                     @endif
 
-                    <!-- Messages List -->
+                    <!-- Lista de mensajes -->
                     <div class="messages-list">
                         @if(auth()->check())
                             @if($messages->count() > 0)
@@ -200,7 +198,7 @@
                 </div>
             </div>
 
-            <!-- Report Event -->
+            <!-- Reportar evento -->
             @if($event->status === 'approved')
             <div class="report-event mb-5">
                 @if(auth()->check() && $event->user_id !== auth()->id())
@@ -210,7 +208,7 @@
                     </button>
                 </div>
 
-                <!-- Report Modal -->
+                <!-- Modal de reporte -->
                 <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -262,10 +260,9 @@
             @endif
         </div>
 
-        <!-- Right Column - Sticky Registration Card -->
+        <!-- Columna derecha - Sticky -->
         <div class="col-lg-4">
             <div class="sticky-sidebar">
-                <!-- Registration Card -->
                 <div class="card registration-card">
                     <div class="card-body">
                         <h4 class="card-title mb-4">{{ __('events.register') }}</h4>
@@ -342,33 +339,12 @@
                         @endif
                     </div>
                 </div>
-
-                <!-- Share Event -->
-                <!-- <div class="card share-card mt-4">
-                    <div class="card-body">
-                        <h5 class="card-title mb-3">Compartir evento</h5>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-outline-primary btn-sm flex-fill">
-                                <i class="fab fa-facebook-f"></i>
-                            </button>
-                            <button class="btn btn-outline-info btn-sm flex-fill">
-                                <i class="fab fa-twitter"></i>
-                            </button>
-                            <button class="btn btn-outline-success btn-sm flex-fill">
-                                <i class="fab fa-whatsapp"></i>
-                            </button>
-                            <button class="btn btn-outline-secondary btn-sm flex-fill">
-                                <i class="fas fa-link"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </div>
     </div>
 </div>
 
-<!-- Other Events in Same City -->
+<!-- Eventos en la misma ciudad -->
 @if(isset($otherEventsInCity) && $otherEventsInCity->count() > 0)
 <div class="other-events-section bg-light py-5">
     <div class="container">
@@ -379,11 +355,21 @@
         <div class="carousel-container">
             @foreach($otherEventsInCity as $otherEvent)
             <div class="event-card-inline">
-                <div class="card card-vertical">
+                <div class="card event-card-enhanced">
                     @if($otherEvent->cover_image)
-                    <img src="{{ asset('storage/img/events/' . $otherEvent->cover_image) }}" class="card-img-top" alt="{{ $otherEvent->title }}">
+                    <div class="card-image-wrapper">
+                        <img src="{{ asset('storage/img/events/' . $otherEvent->cover_image) }}" class="card-img-top" alt="{{ $otherEvent->title }}">
+                        <div class="card-overlay">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
                     @else
-                    <img src="https://via.placeholder.com/280x180?text=Evento" class="card-img-top" alt="{{ $otherEvent->title }}">
+                    <div class="card-image-wrapper">
+                        <img src="https://via.placeholder.com/280x180?text=Evento" class="card-img-top" alt="{{ $otherEvent->title }}">
+                        <div class="card-overlay">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                    </div>
                     @endif
                     <div class="card-body">
                         <div class="card-content">

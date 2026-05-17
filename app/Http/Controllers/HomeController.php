@@ -77,6 +77,15 @@ class HomeController extends Controller
             }
         }
 
+        // Eventos genéricos: eventos destacados/recientes para cuando no hay eventos personalizados
+        $genericEvents = Event::with(['category', 'user', 'city'])
+            ->where('status', 'approved')
+            ->where('event_date', '>=', now())
+            ->fromActiveUsers()
+            ->orderBy('event_date', 'asc')
+            ->take(7)
+            ->get();
+
         // Obtener nombre de la ciudad del usuario
         $userCityName = $user && $user->city ? $user->city->name : 'tu ciudad';
 
@@ -84,6 +93,7 @@ class HomeController extends Controller
             'forYouEvents',
             'cityEvents', 
             'interestEvents',
+            'genericEvents',
             'userCityName'
         ));
     }

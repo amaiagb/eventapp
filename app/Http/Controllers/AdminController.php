@@ -292,6 +292,106 @@ class AdminController extends Controller
     }
 
     /**
+     * Mostrar detalles de un usuario
+     */
+    public function showUser(User $user)
+    {
+        $user->load(['role', 'city', 'events', 'eventAttendees', 'followers', 'following', 'attendedEvents']);
+        
+        $roles = \App\Models\Role::all();
+        $cities = \App\Models\City::all(['id', 'name']);
+
+        return view('admin.users.show', compact('user', 'roles', 'cities'));
+    }
+
+    /**
+     * Mostrar formulario para editar usuario
+     */
+    public function editUser(User $user)
+    {
+        $roles = \App\Models\Role::all();
+        $cities = \App\Models\City::all(['id', 'name']);
+
+        return view('admin.users.edit', compact('user', 'roles', 'cities'));
+    }
+
+    /**
+     * Actualizar usuario
+     */
+    public function updateUser(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'surname' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'role_id' => 'required|exists:roles,id',
+            'bio' => 'nullable|string|max:500',
+            'city_id' => 'nullable|exists:cities,id',
+            'is_active' => 'required|boolean',
+        ]);
+
+        $user->update($validated);
+
+        return redirect()->route('admin.users.show', $user)
+            ->with('success', 'Usuario actualizado correctamente.');
+    }
+
+    /**
+     * Eliminar un usuario
+     */
+    public function deleteUser(User $user)
+    {
+        // No permitir eliminar administradores
+        if ($user->role && $user->role->name === 'admin') {
+            return back()->with('error', 'No se puede eliminar un usuario con rol de administrador.');
+        }
+
+        // Realizar softdelete de los eventos asociados al usuario
+        $user->events()->delete();
+
+        $username = $user->username;
+        $user->delete();
+
+        return redirect()->route('admin.users')
+            ->with('success', "Usuario '{$username}' eliminado correctamente.");
+    }
+
+    /**
+     * Obtener el conteo de eventos de un usuario para el modal de confirmación
+     */
+    public function getUserEventsCount(User $user)
+    {
+        $eventsCount = $user->events()->count();
+
+        return response()->json([
+            'events_count' => $eventsCount,
+        ]);
+    }
+
+    /**
+     * Eliminar un evento (soft delete)
+     */
+    public function deleteEvent(Event $event)
+    {
+        $eventTitle = $event->title;
+        $event->delete();
+
+        return redirect()->route('admin.events')
+            ->with('success', "Evento '{$eventTitle}' eliminado correctamente.");
+    }
+
+    /**
+     * Obtener información de un evento para el modal de confirmación
+     */
+    public function getEventInfo(Event $event)
+    {
+        return response()->json([
+            'title' => $event->title,
+            'organizer' => $event->user?->username ?? 'N/A',
+        ]);
+    }
+
+    /**
      * Marcar un reporte como resuelto
      */
     public function resolveReport(Report $report)

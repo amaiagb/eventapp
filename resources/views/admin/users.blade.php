@@ -80,7 +80,6 @@
                             <table class="table table-bordered" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
                                         <th>{{ __('admin.users.table_username') }}</th>
                                         <th>{{ __('auth.name') }}</th>
                                         <th>{{ __('admin.users.table_email') }}</th>
@@ -93,14 +92,15 @@
                                 <tbody>
                                     @foreach($users as $user)
                                         <tr>
-                                            <td>{{ $user->id }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" 
                                                          style="width: 30px; height: 30px; font-size: 12px;">
                                                         {{ strtoupper(substr($user->username, 0, 1)) }}
                                                     </div>
-                                                    <strong>{{ $user->username }}</strong>
+                                                    <a href="{{ route('admin.users.show', $user) }}" class="text-decoration-none">
+                                                        <strong>{{ $user->username }}</strong>
+                                                    </a>
                                                 </div>
                                             </td>
                                             <td>{{ $user->name }} {{ $user->surname ?? '' }}</td>
@@ -122,19 +122,25 @@
                                                         @csrf
                                                         @method('PATCH')
                                                         <button type="submit" 
-                                                                class="btn btn-sm {{ $user->is_active ? 'btn-warning' : 'btn-success' }}"
+                                                                class="btn btn-sm btn-secondary"
                                                                 title="{{ $user->is_active ? __('admin.users.deactivate_user') : __('admin.users.activate_user') }}">
                                                             <i class="fas {{ $user->is_active ? 'fa-pause' : 'fa-play' }}"></i>
                                                         </button>
                                                     </form>
-                                                    <button class="btn btn-sm btn-info" title="{{ __('admin.users.view_details') }}">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-warning" title="{{ __('admin.users.edit_role') }}">
-                                                        <i class="fas fa-user-cog"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-danger" 
-                                                            @if($user->role && $user->role->name === 'admin') disabled @endif title="@if($user->role && $user->role->name === 'admin') {{ __('admin.users.cannot_delete_admin') }} @else {{ __('admin.users.delete_user') }} @endif">
+                                                    <a href="{{ route('admin.users.show', ['user' => $user, 'edit' => 'true']) }}" 
+                                                       class="btn btn-sm btn-success" 
+                                                       title="{{ __('admin.common.edit') }}">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <button type="button" 
+                                                            class="btn btn-sm btn-danger" 
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#deleteUserModal"
+                                                            data-user-id="{{ $user->id }}"
+                                                            data-user-username="{{ $user->username }}"
+                                                            data-delete-url="{{ route('admin.users.delete', $user) }}"
+                                                            @if($user->role && $user->role->name === 'admin') disabled @endif 
+                                                            title="@if($user->role && $user->role->name === 'admin') {{ __('admin.users.cannot_delete_admin') }} @else {{ __('admin.users.delete_user') }} @endif">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </div>
@@ -162,28 +168,90 @@
     </div>
 </div>
 
-<style>
-.border-left-primary {
-    border-left: 0.25rem solid #4e73df !important;
-}
-.sidebar {
-    position: fixed;
-    top: 76px;
-    bottom: 0;
-    left: 0;
-    z-index: 100;
-    padding: 48px 0 0;
-    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-}
-.sidebar-heading {
-    font-size: .75rem;
-    text-transform: uppercase;
-}
-@media (max-width: 767.8px) {
-    .sidebar {
-        position: static;
-        height: auto;
-    }
-}
-</style>
+<!-- Modal de confirmación de eliminación -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">{{ __('admin.users.delete_confirm_title') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ __('admin.users.delete_confirm_message') }} <strong id="deleteUserName"></strong>?</p>
+                <p class="text-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span id="eventsCountMessage">{{ __('admin.users.loading_events') }}</span>
+                </p>
+                <form id="deleteUserForm" method="POST" style="display: none;">
+                    @csrf
+                    @method('DELETE')
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+                <button type="submit" form="deleteUserForm" class="btn btn-danger">
+                    <i class="fas fa-trash me-2"></i>{{ __('admin.users.delete_confirm_button') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteUserModal = document.getElementById('deleteUserModal');
+    const deleteUserNameSpan = document.getElementById('deleteUserName');
+    const eventsCountMessage = document.getElementById('eventsCountMessage');
+    const deleteUserForm = document.getElementById('deleteUserForm');
+
+    // Textos de traducción
+    const texts = {
+        eventsWillBeDeleted: "{{ __('admin.users.events_will_be_deleted', ['count' => 'X']) }}",
+        noEventsToDelete: "{{ __('admin.users.no_events_to_delete') }}",
+        errorLoadingEvents: "{{ __('admin.users.error_loading_events') }}"
+    };
+
+    // Evento show.bs.modal de Bootstrap
+    deleteUserModal.addEventListener('show.bs.modal', async function(event) {
+        const button = event.relatedTarget;
+        
+        if (!button) return;
+        
+        const userId = button.dataset.userId;
+        const username = button.dataset.userUsername;
+        const deleteUrl = button.dataset.deleteUrl;
+
+        // Establecer el nombre del usuario
+        deleteUserNameSpan.textContent = username;
+        
+        // Establecer la acción del formulario
+        deleteUserForm.action = deleteUrl;
+
+        // Mostrar mensaje de carga
+        eventsCountMessage.textContent = "{{ __('admin.users.loading_events') }}";
+
+        // Obtener el conteo de eventos del usuario
+        try {
+            const response = await fetch(`{{ route('admin.users.events-count', ':userId') }}`.replace(':userId', userId));
+            const data = await response.json();
+            
+            // Mostrar el mensaje con el conteo de eventos
+            if (data.events_count > 0) {
+                eventsCountMessage.textContent = texts.eventsWillBeDeleted.replace('X', data.events_count);
+            } else {
+                eventsCountMessage.textContent = texts.noEventsToDelete;
+            }
+        } catch (error) {
+            eventsCountMessage.textContent = texts.errorLoadingEvents;
+        }
+    });
+
+    // Limpiar al cerrar el modal
+    deleteUserModal.addEventListener('hidden.bs.modal', function() {
+        deleteUserNameSpan.textContent = '';
+        eventsCountMessage.textContent = '';
+        deleteUserForm.action = '';
+    });
+});
+</script>
 @endsection

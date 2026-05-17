@@ -63,11 +63,21 @@
                             @foreach($createdUpcoming as $event)
                                 <div class="col">
                                     <a href="{{ route('events.show', $event->id) }}" class="text-decoration-none">
-                                        <div class="card card-vertical">
+                                        <div class="card event-card-enhanced">
                                             @if($event->cover_image)
-                                                <img src="{{ asset('storage/img/events/' . $event->cover_image) }}" class="card-img-top" alt="{{ $event->title }}">
+                                                <div class="card-image-wrapper">
+                                                    <img src="{{ asset('storage/img/events/' . $event->cover_image) }}" class="card-img-top" alt="{{ $event->title }}">
+                                                    <div class="card-overlay">
+                                                        <i class="fas fa-eye"></i>
+                                                    </div>
+                                                </div>
                                             @else
-                                                <img src="https://via.placeholder.com/280x200?text=Evento" class="card-img-top" alt="{{ $event->title }}">
+                                                <div class="card-image-wrapper">
+                                                    <img src="https://via.placeholder.com/280x200?text=Evento" class="card-img-top" alt="{{ $event->title }}">
+                                                    <div class="card-overlay">
+                                                        <i class="fas fa-eye"></i>
+                                                    </div>
+                                                </div>
                                             @endif
                                             
                                             <div class="card-body">
@@ -128,11 +138,21 @@
                             @foreach($createdPast as $event)
                                 <div class="col">
                                     <a href="{{ route('events.show', $event->id) }}" class="text-decoration-none">
-                                        <div class="card card-vertical opacity-75">
+                                        <div class="card event-card-enhanced opacity-75">
                                             @if($event->cover_image)
-                                                <img src="{{ asset('storage/img/events/' . $event->cover_image) }}" class="card-img-top" alt="{{ $event->title }}">
+                                                <div class="card-image-wrapper">
+                                                    <img src="{{ asset('storage/img/events/' . $event->cover_image) }}" class="card-img-top" alt="{{ $event->title }}">
+                                                    <div class="card-overlay">
+                                                        <i class="fas fa-eye"></i>
+                                                    </div>
+                                                </div>
                                             @else
-                                                <img src="https://via.placeholder.com/280x200?text=Evento" class="card-img-top" alt="{{ $event->title }}">
+                                                <div class="card-image-wrapper">
+                                                    <img src="https://via.placeholder.com/280x200?text=Evento" class="card-img-top" alt="{{ $event->title }}">
+                                                    <div class="card-overlay">
+                                                        <i class="fas fa-eye"></i>
+                                                    </div>
+                                                </div>
                                             @endif
                                             
                                             <div class="card-body">
@@ -209,11 +229,21 @@
                             @foreach($attendedUpcoming as $event)
                                 <div class="col">
                                     <a href="{{ route('events.show', $event->id) }}" class="text-decoration-none">
-                                        <div class="card card-vertical">
+                                        <div class="card event-card-enhanced">
                                             @if($event->cover_image)
-                                                <img src="{{ asset('storage/img/events/' . $event->cover_image) }}" class="card-img-top" alt="{{ $event->title }}">
+                                                <div class="card-image-wrapper">
+                                                    <img src="{{ asset('storage/img/events/' . $event->cover_image) }}" class="card-img-top" alt="{{ $event->title }}">
+                                                    <div class="card-overlay">
+                                                        <i class="fas fa-eye"></i>
+                                                    </div>
+                                                </div>
                                             @else
-                                                <img src="https://via.placeholder.com/280x200?text=Evento" class="card-img-top" alt="{{ $event->title }}">
+                                                <div class="card-image-wrapper">
+                                                    <img src="https://via.placeholder.com/280x200?text=Evento" class="card-img-top" alt="{{ $event->title }}">
+                                                    <div class="card-overlay">
+                                                        <i class="fas fa-eye"></i>
+                                                    </div>
+                                                </div>
                                             @endif
                                             
                                             <div class="card-body">
@@ -258,11 +288,21 @@
                             @foreach($attendedPast as $event)
                                 <div class="col">
                                     <a href="{{ route('events.show', $event->id) }}" class="text-decoration-none">
-                                        <div class="card card-vertical opacity-75">
+                                        <div class="card event-card-enhanced opacity-75">
                                             @if($event->cover_image)
-                                                <img src="{{ asset('storage/img/events/' . $event->cover_image) }}" class="card-img-top" alt="{{ $event->title }}">
+                                                <div class="card-image-wrapper">
+                                                    <img src="{{ asset('storage/img/events/' . $event->cover_image) }}" class="card-img-top" alt="{{ $event->title }}">
+                                                    <div class="card-overlay">
+                                                        <i class="fas fa-eye"></i>
+                                                    </div>
+                                                </div>
                                             @else
-                                                <img src="https://via.placeholder.com/280x200?text=Evento" class="card-img-top" alt="{{ $event->title }}">
+                                                <div class="card-image-wrapper">
+                                                    <img src="https://via.placeholder.com/280x200?text=Evento" class="card-img-top" alt="{{ $event->title }}">
+                                                    <div class="card-overlay">
+                                                        <i class="fas fa-eye"></i>
+                                                    </div>
+                                                </div>
                                             @endif
                                             
                                             <div class="card-body">

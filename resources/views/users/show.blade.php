@@ -93,11 +93,21 @@
                 <div class="row">
                     @foreach($events as $event)
                     <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="card card-vertical h-100">
+                        <div class="card event-card-enhanced h-100">
                             @if($event->cover_image)
-                            <img src="{{ asset('storage/img/events/' . $event->cover_image) }}" class="card-img-top" alt="{{ $event->title }}">
+                            <div class="card-image-wrapper">
+                                <img src="{{ asset('storage/img/events/' . $event->cover_image) }}" class="card-img-top" alt="{{ $event->title }}">
+                                <div class="card-overlay">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                            </div>
                             @else
-                            <img src="https://via.placeholder.com/280x180?text=Evento" class="card-img-top" alt="{{ $event->title }}">
+                            <div class="card-image-wrapper">
+                                <img src="https://via.placeholder.com/280x180?text=Evento" class="card-img-top" alt="{{ $event->title }}">
+                                <div class="card-overlay">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                            </div>
                             @endif
                             <div class="card-body d-flex flex-column">
                                 <div class="card-content flex-grow-1">

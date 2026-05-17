@@ -241,28 +241,28 @@
             color: var(--text-primary) !important;
         }
         
-        [data-theme="dark"] .card-vertical {
+        [data-theme="dark"] .event-card-enhanced {
             background-color: var(--card-bg) !important;
             border-color: var(--border-color) !important;
         }
-        
-        [data-theme="dark"] .card-vertical .card-body {
+
+        [data-theme="dark"] .event-card-enhanced .card-body {
             background-color: var(--card-bg) !important;
         }
-        
-        [data-theme="dark"] .card-vertical .card-title {
+
+        [data-theme="dark"] .event-card-enhanced .card-title {
             color: var(--text-primary) !important;
         }
-        
-        [data-theme="dark"] .card-vertical .card-text {
+
+        [data-theme="dark"] .event-card-enhanced .card-text {
             color: var(--text-secondary) !important;
         }
-        
-        [data-theme="dark"] .card-vertical .card-text.text-muted {
+
+        [data-theme="dark"] .event-card-enhanced .card-text.text-muted {
             color: var(--text-muted) !important;
         }
-        
-        [data-theme="dark"] .card-vertical .category-badge-outline {
+
+        [data-theme="dark"] .event-card-enhanced .category-badge-outline {
             color: var(--text-primary) !important;
             border-color: var(--border-color) !important;
         }
