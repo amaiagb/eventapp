@@ -223,6 +223,67 @@
             </div>
         </section>
     @endif
+
+    <!-- Eventos destacados - Sección genérica -->
+    @if($genericEvents->count() > 0)
+        <section class="events-section mb-5">
+            <div class="section-header">
+                <div class="section-title-wrapper">
+                    <h4 class="section-title">
+                        <i class="fas fa-fire me-2 text-danger"></i>{{ __('home.generic_title') }}
+                    </h4>
+                    <p class="section-subtitle">{{ __('home.generic_subtitle') }}</p>
+                </div>
+                <a href="{{ route('events.index') }}" class="view-all-link">
+                    {{ __('home.view_all') }} <i class="fas fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+            <div class="modern-carousel" data-carousel="generic">
+                <div class="carousel-track">
+                    @foreach($genericEvents as $event)
+                        <div class="event-card-modern">
+                            <a href="{{ route('events.show', $event->id) }}" class="text-decoration-none">
+                                <div class="card event-card h-100">
+                                    @if($event->cover_image)
+                                        <img src="{{ asset('storage/img/events/' . $event->cover_image) }}" class="card-img-top" alt="{{ $event->title }}">
+                                    @else
+                                        <img src="https://via.placeholder.com/300x200?text=Evento" class="card-img-top" alt="{{ $event->title }}">
+                                    @endif
+                                    <div class="card-body">
+                                        <span class="category-badge">{{ $event->category->name ?? 'General' }}</span>
+                                        <h5 class="card-title">{{ Str::limit($event->title, 45) }}</h5>
+                                        <div class="event-meta">
+                                            <div class="meta-item">
+                                                <i class="far fa-calendar"></i>
+                                                <span>{{ $event->event_date->format('d M') }}</span>
+                                            </div>
+                                            @if($event->event_time)
+                                            <div class="meta-item">
+                                                <i class="far fa-clock"></i>
+                                                <span>{{ $event->event_time->format('H:i') }}</span>
+                                            </div>
+                                            @endif
+                                        </div>
+                                        <div class="event-location">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>{{ $event->city->name ?? $event->location }}</span>
+                                        </div>
+                                        @if($event->user)
+                                        <div class="event-organizer">
+                                            <i class="fas fa-user"></i>
+                                            <span>{{ $event->user->name }}</span>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="carousel-dots"></div>
+            </div>
+        </section>
+    @endif
 </div>
 
 <style>
@@ -236,7 +297,7 @@
 }
 
 .hero-content {
-    max-width: 1200px;
+    max-width: 1320px!important;
     margin: 0 auto;
     padding: 0 20px;
     display: flex;
