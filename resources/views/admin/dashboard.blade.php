@@ -85,6 +85,48 @@
     </div>
 </div>
 
+<!-- Gráficos -->
+<div class="row mb-4">
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-calendar-alt me-2"></i>{{ __('admin.dashboard.events_chart_title') }}
+                </h6>
+            </div>
+            <div class="card-body">
+                <canvas id="eventsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-success">
+                    <i class="fas fa-users me-2"></i>{{ __('admin.dashboard.users_chart_title') }}
+                </h6>
+            </div>
+            <div class="card-body">
+                <canvas id="usersChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-info">
+                    <i class="fas fa-user-check me-2"></i>{{ __('admin.dashboard.attendees_chart_title') }}
+                </h6>
+            </div>
+            <div class="card-body">
+                <canvas id="attendeesChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
             <!-- Eventos Pendientes de Aprobación -->
 <div class="row">
     <div class="col-lg-6">
@@ -242,4 +284,83 @@
         </div>
     </div>
 </div>
+
+<script>
+// Datos de los gráficos
+const chartData = @json($chartData);
+
+// Configuración común para todos los gráficos
+const commonOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+        legend: {
+            display: false
+        }
+    },
+    scales: {
+        y: {
+            beginAtZero: true,
+            ticks: {
+                stepSize: 1
+            }
+        }
+    }
+};
+
+// Gráfico de eventos creados por mes
+const eventsCtx = document.getElementById('eventsChart').getContext('2d');
+new Chart(eventsCtx, {
+    type: 'line',
+    data: {
+        labels: chartData.months,
+        datasets: [{
+            label: "{{ __('admin.dashboard.events_chart_title') }}",
+            data: chartData.events,
+            borderColor: '#0d6efd',
+            backgroundColor: 'rgba(13, 110, 253, 0.1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: commonOptions
+});
+
+// Gráfico de usuarios registrados por mes
+const usersCtx = document.getElementById('usersChart').getContext('2d');
+new Chart(usersCtx, {
+    type: 'bar',
+    data: {
+        labels: chartData.months,
+        datasets: [{
+            label: "{{ __('admin.dashboard.users_chart_title') }}",
+            data: chartData.users,
+            backgroundColor: 'rgba(25, 135, 84, 0.8)',
+            borderColor: '#198754',
+            borderWidth: 1
+        }]
+    },
+    options: commonOptions
+});
+
+// Gráfico de asistencias a eventos por mes
+const attendeesCtx = document.getElementById('attendeesChart').getContext('2d');
+new Chart(attendeesCtx, {
+    type: 'line',
+    data: {
+        labels: chartData.months,
+        datasets: [{
+            label: "{{ __('admin.dashboard.attendees_chart_title') }}",
+            data: chartData.attendees,
+            borderColor: '#0dcaf0',
+            backgroundColor: 'rgba(13, 202, 240, 0.1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: commonOptions
+});
+</script>
 @endsection

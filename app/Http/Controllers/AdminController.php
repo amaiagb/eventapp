@@ -53,7 +53,40 @@ class AdminController extends Controller
             'active_users' => User::where('is_active', true)->count(),
         ];
 
-        return view('admin.dashboard', compact('pendingEvents', 'activeEvents', 'users', 'pendingReports', 'reports', 'stats'));
+        // Datos para gráficos - últimos 6 meses
+        $months = [];
+        $eventsByMonth = [];
+        $usersByMonth = [];
+        $attendeesByMonth = [];
+
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $months[] = $date->format('M'); // Abreviatura del mes
+
+            // Eventos creados por mes
+            $eventsByMonth[] = Event::whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month)
+                ->count();
+
+            // Usuarios registrados por mes
+            $usersByMonth[] = User::whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month)
+                ->count();
+
+            // Asistencias a eventos por mes
+            $attendeesByMonth[] = \App\Models\EventAttendee::whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month)
+                ->count();
+        }
+
+        $chartData = [
+            'months' => $months,
+            'events' => $eventsByMonth,
+            'users' => $usersByMonth,
+            'attendees' => $attendeesByMonth,
+        ];
+
+        return view('admin.dashboard', compact('pendingEvents', 'activeEvents', 'users', 'pendingReports', 'reports', 'stats', 'chartData'));
     }
 
     /**

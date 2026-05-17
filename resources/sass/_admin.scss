@@ -4,6 +4,7 @@
 .admin-layout {
   background-color: var(--bg-primary);
   min-height: 100vh;
+  padding-top: 0; // Eliminar el padding-top del body principal
 }
 
 // Modern Sidebar
