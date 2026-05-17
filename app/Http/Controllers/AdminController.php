@@ -96,22 +96,18 @@ class AdminController extends Controller
     {
         $query = Event::with(['category', 'city', 'user']);
 
-        // Filtrar por estado (activo/inactivo)
-        if ($request->has('status') && $request->status !== '') {
-            if ($request->status === 'active') {
-                $query->where('is_active', true);
-            } elseif ($request->status === 'inactive') {
-                $query->where('is_active', false);
-            }
+        // Filtrar por estado (approved, pending, rejected)
+        if (!empty($request->status)) {
+            $query->where('status', $request->status);
         }
 
         // Filtrar por categoría
-        if ($request->has('category') && $request->category !== '') {
+        if (!empty($request->category)) {
             $query->where('category_id', $request->category);
         }
 
         // Filtrar por búsqueda (título o descripción)
-        if ($request->has('search') && $request->search !== '') {
+        if (!empty($request->search)) {
             $searchTerm = $request->search;
             $query->where(function($q) use ($searchTerm) {
                 $q->where('title', 'LIKE', '%' . $searchTerm . '%')

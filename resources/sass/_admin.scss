@@ -134,6 +134,12 @@
     background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
     border-bottom: 1px solid var(--border-color);
     padding: 1.5rem;
+
+    // Card-header de gráficos sin background ni border
+    &.py-3 {
+      background: none;
+      border: none;
+    }
     
     .card-title {
       font-size: 1.25rem;

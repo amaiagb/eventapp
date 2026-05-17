@@ -32,8 +32,9 @@
                             <label for="status" class="form-label">{{ __('admin.events.filter_status') }}</label>
                             <select class="form-select" id="status" name="status">
                                 <option value="">{{ __('admin.events.filter_all') }}</option>
-                                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>{{ __('admin.events.filter_active') }}</option>
-                                <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>{{ __('admin.events.filter_inactive') }}</option>
+                                <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>{{ __('admin.events.filter_approved') }}</option>
+                                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>{{ __('admin.events.filter_pending') }}</option>
+                                <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>{{ __('admin.events.filter_rejected') }}</option>
                             </select>
                         </div>
                         <div class="col-md-4">
