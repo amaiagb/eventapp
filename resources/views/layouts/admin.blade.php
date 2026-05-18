@@ -472,8 +472,7 @@
         <div class="sidebar-header">
             <div class="d-flex justify-content-between align-items-center">
                 <a href="{{ route('admin.dashboard') }}" class="logo">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>EventApp</span>
+                    <img src="{{ asset('assets/img/eventapplogo.png') }}" alt="EventApp" style="height: 35px;">
                 </a>
                 <button class="dark-mode-toggle btn btn-outline-secondary btn-sm theme-toggle" 
                         type="button" 

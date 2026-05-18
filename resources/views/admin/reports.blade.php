@@ -76,8 +76,8 @@
                                 <thead>
                                     <tr>
                                         <th>{{ __('admin.reports.table_reporter') }}</th>
-                                        <th>{{ __('admin.reports.table_type') }}</th>
-                                        <th>{{ __('admin.reports.table_element') }}</th>
+                                        <th>Evento</th>
+                                        <th>Creador</th>
                                         <th>{{ __('admin.reports.table_reason') }}</th>
                                         <th>{{ __('admin.reports.table_status') }}</th>
                                         <th>{{ __('admin.reports.table_date') }}</th>
@@ -97,12 +97,18 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <span class="badge bg-secondary">
-                                                    {{ $report->reportable_type_name }}
-                                                </span>
+                                                <a href="{{ route('events.show', $report->reportable) }}" class="text-decoration-none">
+                                                    {{ $report->reportable->title ?? 'N/A' }}
+                                                </a>
                                             </td>
                                             <td>
-                                                {{ $report->reportable_display_info }}
+                                                <div class="d-flex align-items-center">
+                                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" 
+                                                         style="width: 25px; height: 25px; font-size: 10px;">
+                                                        {{ strtoupper(substr($report->reportable->user->username ?? 'N/A', 0, 1)) }}
+                                                    </div>
+                                                    {{ $report->reportable->user->username ?? 'N/A' }}
+                                                </div>
                                             </td>
                                             <td>
                                                 <span class="text-muted" title="{{ $report->reason }}">
@@ -117,10 +123,10 @@
                                             <td>{{ $report->created_at->format('d/m/Y H:i') }}</td>
                                             <td>
                                                 <div class="btn-group" role="group">
-                                                    <button class="btn btn-sm btn-info" title="{{ __('admin.reports.view_details') }}" 
+                                                    <!-- <button class="btn btn-sm btn-info" title="{{ __('admin.reports.view_details') }}" 
                                                             onclick="showReportDetails({{ $report->id }})">
                                                         <i class="fas fa-eye"></i>
-                                                    </button>
+                                                    </button> -->
                                                     @if($report->status === 'pending')
                                                         <form action="{{ route('admin.reports.resolve', $report) }}" method="POST" style="display: inline;">
                                                             @csrf

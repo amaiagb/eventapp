@@ -110,7 +110,7 @@
                                                         @csrf
                                                         @method('PATCH')
                                                         <button type="submit" 
-                                                                class="btn btn-sm {{ $event->is_active ? 'btn-warning' : 'btn-success' }}"
+                                                                class="btn btn-sm {{ $event->is_active ? 'btn-secondary' : 'btn-success' }}"
                                                                 title="{{ $event->is_active ? __('admin.events.deactivate') : __('admin.events.activate') }}">
                                                             <i class="fas {{ $event->is_active ? 'fa-pause' : 'fa-play' }}"></i>
                                                         </button>
