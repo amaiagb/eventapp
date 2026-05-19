@@ -204,6 +204,8 @@
 
 <script>
 // Location type toggle
+const pendingValue = '{{ __('common.pending_value') }}';
+
 document.querySelectorAll('input[name="location_type"]').forEach(radio => {
     radio.addEventListener('change', function() {
         const locationInputContainer = document.getElementById('location_input_container');
@@ -211,11 +213,11 @@ document.querySelectorAll('input[name="location_type"]').forEach(radio => {
         
         if (this.value === 'pending') {
             locationInputContainer.style.display = 'none';
-            locationInput.value = 'pendiente';
+            locationInput.value = pendingValue;
             locationInput.removeAttribute('required');
         } else {
             locationInputContainer.style.display = 'block';
-            if (locationInput.value === 'pendiente') {
+            if (locationInput.value === pendingValue) {
                 locationInput.value = '';
             }
             locationInput.setAttribute('required', 'required');

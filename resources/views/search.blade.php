@@ -91,7 +91,7 @@
                         </div>
                         <div class="col-md-7">
                             <div class="card-body">
-                                <span class="category-badge-outline mb-2 d-inline-block">{{ $event->category->name ?? 'General' }}</span>
+                                <span class="category-badge-outline mb-2 d-inline-block">{{ $event->category->name ?? __('common.general_category') }}</span>
                                 <h5 class="card-title">{{ $event->title }}</h5>
                                 <p class="card-text text-muted small mb-2">
                                     <i class="far fa-calendar me-1"></i>{{ $event->event_date->format('d M Y') }}
@@ -132,6 +132,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const applyFiltersBtn = document.getElementById('applyFilters');
     const resultsContainer = document.querySelector('.results-container');
     const resultsTitle = document.querySelector('.results-container h5');
+    
+    // Traducciones para JavaScript
+    const translations = {
+        searching: "{{ __('search.searching') }}",
+        searchIndex: "{{ route('search.index') }}"
+    };
     
     // Function to update search results
     function updateSearchResults() {
@@ -178,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Reset loading state
             resultsContainer.style.opacity = '1';
             applyFiltersBtn.disabled = false;
-            applyFiltersBtn.innerHTML = '<i class="fas fa-search me-2"></i>Aplicar Filtros';
+            applyFiltersBtn.innerHTML = '<i class="fas fa-search me-2"></i>{{ __('common.apply_filters') }}';
         });
     }
     

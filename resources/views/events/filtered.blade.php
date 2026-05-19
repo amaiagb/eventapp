@@ -19,7 +19,7 @@
     <!-- Botón de volver con count de eventos -->
     <div class="mb-4 d-flex align-items-center justify-content-between">
         <h5 class="events-count">
-            <strong>{{ $events->count() }}</strong> eventos encontrados
+            <strong>{{ $events->count() }}</strong> {{ __('events.filtered_count') }}
         </h5>
         <a href="{{ route('home') }}" class="btn-back">
             <i class="fas fa-arrow-left me-2"></i>{{ __('common.back') }}
@@ -50,7 +50,7 @@
                             
                             <div class="card-body">
                                 <div class="card-content">
-                                    <span class="category-badge mb-2 d-inline-block">{{ $event->category->name ?? 'General' }}</span>
+                                    <span class="category-badge mb-2 d-inline-block">{{ $event->category->name ?? __('common.general_category') }}</span>
                                     <h5 class="card-title">{{ Str::limit($event->title, 50) }}</h5>
                                     
                                     <div class="event-meta-enhanced">
@@ -88,11 +88,11 @@
         <section class="cta-section mt-5">
             <div class="cta-content">
                 <div class="cta-text">
-                    <h3 class="cta-title">¿No encontraste lo que buscabas?</h3>
-                    <p class="cta-subtitle">Explora todos los eventos disponibles y descubre nuevas experiencias</p>
+                    <h3 class="cta-title">{{ __('events.filtered_cta_title') }}</h3>
+                    <p class="cta-subtitle">{{ __('events.filtered_cta_subtitle') }}</p>
                 </div>
                 <a href="{{ route('search.index') }}" class="cta-button">
-                    <i class="fas fa-search me-2"></i>Buscar más eventos
+                    <i class="fas fa-search me-2"></i>{{ __('events.filtered_cta_button') }}
                 </a>
             </div>
         </section>

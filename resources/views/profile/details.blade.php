@@ -40,7 +40,7 @@
                         <div class="position-relative d-inline-block">
                             @if(Auth::user()->profile_image)
                                 <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" 
-                                     alt="Profile Image" 
+                                     alt="{{ __('common.profile_image_alt') }}" 
                                      class="rounded-circle" 
                                      style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #007bff;">
                             @else

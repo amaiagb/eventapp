@@ -48,7 +48,7 @@
             <!-- Información básica del evento -->
             <div class="event-basic-info mb-4">
                 <div class="d-flex align-items-center mb-3">
-                    <span class="category-badge-outline me-3">{{ $event->category->name ?? 'General' }}</span>
+                    <span class="category-badge-outline me-3">{{ $event->category->name ?? __('common.general_category') }}</span>
                     <span class="me-3 event-info-text">
                         <i class="fas fa-map-marker-alt text-primary"></i>
                         {{ $event->city->name ?? $event->location }}
@@ -82,12 +82,12 @@
                                 <img src="{{ asset('storage/' . $event->user->profile_image) }}" alt="{{ $event->user->name }}" class="rounded-circle">
                                 @else
                                 <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                                    {{ $event->user ? strtoupper(substr($event->user->username ?? $event->user->name, 0, 1)) : '?' }}
+                                    {{ $event->user ? strtoupper(substr($event->user->username ?? $event->user->name, 0, 1)) : __('common.unknown_initial') }}
                                 </div>
                                 @endif
                             </div>
                             <div class="organizer-details flex-grow-1">
-                                <h5 class="mb-1">{{ $event->user->name ?? 'Anónimo' }}</h5>
+                                <h5 class="mb-1">{{ $event->user->name ?? __('common.anonymous') }}</h5>
                                 <p class="text-muted small mb-0">{{ __('events.organizer') }}</p>
                             </div>
                             <div class="organizer-actions">
@@ -167,7 +167,7 @@
                                             </div>
                                             <div class="message-content flex-grow-1">
                                                 <div class="message-header mb-2">
-                                                    <strong>{{ $message->user->name ?? 'Anónimo' }}</strong>
+                                                    <strong>{{ $message->user->name ?? __('common.anonymous') }}</strong>
                                                     <span class="text-muted small ms-2">{{ $message->created_at->diffForHumans() }}</span>
                                                 </div>
                                                 <p class="mb-0">{{ $message->content }}</p>
@@ -373,7 +373,7 @@
                     @endif
                     <div class="card-body">
                         <div class="card-content">
-                            <span class="category-badge-outline mb-2 d-inline-block">{{ $otherEvent->category->name ?? 'General' }}</span>
+                            <span class="category-badge-outline mb-2 d-inline-block">{{ $otherEvent->category->name ?? __('common.general_category') }}</span>
                             <h5 class="card-title">{{ Str::limit($otherEvent->title, 40) }}</h5>
                             <p class="card-text text-muted small mb-2">
                                 <i class="far fa-calendar me-1"></i>{{ $otherEvent->event_date->format('d M Y') }}
@@ -401,6 +401,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const followBtn = document.getElementById('followBtn');
     const followText = document.getElementById('followText');
     
+    // Traducciones para JavaScript
+    const translations = {
+        follow: "{{ __('common.follow') }}",
+        unfollow: "{{ __('common.unfollow') }}",
+        errorProcessing: "{{ __('common.error_processing') }}",
+        connectionError: "{{ __('common.connection_error') }}"
+    };
+    
     if (followForm) {
         followForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -426,25 +434,25 @@ document.addEventListener('DOMContentLoaded', function() {
                         followBtn.classList.add('btn-primary');
                         followBtn.querySelector('i').classList.remove('fa-user-minus');
                         followBtn.querySelector('i').classList.add('fa-user-plus');
-                        followText.textContent = 'Seguir';
+                        followText.textContent = translations.follow;
                     } else {
                         // No estaba siguiendo, ahora sigue
                         followBtn.classList.remove('btn-primary');
                         followBtn.classList.add('btn-outline-secondary');
                         followBtn.querySelector('i').classList.remove('fa-user-plus');
                         followBtn.querySelector('i').classList.add('fa-user-minus');
-                        followText.textContent = 'Dejar de seguir';
+                        followText.textContent = translations.unfollow;
                     }
                     
                     // Mostrar mensaje de éxito
                     showToast(data.message);
                 } else {
-                    showToast(data.message || 'Error al procesar la solicitud', 'error');
+                    showToast(data.message || translations.errorProcessing, 'error');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                showToast('Error de conexión', 'error');
+                showToast(translations.connectionError, 'error');
             });
         });
     }

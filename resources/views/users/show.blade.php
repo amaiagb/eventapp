@@ -63,7 +63,7 @@
                         @csrf
                         <button type="submit" id="followBtn" class="btn @if($isFollowing) btn-outline-secondary @else btn-primary @endif w-100">
                             <i class="fas @if($isFollowing) fa-user-minus @else fa-user-plus @endif me-2"></i>
-                            <span id="followText">@if($isFollowing) Dejar de seguir @else Seguir @endif</span>
+                            <span id="followText">@if($isFollowing) {{ __('common.unfollow') }} @else {{ __('common.follow') }} @endif</span>
                         </button>
                     </form>
                     @endif
@@ -111,7 +111,7 @@
                             @endif
                             <div class="card-body d-flex flex-column">
                                 <div class="card-content flex-grow-1">
-                                    <span class="category-badge-outline mb-2 d-inline-block">{{ $event->category->name ?? 'General' }}</span>
+                                    <span class="category-badge-outline mb-2 d-inline-block">{{ $event->category->name ?? __('common.general_category') }}</span>
                                     <h5 class="card-title">{{ $event->title }}</h5>
                                     <p class="card-text text-muted small mb-2">
                                         <i class="far fa-calendar me-1"></i>{{ $event->event_date->format('d M Y') }}

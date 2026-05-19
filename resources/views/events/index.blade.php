@@ -10,7 +10,7 @@
     <div class="hero-content">
         <div class="hero-text">
             <h1 class="hero-title">{{ __('events.all') }}</h1>
-            <p class="hero-subtitle">Descubre todos los eventos disponibles en la plataforma</p>
+            <p class="hero-subtitle">{{ __('events.index_subtitle') }}</p>
         </div>
     </div>
 </section>
@@ -19,7 +19,7 @@
     <!-- Count de eventos -->
     <div class="mb-4">
         <h5 class="events-count">
-            <strong>{{ $events->total() }}</strong> eventos disponibles
+            <strong>{{ $events->total() }}</strong> {{ __('events.available_count') }}
         </h5>
     </div>
 
@@ -47,7 +47,7 @@
                             
                             <div class="card-body">
                                 <div class="card-content">
-                                    <span class="category-badge mb-2 d-inline-block">{{ $event->category->name ?? 'General' }}</span>
+                                    <span class="category-badge mb-2 d-inline-block">{{ $event->category->name ?? __('common.general_category') }}</span>
                                     <h5 class="card-title">{{ Str::limit($event->title, 50) }}</h5>
                                     
                                     <div class="event-meta-enhanced">
@@ -85,12 +85,19 @@
         <section class="cta-section mt-5">
             <div class="cta-content">
                 <div class="cta-text">
-                    <h3 class="cta-title">¿No encuentras el evento perfecto?</h3>
-                    <p class="cta-subtitle">Crea tu propio evento y convierte a la comunidad en parte de tu experiencia</p>
+                    <h3 class="cta-title">{{ __('events.cta_title') }}</h3>
+                    <p class="cta-subtitle">{{ __('events.cta_subtitle') }}</p>
                 </div>
+                @auth
                 <a href="{{ route('events.create') }}" class="cta-button">
-                    <i class="fas fa-plus me-2"></i>Crear evento
+                    <i class="fas fa-plus me-2"></i>{{ __('events.cta_button') }}
                 </a>
+                @endauth
+                @guest
+                <a href="{{ route('login') }}" class="cta-button">
+                    <i class="fas fa-plus me-2"></i>{{ __('events.cta_login_button') }}
+                </a>
+                @endguest
             </div>
         </section>
     @else

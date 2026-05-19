@@ -85,11 +85,24 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('/tags/{tag}', [AdminController::class, 'deleteTag'])->name('tags.delete');
 });
 
-// Event routes
-Route::post('/events/{event}/register', [EventController::class, 'register'])->name('events.register')->middleware(['auth', 'active']);
-Route::post('/events/{event}/cancel', [EventController::class, 'cancel'])->name('events.cancel')->middleware(['auth', 'active']);
-Route::get('/my-events', [EventController::class, 'myEvents'])->name('events.my-events')->middleware(['auth', 'active']);
-Route::get('/events/filtered/{type}', [EventController::class, 'filteredEvents'])->name('events.filtered')->middleware(['auth', 'active']);
+// Event routes - públicas (sin autenticación)
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+
+// Event routes - protegidas (requieren autenticación)
+Route::middleware(['auth', 'active'])->group(function () {
+    Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
+    Route::post('/events', [EventController::class, 'store'])->name('events.store');
+    Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
+    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
+    Route::patch('/events/{event}', [EventController::class, 'update'])->name('events.update.patch');
+    Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
+    Route::post('/events/{event}/register', [EventController::class, 'register'])->name('events.register');
+    Route::post('/events/{event}/cancel', [EventController::class, 'cancel'])->name('events.cancel');
+    Route::get('/my-events', [EventController::class, 'myEvents'])->name('events.my-events');
+    Route::get('/mis-eventos', [EventController::class, 'myEvents'])->name('my.events');
+    Route::get('/events/filtered/{type}', [EventController::class, 'filteredEvents'])->name('events.filtered');
+});
 
 // User profile routes
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show')->middleware(['auth', 'active']);
@@ -97,8 +110,3 @@ Route::post('/users/{user}/follow', [UserController::class, 'toggleFollow'])->na
 
 // Message routes
 Route::post('/messages', [MessageController::class, 'store'])->name('messages.store')->middleware(['auth', 'active']);
-// Event routes (require authentication)
-Route::middleware(['auth', 'active'])->group(function () {
-    Route::resource('events', EventController::class);
-    Route::get('/mis-eventos', [EventController::class, 'myEvents'])->name('my.events');
-});

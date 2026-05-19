@@ -98,7 +98,7 @@
                                                             </span>
                                                         @endif
                                                     </div>
-                                                    <span class="category-badge-outline mb-2 d-inline-block">{{ $event->category->name ?? 'General' }}</span>
+                                                    <span class="category-badge-outline mb-2 d-inline-block">{{ $event->category->name ?? __('common.general_category') }}</span>
                                                     <h5 class="card-title">{{ Str::limit($event->title, 50) }}</h5>
                                                     
                                                     <p class="card-text text-muted small mb-2">
@@ -173,7 +173,7 @@
                                                             </span>
                                                         @endif
                                                     </div>
-                                                    <span class="category-badge-outline mb-2 d-inline-block">{{ $event->category->name ?? 'General' }}</span>
+                                                    <span class="category-badge-outline mb-2 d-inline-block">{{ $event->category->name ?? __('common.general_category') }}</span>
                                                     <h5 class="card-title">{{ Str::limit($event->title, 50) }}</h5>
                                                     
                                                     <p class="card-text text-muted small mb-2">
@@ -248,7 +248,7 @@
                                             
                                             <div class="card-body">
                                                 <div class="card-content">
-                                                    <span class="category-badge-outline mb-2 d-inline-block">{{ $event->category->name ?? 'General' }}</span>
+                                                    <span class="category-badge-outline mb-2 d-inline-block">{{ $event->category->name ?? __('common.general_category') }}</span>
                                                     <h5 class="card-title">{{ Str::limit($event->title, 50) }}</h5>
                                                     
                                                     <p class="card-text text-muted small mb-2">
@@ -260,7 +260,7 @@
                                                     </p>
                                                     
                                                     <p class="card-text text-muted small mb-3">
-                                                        <i class="fas fa-user me-1"></i>{{ __('events.organizer_label') }} {{ $event->user->name ?? 'Anónimo' }}
+                                                        <i class="fas fa-user me-1"></i>{{ __('events.organizer_label') }} {{ $event->user->name ?? __('common.anonymous') }}
                                                     </p>
                                                 </div>
                                             </div>
@@ -307,7 +307,7 @@
                                             
                                             <div class="card-body">
                                                 <div class="card-content">
-                                                    <span class="category-badge-outline mb-2 d-inline-block">{{ $event->category->name ?? 'General' }}</span>
+                                                    <span class="category-badge-outline mb-2 d-inline-block">{{ $event->category->name ?? __('common.general_category') }}</span>
                                                     <h5 class="card-title">{{ Str::limit($event->title, 50) }}</h5>
                                                     
                                                     <p class="card-text text-muted small mb-2">
@@ -319,7 +319,7 @@
                                                     </p>
                                                     
                                                     <p class="card-text text-muted small mb-3">
-                                                        <i class="fas fa-user me-1"></i>{{ __('events.organizer_label') }} {{ $event->user->name ?? 'Anónimo' }}
+                                                        <i class="fas fa-user me-1"></i>{{ __('events.organizer_label') }} {{ $event->user->name ?? __('common.anonymous') }}
                                                     </p>
                                                 </div>
                                             </div>

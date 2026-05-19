@@ -51,9 +51,11 @@
                     </h4>
                     <p class="section-subtitle">{{ __('home.for_you_subtitle') }}</p>
                 </div>
+@auth
                 <a href="{{ route('events.filtered', 'following') }}" class="view-all-link">
                     {{ __('home.view_all') }} <i class="fas fa-arrow-right ms-1"></i>
                 </a>
+                @endauth
             </div>
             <div class="modern-carousel" data-carousel="following">
                 <div class="carousel-track">
@@ -77,7 +79,7 @@
                                         </div>
                                     @endif
                                     <div class="card-body">
-                                        <span class="category-badge">{{ $event->category->name ?? 'General' }}</span>
+                                        <span class="category-badge">{{ $event->category->name ?? __('common.general_category') }}</span>
                                         <h5 class="card-title">{{ Str::limit($event->title, 45) }}</h5>
                                         <div class="event-meta">
                                             <div class="meta-item">
@@ -122,9 +124,11 @@
                     </h4>
                     <p class="section-subtitle">{{ __('home.city_subtitle') }}</p>
                 </div>
+@auth
                 <a href="{{ route('events.filtered', 'city') }}" class="view-all-link">
                     {{ __('home.view_all') }} <i class="fas fa-arrow-right ms-1"></i>
                 </a>
+                @endauth
             </div>
             <div class="modern-carousel" data-carousel="city">
                 <div class="carousel-track">
@@ -148,7 +152,7 @@
                                         </div>
                                     @endif
                                     <div class="card-body">
-                                        <span class="category-badge">{{ $event->category->name ?? 'General' }}</span>
+                                        <span class="category-badge">{{ $event->category->name ?? __('common.general_category') }}</span>
                                         <h5 class="card-title">{{ Str::limit($event->title, 45) }}</h5>
                                         <div class="event-meta">
                                             <div class="meta-item">
@@ -193,9 +197,11 @@
                     </h4>
                     <p class="section-subtitle">{{ __('home.interests_subtitle') }}</p>
                 </div>
+@auth
                 <a href="{{ route('events.filtered', 'interests') }}" class="view-all-link">
                     {{ __('home.view_all') }} <i class="fas fa-arrow-right ms-1"></i>
                 </a>
+                @endauth
             </div>
             <div class="modern-carousel" data-carousel="interests">
                 <div class="carousel-track">
@@ -219,7 +225,7 @@
                                         </div>
                                     @endif
                                     <div class="card-body">
-                                        <span class="category-badge">{{ $event->category->name ?? 'General' }}</span>
+                                        <span class="category-badge">{{ $event->category->name ?? __('common.general_category') }}</span>
                                         <h5 class="card-title">{{ Str::limit($event->title, 45) }}</h5>
                                         <div class="event-meta">
                                             <div class="meta-item">
@@ -290,7 +296,7 @@
                                         </div>
                                     @endif
                                     <div class="card-body">
-                                        <span class="category-badge">{{ $event->category->name ?? 'General' }}</span>
+                                        <span class="category-badge">{{ $event->category->name ?? __('common.general_category') }}</span>
                                         <h5 class="card-title">{{ Str::limit($event->title, 45) }}</h5>
                                         <div class="event-meta">
                                             <div class="meta-item">

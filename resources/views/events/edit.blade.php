@@ -188,7 +188,7 @@
                                 <div class="mb-3">
                                     <label class="form-label fw-medium">{{ __('events.current_image') }}</label>
                                     <div class="d-flex align-items-center gap-3">
-                                        <img src="{{ $event->cover_image_url }}" alt="Imagen actual" class="img-thumbnail" style="max-width: 150px; max-height: 100px;">
+                                        <img src="{{ $event->cover_image_url }}" alt="{{ __('common.current_image_alt') }}" class="img-thumbnail" style="max-width: 150px; max-height: 100px;">
                                         <div>
                                             <p class="mb-0 small text-muted">{{ __('events.current_image') }}</p>
                                             <p class="mb-0 small">{{ __('events.current_image_help') }}</p>
@@ -229,6 +229,7 @@
 <script>
 // Cities data loaded from server
 var citiesData = {!! json_encode($cities) !!};
+var pendingValue = "{{ __('common.pending_value') }}";
 
 // City autocomplete functionality
 var selectedCityId = null;
@@ -318,7 +319,7 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Set initial value if there's a selected city
+// Establecer valor inicial si hay una ciudad seleccionada
 @if($event->city_id)
     var initialCityId = {{ $event->city_id }};
     var initialCity = citiesData.find(function(city) {
@@ -339,11 +340,11 @@ document.querySelectorAll('input[name="location_type"]').forEach(radio => {
         
         if (this.value === 'pending') {
             locationInputContainer.style.display = 'none';
-            locationInput.value = 'pendiente';
+            locationInput.value = pendingValue;
             locationInput.removeAttribute('required');
         } else {
             locationInputContainer.style.display = 'block';
-            if (locationInput.value === 'pendiente') {
+            if (locationInput.value === pendingValue) {
                 locationInput.value = '';
             }
             locationInput.setAttribute('required', 'required');

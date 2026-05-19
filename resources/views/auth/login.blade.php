@@ -10,7 +10,7 @@
                     <!-- Dark Mode Toggle -->
                     <button class="dark-mode-toggle btn btn-outline-light btn-sm theme-toggle position-absolute top-50 end-0 translate-middle-y me-3" 
                             type="button" 
-                            title="Cambiar modo oscuro/claro"
+                            title="{{ __('nav.dark_mode') }}"
                             onclick="toggleDarkMode()">
                         <i class="fas fa-moon" id="theme-icon"></i>
                     </button>
@@ -36,7 +36,7 @@
                             <label for="email" class="form-label fw-semibold">
                                 <i class="fas fa-envelope me-2 text-primary"></i>{{ __('auth.email_address') }}
                             </label>
-                            <input id="email" type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="correo@ejemplo.com">
+                            <input id="email" type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="{{ __('auth.email_placeholder') }}">
                             @error('email')
                                 <div class="invalid-feedback d-block">
                                     <strong>{{ $message }}</strong>
@@ -48,7 +48,7 @@
                             <label for="password" class="form-label fw-semibold">
                                 <i class="fas fa-lock me-2 text-primary"></i>{{ __('auth.password') }}
                             </label>
-                            <input id="password" type="password" class="form-control form-control-lg @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="••••••••">
+                            <input id="password" type="password" class="form-control form-control-lg @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="{{ __('auth.password_placeholder') }}">
                             @error('password')
                                 <div class="invalid-feedback d-block">
                                     <strong>{{ $message }}</strong>

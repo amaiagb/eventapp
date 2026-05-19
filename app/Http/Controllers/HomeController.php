@@ -18,7 +18,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // Sin middleware auth para permitir acceso a visitantes
     }
 
     /**
@@ -29,26 +29,49 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
+
+        // Si no hay usuario autenticado, mostrar solo eventos genéricos
+        if (!$user) {
+            $forYouEvents = collect();
+            $cityEvents = collect();
+            $interestEvents = collect();
+            $userCityName = 'tu ciudad';
+
+            $genericEvents = Event::with(['category', 'user', 'city'])
+                ->where('status', 'approved')
+                ->where('event_date', '>=', now())
+                ->fromActiveUsers()
+                ->orderBy('event_date', 'asc')
+                ->take(7)
+                ->get();
+
+            return view('home', compact(
+                'forYouEvents',
+                'cityEvents',
+                'interestEvents',
+                'genericEvents',
+                'userCityName'
+            ));
+        }
+
+        // Para usuarios autenticados, mostrar secciones personalizadas
         // Especialmente para ti: eventos creados por las personas que sigo
         $forYouEvents = collect();
-        if ($user) {
-            $followedUserIds = $user->following()->pluck('followed_id');
-            if ($followedUserIds->isNotEmpty()) {
-                $forYouEvents = Event::with(['category', 'user', 'city'])
-                    ->whereIn('user_id', $followedUserIds)
-                    ->where('status', 'approved')
-                    ->where('event_date', '>=', now())
-                    ->fromActiveUsers()
-                    ->orderBy('event_date', 'asc')
-                    ->take(7)
-                    ->get();
-            }
+        $followedUserIds = $user->following()->pluck('followed_id');
+        if ($followedUserIds->isNotEmpty()) {
+            $forYouEvents = Event::with(['category', 'user', 'city'])
+                ->whereIn('user_id', $followedUserIds)
+                ->where('status', 'approved')
+                ->where('event_date', '>=', now())
+                ->fromActiveUsers()
+                ->orderBy('event_date', 'asc')
+                ->take(7)
+                ->get();
         }
 
         // En tu ciudad: eventos de la misma ciudad que el usuario
         $cityEvents = collect();
-        if ($user && $user->city_id) {
+        if ($user->city_id) {
             $cityEvents = Event::with(['category', 'user', 'city'])
                 ->where('city_id', $user->city_id)
                 ->where('status', 'approved')
@@ -61,20 +84,18 @@ class HomeController extends Controller
 
         // Según tus intereses: eventos que tienen tags marcados como intereses por el usuario
         $interestEvents = collect();
-        if ($user) {
-            $userTagIds = $user->tags()->pluck('tags.id');
-            if ($userTagIds->isNotEmpty()) {
-                $interestEvents = Event::with(['category', 'user', 'city', 'tags'])
-                    ->where('status', 'approved')
-                    ->where('event_date', '>=', now())
-                    ->whereHas('tags', function ($query) use ($userTagIds) {
-                        $query->whereIn('tags.id', $userTagIds);
-                    })
-                    ->fromActiveUsers()
-                    ->orderBy('event_date', 'asc')
-                    ->take(7)
-                    ->get();
-            }
+        $userTagIds = $user->tags()->pluck('tags.id');
+        if ($userTagIds->isNotEmpty()) {
+            $interestEvents = Event::with(['category', 'user', 'city', 'tags'])
+                ->where('status', 'approved')
+                ->where('event_date', '>=', now())
+                ->whereHas('tags', function ($query) use ($userTagIds) {
+                    $query->whereIn('tags.id', $userTagIds);
+                })
+                ->fromActiveUsers()
+                ->orderBy('event_date', 'asc')
+                ->take(7)
+                ->get();
         }
 
         // Eventos genéricos: eventos destacados/recientes para cuando no hay eventos personalizados
@@ -87,11 +108,11 @@ class HomeController extends Controller
             ->get();
 
         // Obtener nombre de la ciudad del usuario
-        $userCityName = $user && $user->city ? $user->city->name : 'tu ciudad';
+        $userCityName = $user->city ? $user->city->name : 'tu ciudad';
 
         return view('home', compact(
             'forYouEvents',
-            'cityEvents', 
+            'cityEvents',
             'interestEvents',
             'genericEvents',
             'userCityName'
