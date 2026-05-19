@@ -2,8 +2,7 @@
     <div class="container">
         <!-- Logo -->
         <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
-            <i class="fas fa-calendar-alt me-2 text-primary"></i>
-            <span>EventApp</span>
+            <img src="{{ asset('assets/img/eventapplogo.png') }}" alt="EventApp" style="height: 35px;">
         </a>
 
         <!-- Mobile Toggle -->

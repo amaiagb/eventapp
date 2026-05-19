@@ -260,7 +260,7 @@ class AdminController extends Controller
      */
     public function reports()
     {
-        $reports = Report::with(['reporter', 'reportable'])
+        $reports = Report::with(['reporter', 'reportable.user'])
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
