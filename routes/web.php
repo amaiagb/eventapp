@@ -87,7 +87,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
 // Event routes - públicas (sin autenticación)
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
-Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 
 // Event routes - protegidas (requieren autenticación)
 Route::middleware(['auth', 'active'])->group(function () {
@@ -103,6 +102,9 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::get('/mis-eventos', [EventController::class, 'myEvents'])->name('my.events');
     Route::get('/events/filtered/{type}', [EventController::class, 'filteredEvents'])->name('events.filtered');
 });
+
+// Event routes - públicas (sin autenticación) - rutas con parámetros al final
+Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 
 // User profile routes
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show')->middleware(['auth', 'active']);

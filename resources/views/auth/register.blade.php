@@ -5,15 +5,8 @@
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-7">
             <div class="card shadow-lg border-0">
-                <div class="card-header bg-gradient text-white text-center py-4 position-relative">
+                <div class="card-header bg-gradient text-white text-center py-4">
                     <h4 class="mb-0">{{ __('auth.create_account') }}</h4>
-                    <!-- Dark Mode Toggle -->
-                    <button class="dark-mode-toggle btn btn-outline-light btn-sm theme-toggle position-absolute top-50 end-0 translate-middle-y me-3"
-                            type="button"
-                            title="{{ __('nav.dark_mode') }}"
-                            onclick="toggleDarkMode()">
-                        <i class="fas fa-moon" id="theme-icon"></i>
-                    </button>
                 </div>
 
                 <div class="card-body p-4">
@@ -107,7 +100,6 @@
                                     name="city_name"
                                     id="city_input"
                                     :value="old('city_name')"
-                                    required="true"
                                     placeholder="{{ __('auth.select_city') }}"
                                     :label="__('auth.city')"
                                     :error="$errors->first('city_id')"
